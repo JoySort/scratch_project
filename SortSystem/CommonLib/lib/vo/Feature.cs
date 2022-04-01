@@ -1,4 +1,7 @@
-﻿namespace CommonLib.lib.vo
+﻿using System;
+using System.Collections.Generic;
+
+namespace CommonLib.lib.vo
 {
     internal class Feature
     {
