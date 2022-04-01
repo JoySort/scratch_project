@@ -195,7 +195,7 @@ namespace CommonLib.lib.sort
         }
     }
 
-    internal class ConditionList : List<Condition>, IComparable<ConditionList>
+    internal class ConditionHelper : List<Condition>, IComparable<ConditionHelper>
     {
         public bool Verify(int[] featureIds, int[] levels)
         {
@@ -219,7 +219,7 @@ namespace CommonLib.lib.sort
             return false;
         }
 
-        public int CompareTo(ConditionList? other)
+        public int CompareTo(ConditionHelper? other)
         {
             if (other == null)
                 return 1;

@@ -11,7 +11,7 @@ namespace CommonLib.lib.sort
         private int totalCount=0;
         internal int[] colsCounts;
         internal List<int> mateChIds;
-        internal ConditionList conditions;
+        internal ConditionHelper conditions;
         internal ChannelList Parent;
 
         private void Reset(int _colsCount)
@@ -22,7 +22,7 @@ namespace CommonLib.lib.sort
                 colsCounts[i] = 0;
             }
             totalCount = 0;
-            conditions = new ConditionList();
+            conditions = new ConditionHelper();
             mateChIds = new List<int>() { channelId };
         }
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
@@ -43,7 +43,7 @@ namespace CommonLib.lib.sort
             Reset(_colsCount);
         }
 
-        public void SetConditions(ConditionList _conditions)
+        public void SetConditions(ConditionHelper _conditions)
         {
             conditions = _conditions;
         }
