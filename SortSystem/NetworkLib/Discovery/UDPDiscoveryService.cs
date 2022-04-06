@@ -16,7 +16,7 @@ public class UDPDiscoveryService
     private bool exitFlag = false;
     private int counter = 0;
     private Dictionary<string, int> msgCounter= new Dictionary<string,int>();
-
+    private Dictionary<string, int> sentCounter= new Dictionary<string,int>();
     private List<string> localIps = new List<string>();
     
     public bool ExitFlag
@@ -59,15 +59,10 @@ public class UDPDiscoveryService
                 
                 if (peerDiscoverMsg.Type == DiscoverMSG.MSG_TYPE_BRD) {
                     sendResponds(fromIP);
-                    Console.WriteLine("Recive from ip : "+fromIP+":"+from.Port.ToString() + " msg count: "+ msgCounter[fromIP]+"  content: "+peerDiscoverMsg.ToString());
+                    Console.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ff")+" Recive from ip : "+fromIP+":"+from.Port.ToString() + " msg count: "+ msgCounter[fromIP]+"  content: "+peerDiscoverMsg.ToString());
                 }
                 
-                
-                
-              
 
-              
-               
             }
         });
         
@@ -90,6 +85,12 @@ public class UDPDiscoveryService
         {
             msgCounter[fromIP]++;
         }
+        if (!sentCounter.ContainsKey(fromIP))
+        {
+            sentCounter[fromIP] = counter;
+        }
+        
+        
         var respondDiscoverMsg = new DiscoverMSG(localDiscoverMsg.RpcPort,DiscoverMSG.MSG_TYPE_ACK,msgCounter[fromIP]);
         var msg = JsonConvert.SerializeObject(respondDiscoverMsg);
         var data = Encoding.UTF8.GetBytes(msg);
@@ -101,16 +102,33 @@ public class UDPDiscoveryService
 
     public void SendAnnouncement()
     {
+            printStats();
             counter++;
             localDiscoverMsg.Type = DiscoverMSG.MSG_TYPE_BRD;
             localDiscoverMsg.Count = counter;
             var msg = JsonConvert.SerializeObject(localDiscoverMsg);
             var data = Encoding.UTF8.GetBytes(msg);
             udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, DiscoverMSG.DISCOVER_PORT);
-            Console.WriteLine("Send  msg count: "+ counter+"  content: "+localDiscoverMsg.ToString());
-            if(counter%10 == 0)
-                Console.WriteLine("Message kept alive from ip: \n"+JsonConvert.SerializeObject(msgCounter));
+            Console.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ff")+" Send  msg count: "+ counter+"  content: "+localDiscoverMsg.ToString());
+            
 
     }
+
+    public void printStats()
+    {
+        var ackCounter  = new Dictionary<string,int>();
+        foreach ((var key, var value) in sentCounter)
+        {
+            ackCounter.Add(key,counter-value);
+        }
+        
+
+        if(counter%10 == 0){
+            Console.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ff")+" Message kept alive from ip: " + 
+                                                                             "\n"+JsonConvert.SerializeObject(msgCounter) + 
+                                                                             "\n" + JsonConvert.SerializeObject(ackCounter));
+        }
+    }
     
+
 }
