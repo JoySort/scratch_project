@@ -1,3 +1,4 @@
+using System.Diagnostics.Metrics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -13,6 +14,7 @@ public class UDPDiscoveryService
 
     private int keepAliveInterval = 1000* 3;//seconds
     private bool exitFlag = false;
+    private long counter = 0;
     private Dictionary<string, int> msgCounter= new Dictionary<string,int>();
 
     public bool ExitFlag
@@ -35,7 +37,7 @@ public class UDPDiscoveryService
         var from = new IPEndPoint(0, 0);
         Task.Run(() =>
         {
-            while (exitFlag)
+            while (!exitFlag)
             {
                 var recvBuffer = udpClient.Receive(ref from);
                 
@@ -44,9 +46,10 @@ public class UDPDiscoveryService
                 
                 var fromIP = from.Address.ToString();
                 
-                sendResponds(fromIP);
+                
                 
                 Console.WriteLine("Recive from ip : "+fromIP+"  "+from.Port.ToString() + "  content: "+peerDiscoverMsg);
+                sendResponds(fromIP);
             }
         });
         var count = 0;
@@ -72,17 +75,18 @@ public class UDPDiscoveryService
             msgCounter[fromIP]++;
         }
 
-        udpClient.Send(data, data.Length, fromIP, DiscoverMSG.DISCOVER_PORT);
+        udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, DiscoverMSG.DISCOVER_PORT);
     }
     
 
     public void SendAnnouncement()
     {
+            counter++;
             var msg = JsonConvert.SerializeObject(localDiscoverMsg);
             var data = Encoding.UTF8.GetBytes(msg);
             udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, DiscoverMSG.DISCOVER_PORT);
-            
-            Console.WriteLine("Message kept alive from ip: \n"+JsonConvert.SerializeObject(msgCounter));
+            if(counter%10 == 0)
+                Console.WriteLine("Message kept alive from ip: \n"+JsonConvert.SerializeObject(msgCounter));
 
     }
     
