@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LowerRunner", "LowerRunner\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibUnitTest", "LibUnitTest\LibUnitTest.csproj", "{A7A92FC3-580F-43A0-B88A-96EACD989AF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkLib", "NetworkLib\NetworkLib.csproj", "{856B8D09-8E16-4266-BEDD-9B63E15194AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{A7A92FC3-580F-43A0-B88A-96EACD989AF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7A92FC3-580F-43A0-B88A-96EACD989AF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7A92FC3-580F-43A0-B88A-96EACD989AF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{856B8D09-8E16-4266-BEDD-9B63E15194AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{856B8D09-8E16-4266-BEDD-9B63E15194AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{856B8D09-8E16-4266-BEDD-9B63E15194AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{856B8D09-8E16-4266-BEDD-9B63E15194AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
