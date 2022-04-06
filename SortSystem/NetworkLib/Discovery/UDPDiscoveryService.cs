@@ -149,8 +149,12 @@ public class UDPDiscoveryService
                 {
                     if(lastDiff[key].Last().Value!=diff_value)
                     {
-                        if (lastDiff[key].ContainsKey(diff_key)) lastDiff[key][diff_key]=diff_value;
+                        if (lastDiff[key].ContainsKey(diff_key))
+                        {
+                            lastDiff[key][diff_key]=diff_value;
+                        }else{
                         lastDiff[key].Add(diff_key,diff_value);
+                        }
                         
                     }
                 }

@@ -6,6 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+        <PublicSign>false</PublicSign>
+        <DelaySign>true</DelaySign>
     </PropertyGroup>
 
     <ItemGroup>
