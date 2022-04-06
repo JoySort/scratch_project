@@ -14,7 +14,7 @@ public class UDPDiscoveryService
 
     private int keepAliveInterval = 1000* 3;//seconds
     private bool exitFlag = false;
-    private long counter = 0;
+    private int counter = 0;
     private Dictionary<string, int> msgCounter= new Dictionary<string,int>();
 
     private List<string> localIps = new List<string>();
@@ -35,7 +35,7 @@ public class UDPDiscoveryService
                 localIps.Add( ip.ToString());
             }
         }
-        localDiscoverMsg = new DiscoverMSG(rpc_port,DiscoverMSG.MSG_TYPE_BRD);
+        localDiscoverMsg = new DiscoverMSG(rpc_port,DiscoverMSG.MSG_TYPE_BRD,0);
     }
 
     public void StartListen()
@@ -56,10 +56,11 @@ public class UDPDiscoveryService
                 
                 var fromIP = from.Address.ToString();
                 if(localIps.Contains(fromIP)) continue; // ignore local msgs;
+                
                 if (peerDiscoverMsg.Type == DiscoverMSG.MSG_TYPE_BRD) {
                     sendResponds(fromIP);
-                    Console.WriteLine("Recive from ip : "+fromIP+"  "+from.Port.ToString() + " msg count: "+msgCounter[fromIP] +"  content: "+peerDiscoverMsg.ToString());
                 }
+                Console.WriteLine("Recive from ip : "+fromIP+"  "+from.Port.ToString() + " msg count: "+msgCounter[fromIP] +"  content: "+peerDiscoverMsg.ToString());
                
             }
         });
@@ -75,10 +76,6 @@ public class UDPDiscoveryService
 
     private void sendResponds(string fromIP)
     {
-
-        var respondDiscoverMsg = new DiscoverMSG(localDiscoverMsg.RpcPort,DiscoverMSG.MSG_TYPE_ACK);
-        var msg = JsonConvert.SerializeObject(respondDiscoverMsg);
-        var data = Encoding.UTF8.GetBytes(msg);
         if (!msgCounter.ContainsKey(fromIP))
         {
             msgCounter[fromIP] = 0;
@@ -87,6 +84,10 @@ public class UDPDiscoveryService
         {
             msgCounter[fromIP]++;
         }
+        var respondDiscoverMsg = new DiscoverMSG(localDiscoverMsg.RpcPort,DiscoverMSG.MSG_TYPE_ACK,msgCounter[fromIP]);
+        var msg = JsonConvert.SerializeObject(respondDiscoverMsg);
+        var data = Encoding.UTF8.GetBytes(msg);
+        
 
         udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, DiscoverMSG.DISCOVER_PORT);
     }
@@ -96,6 +97,7 @@ public class UDPDiscoveryService
     {
             counter++;
             localDiscoverMsg.Type = DiscoverMSG.MSG_TYPE_BRD;
+            localDiscoverMsg.Count = counter;
             var msg = JsonConvert.SerializeObject(localDiscoverMsg);
             var data = Encoding.UTF8.GetBytes(msg);
             udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, DiscoverMSG.DISCOVER_PORT);

@@ -13,6 +13,13 @@ public class DiscoverMSG
     
     private int rpcPort = RPC_PORT;
     private string type = "BROADCAST";
+    private int count = 0;
+
+    public int Count
+    {
+        get => count;
+        set => count = value;
+    }
 
     public string Type
     {
@@ -21,10 +28,11 @@ public class DiscoverMSG
     }
 
 
-    public DiscoverMSG(int rpcPort,string type)
+    public DiscoverMSG(int rpcPort,string type,int count)
     {
         this.rpcPort = rpcPort;
         this.type = type;
+        this.count = count;
 
 
     }
