@@ -69,7 +69,7 @@ public class UDPDiscoveryService
         
         
         while (!exitFlag)
-        {
+        {   printStats();
             SendAnnouncement();
             Thread.Sleep(keepAliveInterval);
         }
@@ -102,7 +102,7 @@ public class UDPDiscoveryService
 
     public void SendAnnouncement()
     {
-            printStats();
+            
             counter++;
             localDiscoverMsg.Type = DiscoverMSG.MSG_TYPE_BRD;
             localDiscoverMsg.Count = counter;

@@ -13,12 +13,12 @@ public class DiscoverMSG
     
     private int rpcPort = RPC_PORT;
     private string type = "BROADCAST";
-    private int count = 0;
+    private int msgID = 0;
 
     public int Count
     {
-        get => count;
-        set => count = value;
+        get => msgID;
+        set => msgID = value;
     }
 
     public string Type
@@ -28,11 +28,11 @@ public class DiscoverMSG
     }
 
 
-    public DiscoverMSG(int rpcPort,string type,int count)
+    public DiscoverMSG(int rpcPort,string type,int msgId)
     {
         this.rpcPort = rpcPort;
         this.type = type;
-        this.count = count;
+        this.msgID = msgId;
 
 
     }
@@ -43,7 +43,8 @@ public class DiscoverMSG
     public string ToString()
     {
         return "rpc port:" + rpcPort +
-               " type:"+type;
+               " type:"+type+
+               " msgID:"+msgID;
     }
 }
 
