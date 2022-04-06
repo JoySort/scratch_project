@@ -42,8 +42,9 @@ public class UDPDiscoveryService
         var count = 0;
         
         
-        while (count++<announcementInterval)
+        while (true)
         {
+            
             SendAnnouncement();
             Thread.Sleep(announcementInterval);
         }
