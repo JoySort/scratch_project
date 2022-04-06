@@ -3,17 +3,20 @@ namespace NetworkLib.Discovery;
 public class DiscoverMSG
 {
 
-    public const int RPC_PORT = 13652;
-    public const int DISCOVER_PORT = 13655;
+
     public const string BROADCAST_ADDR = "255.255.255.255";
 
     public const string MSG_TYPE_ACK = "ACK";
     public const string MSG_TYPE_BRD = "BRD";
-    
-    
-    private int rpcPort = RPC_PORT;
+
+
+    private int rpcPort;
+    private int listenPort;
+
+
     private string type = "BROADCAST";
     private int msgID = 0;
+    public int ListenPort => listenPort;
 
     public int Count
     {
@@ -28,9 +31,10 @@ public class DiscoverMSG
     }
 
 
-    public DiscoverMSG(int rpcPort,string type,int msgId)
+    public DiscoverMSG(int rpcPort,int listenPort,string type,int msgId)
     {
         this.rpcPort = rpcPort;
+        this.listenPort = listenPort;
         this.type = type;
         this.msgID = msgId;
 

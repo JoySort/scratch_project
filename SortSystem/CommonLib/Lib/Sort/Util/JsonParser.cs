@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using CommonLib.Lib.vo;
 using Newtonsoft.Json.Linq;
 
@@ -6,7 +5,7 @@ namespace CommonLib.Lib.Sort.Util;
 /**
  * <summary>Usage see @LibUnitTest.vo.JSONParserTest</summary>
  */
-public class JSONParser
+public class JsonParser
 {
     public List<Criteria> FullCriteria => fullCriteria;
 
@@ -17,18 +16,20 @@ public class JSONParser
     private List<Criteria> enabledCriteria = new List<Criteria>();
 
     private List<Outlet> outlets = new List<Outlet>();
-    
+
+    public List<Outlet> Outlets => outlets;
+
     private JObject _jresult;
-    public JSONParser(string project_json_string)
+    public JsonParser(string projectJsonString)
     {
-        _jresult = JObject.Parse(project_json_string);
+        _jresult = JObject.Parse(projectJsonString);
         ParseCriteria();
         ParseOutlet();
     }
 
     private void ParseCriteria()
     {   
-        var criteria = (JObject)_jresult.SelectToken("criteria");
+        var criteria = (JObject)_jresult.SelectToken("criteria")!;
         foreach (var (key, value) in criteria)
         {
             if (value == null) continue;
