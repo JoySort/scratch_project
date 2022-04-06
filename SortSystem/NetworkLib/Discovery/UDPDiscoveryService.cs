@@ -3,11 +3,14 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Newtonsoft.Json;
+using NLog;
 
 namespace NetworkLib.Discovery;
 
 public class UDPDiscoveryService
-{
+{   
+    //LogManager.LoadConfiguration("config/logger.config"); 
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
     private UdpClient udpClient;
     private DiscoverMSG localDiscoverMsg;
@@ -16,7 +19,9 @@ public class UDPDiscoveryService
     private bool exitFlag = false;
     private int counter = 0;
     private Dictionary<string, int> msgCounter= new Dictionary<string,int>();
-    private Dictionary<string, int> sentCounter= new Dictionary<string,int>();
+    private Dictionary<string, int> firstMsgID= new Dictionary<string,int>();
+    private Dictionary<string, int> lastMsgID= new Dictionary<string,int>();
+    private  Dictionary<string,Dictionary<int,int>> lastDiff  = new Dictionary<string,Dictionary<int,int>>();
     private List<string> localIps = new List<string>();
     
     public bool ExitFlag
@@ -59,9 +64,9 @@ public class UDPDiscoveryService
                 
                 if (peerDiscoverMsg.Type == DiscoverMSG.MSG_TYPE_BRD) {
                     sendResponds(fromIP,peerDiscoverMsg.Count);
-                    Console.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ff")+" Recive from ip : "+fromIP+":"+from.Port.ToString() + " msg count: "+msgCounter[fromIP]+" msg diff:"+ (msgCounter[fromIP]-peerDiscoverMsg.Count)+"  content: "+peerDiscoverMsg.ToString());
+                    lastMsgID[fromIP] = peerDiscoverMsg.Count;
+                    logger.Debug(" Recive from ip : "+fromIP+":"+from.Port.ToString() + " msg count: "+msgCounter[fromIP]+" msg diff:"+ (peerDiscoverMsg.Count- msgCounter[fromIP])+"  content: "+peerDiscoverMsg.ToString());
                 }
-                
 
             }
         });
@@ -69,7 +74,7 @@ public class UDPDiscoveryService
         
         
         while (!exitFlag)
-        {   printStats();
+        {   if(counter%10 == 0)printStats();
             SendAnnouncement();
             Thread.Sleep(keepAliveInterval);
         }
@@ -80,14 +85,15 @@ public class UDPDiscoveryService
         if (!msgCounter.ContainsKey(fromIP))
         {
             msgCounter[fromIP] = 0;
+            
         }
         else
         {
             msgCounter[fromIP]++;
         }
-        if (!sentCounter.ContainsKey(fromIP))
+        if (!firstMsgID.ContainsKey(fromIP))
         {
-            sentCounter[fromIP] = msgID-msgCounter[fromIP];
+            firstMsgID[fromIP] = msgID;
         }
         
         
@@ -109,25 +115,48 @@ public class UDPDiscoveryService
             var msg = JsonConvert.SerializeObject(localDiscoverMsg);
             var data = Encoding.UTF8.GetBytes(msg);
             udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, DiscoverMSG.DISCOVER_PORT);
-            //Console.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ff")+" Send  msg count: "+ counter+"  content: "+localDiscoverMsg.ToString());
-            
+             
 
     }
 
     public void printStats()
     {
         var ackCounter  = new Dictionary<string,int>();
-        foreach ((var key, var value) in sentCounter)
+        foreach ((var key, var value) in firstMsgID)
         {
-            ackCounter.Add(key,counter-value);
+            ackCounter.Add(key,value-lastMsgID[key]);
         }
+
+        
+            foreach ((var key, var value)in firstMsgID)
+            {
+                var diff_value = lastMsgID[key] - value - msgCounter[key];
+                var diff_key = lastMsgID[key];
+                
+                
+                
+                if (!lastDiff.ContainsKey(key))
+                {
+                    var diff_dic = new Dictionary<int, int>();
+                    diff_dic.Add(diff_key,diff_value);
+                    lastDiff.Add(key, diff_dic);
+                }
+                else
+                {
+                    if(lastDiff[key].Last().Value!=diff_value){
+                        lastDiff[key].Add(diff_key,diff_value);
+                        
+                    }
+                }
+            }
         
 
-        if(counter%10 == 0){
-            Console.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ff")+" Message kept alive from ip: " + 
-                                                                             "\n"+JsonConvert.SerializeObject(msgCounter) + 
-                                                                             "\n" + JsonConvert.SerializeObject(ackCounter));
-        }
+
+        
+            logger.Info(" Message stats: " + 
+                        "\nresponse sent"+JsonConvert.SerializeObject(msgCounter) + 
+                        "\n" + JsonConvert.SerializeObject(lastDiff));
+        
     }
     
 

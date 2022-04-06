@@ -12,4 +12,14 @@
       <ProjectReference Include="..\NetworkLib\NetworkLib.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="config\logger.config">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="NLog.Extensions.Logging" Version="5.0.0-rc2" />
+    </ItemGroup>
+
 </Project>

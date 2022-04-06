@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 public class JSONParserTest
 {
-    private const string jsonFilePath = @"../../../assets/vo/project_start_sample.json";
+    private const string jsonFilePath = @"./assets/vo/project_start_sample.json";
     string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),jsonFilePath);
 
     private string porject_json_string;
