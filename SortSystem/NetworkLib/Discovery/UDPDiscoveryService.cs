@@ -9,61 +9,81 @@ public class UDPDiscoveryService
 {
 
     private UdpClient udpClient;
-    private Announcement localAnnouncement;
-    private string BROADCAST_ADDR = "255.255.255.255";
-    private int announcementInterval = 5;//seconds
-    
-    public UDPDiscoveryService(string role)
+    private DiscoverMSG localDiscoverMsg;
+
+    private int keepAliveInterval = 1000* 3;//seconds
+    private bool exitFlag = false;
+    private Dictionary<string, int> msgCounter= new Dictionary<string,int>();
+
+    public bool ExitFlag
     {
-        localAnnouncement = new Announcement(role);
+        get => exitFlag;
+        set => exitFlag = value;
+    }
+
+    public UDPDiscoveryService(int rpc_port)
+    {
+        localDiscoverMsg = new DiscoverMSG(rpc_port);
     }
 
     public void StartListen()
     {
         
         udpClient = new UdpClient();
-        udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, Announcement.DISCOVER_PORT ));
+        udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, DiscoverMSG.DISCOVER_PORT ));
         
         var from = new IPEndPoint(0, 0);
         Task.Run(() =>
         {
-            while (true)
+            while (exitFlag)
             {
                 var recvBuffer = udpClient.Receive(ref from);
-                var fromIP = from.Address.ToString();
+                
                 var msg = Encoding.UTF8.GetString(recvBuffer);
-                var peerAnnouncement = (Announcement)JsonConvert.DeserializeObject(msg);
-                peerAnnouncement.RemoteAddress = fromIP;
-                sendResponds(peerAnnouncement);
-                // udpClient
-                Console.WriteLine("Recive from ip : "+from.Address.ToString()+"  "+from.Port.ToString() + "  content: "+Encoding.UTF8.GetString(recvBuffer));
+                var peerDiscoverMsg = JsonConvert.DeserializeObject<DiscoverMSG>(msg);
+                
+                var fromIP = from.Address.ToString();
+                
+                sendResponds(fromIP);
+                
+                Console.WriteLine("Recive from ip : "+fromIP+"  "+from.Port.ToString() + "  content: "+peerDiscoverMsg);
             }
         });
         var count = 0;
         
         
-        while (true)
+        while (!exitFlag)
         {
-            
             SendAnnouncement();
-            Thread.Sleep(announcementInterval);
+            Thread.Sleep(keepAliveInterval);
         }
     }
 
-    private void sendResponds(Announcement peer_announcement)
+    private void sendResponds(string fromIP)
     {
-        var msg = JsonConvert.SerializeObject(localAnnouncement);
+        var msg = JsonConvert.SerializeObject(localDiscoverMsg);
         var data = Encoding.UTF8.GetBytes(msg);
-        udpClient.Send(data, data.Length, peer_announcement.RemoteAddress, Announcement.DISCOVER_PORT);
+        if (msgCounter[fromIP] == null)
+        {
+            msgCounter[fromIP] = 0;
+        }
+        else
+        {
+            msgCounter[fromIP]++;
+        }
+
+        udpClient.Send(data, data.Length, fromIP, DiscoverMSG.DISCOVER_PORT);
     }
     
 
     public void SendAnnouncement()
     {
-            var msg = JsonConvert.SerializeObject(localAnnouncement);
+            var msg = JsonConvert.SerializeObject(localDiscoverMsg);
             var data = Encoding.UTF8.GetBytes(msg);
-            udpClient.Send(data, data.Length, "255.255.255.255", Announcement.DISCOVER_PORT);
+            udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, DiscoverMSG.DISCOVER_PORT);
             
+            Console.WriteLine("Message kept alive from ip: \n"+JsonConvert.SerializeObject(msgCounter));
+
     }
     
 }

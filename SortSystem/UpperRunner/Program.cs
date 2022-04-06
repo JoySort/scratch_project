@@ -3,6 +3,6 @@
 using System;
 using NetworkLib.Discovery;
 
-var discoverService = new UDPDiscoveryService(Announcement.ROLE_UPPER);
+var discoverService = new UDPDiscoveryService(DiscoverMSG.RPC_PORT);
 discoverService.StartListen();
 Console.WriteLine("Hello, World!");
