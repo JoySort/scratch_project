@@ -60,7 +60,8 @@ public class UDPDiscoveryService
                 if (peerDiscoverMsg.Type == DiscoverMSG.MSG_TYPE_BRD) {
                     sendResponds(fromIP);
                 }
-                Console.WriteLine("Recive from ip : "+fromIP+"  "+from.Port.ToString() + " msg count: "+msgCounter[fromIP] +"  content: "+peerDiscoverMsg.ToString());
+                
+                Console.WriteLine("Recive from ip : "+fromIP+":"+from.Port.ToString() + " msg count: "+ msgCounter[fromIP]??counter +"  content: "+peerDiscoverMsg.ToString());
                
             }
         });
