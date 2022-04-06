@@ -25,7 +25,7 @@ public class UDPDiscoveryService
 
     public UDPDiscoveryService(int rpc_port)
     {
-        localDiscoverMsg = new DiscoverMSG(rpc_port);
+        localDiscoverMsg = new DiscoverMSG(rpc_port,DiscoverMSG.MSG_TYPE_BRD);
     }
 
     public void StartListen()
@@ -45,14 +45,15 @@ public class UDPDiscoveryService
                 var peerDiscoverMsg = JsonConvert.DeserializeObject<DiscoverMSG>(msg);
                 
                 var fromIP = from.Address.ToString();
-                
-                
-                
-                Console.WriteLine("Recive from ip : "+fromIP+"  "+from.Port.ToString() + "  content: "+peerDiscoverMsg);
-                sendResponds(fromIP);
+
+                if (peerDiscoverMsg.Type == DiscoverMSG.MSG_TYPE_BRD) {
+                    sendResponds(fromIP);
+                    Console.WriteLine("Recive from ip : "+fromIP+"  "+from.Port.ToString() + " msg count: "+msgCounter[fromIP] +"  content: "+peerDiscoverMsg.ToString());
+                }
+               
             }
         });
-        var count = 0;
+        
         
         
         while (!exitFlag)
@@ -64,9 +65,11 @@ public class UDPDiscoveryService
 
     private void sendResponds(string fromIP)
     {
-        var msg = JsonConvert.SerializeObject(localDiscoverMsg);
+
+        var respondDiscoverMsg = new DiscoverMSG(localDiscoverMsg.RpcPort,DiscoverMSG.MSG_TYPE_ACK);
+        var msg = JsonConvert.SerializeObject(respondDiscoverMsg);
         var data = Encoding.UTF8.GetBytes(msg);
-        if (msgCounter[fromIP] == null)
+        if (!msgCounter.ContainsKey(fromIP))
         {
             msgCounter[fromIP] = 0;
         }
@@ -82,6 +85,7 @@ public class UDPDiscoveryService
     public void SendAnnouncement()
     {
             counter++;
+            localDiscoverMsg.Type = DiscoverMSG.MSG_TYPE_BRD;
             var msg = JsonConvert.SerializeObject(localDiscoverMsg);
             var data = Encoding.UTF8.GetBytes(msg);
             udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, DiscoverMSG.DISCOVER_PORT);
