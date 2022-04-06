@@ -24,7 +24,8 @@ public class NetworkScratch
             while (true)
             {
                 var recvBuffer = udpClient.Receive(ref from);
-                Console.WriteLine("Recive"+Encoding.UTF8.GetString(recvBuffer));
+               // udpClient
+                Console.WriteLine("Recive from ip : "+from.Address.ToString()+"  "+from.Port.ToString() + "  content: "+Encoding.UTF8.GetString(recvBuffer));
             }
         });
     }
@@ -34,10 +35,10 @@ public class NetworkScratch
     {
         var count = 0;
         
-            while (count++<5)
+            while (count++<2)
             {
                 Thread.Sleep(1000);
-                var data = Encoding.UTF8.GetBytes("{'port':"+count+"}");
+                var data = Encoding.UTF8.GetBytes("{'send from mac counter':"+count+"}");
                 udpClient.Send(data, data.Length, "255.255.255.255", PORT);
             }
         
