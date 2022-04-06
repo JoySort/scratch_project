@@ -58,8 +58,8 @@ public class UDPDiscoveryService
                 if(localIps.Contains(fromIP)) continue; // ignore local msgs;
                 
                 if (peerDiscoverMsg.Type == DiscoverMSG.MSG_TYPE_BRD) {
-                    sendResponds(fromIP);
-                    Console.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ff")+" Recive from ip : "+fromIP+":"+from.Port.ToString() + " msg count: "+ msgCounter[fromIP]+"  content: "+peerDiscoverMsg.ToString());
+                    sendResponds(fromIP,peerDiscoverMsg.Count);
+                    Console.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ff")+" Recive from ip : "+fromIP+":"+from.Port.ToString() + " msg count: "+msgCounter[fromIP]+" msg diff:"+ (msgCounter[fromIP]-peerDiscoverMsg.Count)+"  content: "+peerDiscoverMsg.ToString());
                 }
                 
 
@@ -75,7 +75,7 @@ public class UDPDiscoveryService
         }
     }
 
-    private void sendResponds(string fromIP)
+    private void sendResponds(string fromIP,int msgID)
     {
         if (!msgCounter.ContainsKey(fromIP))
         {
@@ -87,7 +87,7 @@ public class UDPDiscoveryService
         }
         if (!sentCounter.ContainsKey(fromIP))
         {
-            sentCounter[fromIP] = counter;
+            sentCounter[fromIP] = msgID-msgCounter[fromIP];
         }
         
         
@@ -109,7 +109,7 @@ public class UDPDiscoveryService
             var msg = JsonConvert.SerializeObject(localDiscoverMsg);
             var data = Encoding.UTF8.GetBytes(msg);
             udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, DiscoverMSG.DISCOVER_PORT);
-            Console.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ff")+" Send  msg count: "+ counter+"  content: "+localDiscoverMsg.ToString());
+            //Console.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ff")+" Send  msg count: "+ counter+"  content: "+localDiscoverMsg.ToString());
             
 
     }
