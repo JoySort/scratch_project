@@ -17,6 +17,8 @@ public class UDPDiscoveryService
     private long counter = 0;
     private Dictionary<string, int> msgCounter= new Dictionary<string,int>();
 
+    private List<string> localIps = new List<string>();
+    
     public bool ExitFlag
     {
         get => exitFlag;
@@ -25,6 +27,14 @@ public class UDPDiscoveryService
 
     public UDPDiscoveryService(int rpc_port)
     {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                localIps.Add( ip.ToString());
+            }
+        }
         localDiscoverMsg = new DiscoverMSG(rpc_port,DiscoverMSG.MSG_TYPE_BRD);
     }
 
@@ -45,7 +55,7 @@ public class UDPDiscoveryService
                 var peerDiscoverMsg = JsonConvert.DeserializeObject<DiscoverMSG>(msg);
                 
                 var fromIP = from.Address.ToString();
-
+                if(localIps.Contains(fromIP)) continue; // ignore local msgs;
                 if (peerDiscoverMsg.Type == DiscoverMSG.MSG_TYPE_BRD) {
                     sendResponds(fromIP);
                     Console.WriteLine("Recive from ip : "+fromIP+"  "+from.Port.ToString() + " msg count: "+msgCounter[fromIP] +"  content: "+peerDiscoverMsg.ToString());
