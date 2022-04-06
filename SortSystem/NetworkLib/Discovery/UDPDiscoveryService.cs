@@ -65,7 +65,11 @@ public class UDPDiscoveryService
                 if (peerDiscoverMsg.Type == DiscoverMSG.MSG_TYPE_BRD) {
                     sendResponds(fromIP,peerDiscoverMsg.Count);
                     lastMsgID[fromIP] = peerDiscoverMsg.Count;
-                    logger.Debug(" Recive from ip : "+fromIP+":"+from.Port.ToString() + " msg count: "+msgCounter[fromIP]+" msg diff:"+ (peerDiscoverMsg.Count- msgCounter[fromIP])+"  content: "+peerDiscoverMsg.ToString());
+                    logger.Debug("Recive from ip : "+fromIP+":"+from.Port.ToString() + " msg count: "+msgCounter[fromIP]+" msg diff:"+ (peerDiscoverMsg.Count- msgCounter[fromIP])+"  content: "+peerDiscoverMsg.ToString());
+                }
+                else
+                {
+                    logger.Debug("Recive from ip : "+fromIP+":"+from.Port.ToString() + "  content: "+peerDiscoverMsg.ToString());
                 }
 
             }
@@ -143,7 +147,9 @@ public class UDPDiscoveryService
                 }
                 else
                 {
-                    if(lastDiff[key].Last().Value!=diff_value){
+                    if(lastDiff[key].Last().Value!=diff_value)
+                    {
+                        if (lastDiff[key].ContainsKey(diff_key)) lastDiff[key][diff_key]=diff_value;
                         lastDiff[key].Add(diff_key,diff_value);
                         
                     }
