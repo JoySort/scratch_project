@@ -59,9 +59,14 @@ public class UDPDiscoveryService
                 
                 if (peerDiscoverMsg.Type == DiscoverMSG.MSG_TYPE_BRD) {
                     sendResponds(fromIP);
+                    Console.WriteLine("Recive from ip : "+fromIP+":"+from.Port.ToString() + " msg count: "+ msgCounter[fromIP]+"  content: "+peerDiscoverMsg.ToString());
                 }
                 
-                Console.WriteLine("Recive from ip : "+fromIP+":"+from.Port.ToString() + " msg count: "+ msgCounter[fromIP]??counter +"  content: "+peerDiscoverMsg.ToString());
+                
+                
+              
+
+              
                
             }
         });
@@ -102,6 +107,7 @@ public class UDPDiscoveryService
             var msg = JsonConvert.SerializeObject(localDiscoverMsg);
             var data = Encoding.UTF8.GetBytes(msg);
             udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, DiscoverMSG.DISCOVER_PORT);
+            Console.WriteLine("Send  msg count: "+ counter+"  content: "+localDiscoverMsg.ToString());
             if(counter%10 == 0)
                 Console.WriteLine("Message kept alive from ip: \n"+JsonConvert.SerializeObject(msgCounter));
 

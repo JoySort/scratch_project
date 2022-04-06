@@ -42,8 +42,8 @@ public class DiscoverMSG
     
     public string ToString()
     {
-        return "rpc port:" + rpcPort+"\r\n" +
-               "type:"+type;
+        return "rpc port:" + rpcPort +
+               " type:"+type;
     }
 }
 
