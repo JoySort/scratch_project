@@ -24,13 +24,22 @@ if (args.Length > 0)
     udp_port = int.Parse(args[1]);
 }
 
-var discoverService = new UDPDiscoveryService(rpc_port,udp_port);
-discoverService.EndPointDiscoverFound += (object sender, DiscoverFoundEventArgs e) =>
+var uppDiscoverService = new UDPDiscoveryService(rpc_port,udp_port);
+uppDiscoverService.EndPointDiscoverFound += (object sender, DiscoverFoundEventArgs e) =>
 {
     logger.Info("Event catched "+e.ipAddr +" "+ e.rpcPort);
 };
-discoverService.StartListen();
-while ( discoverService.Counter<1000000)// keep discovery running
+uppDiscoverService.StartListen();
+
+var CamDiscoverService = new UDPDiscoveryService(rpc_port+1,udp_port+1);
+CamDiscoverService.EndPointDiscoverFound += (object sender, DiscoverFoundEventArgs e) =>
+{
+    logger.Info("Event catched "+e.ipAddr +" "+ e.rpcPort);
+};
+CamDiscoverService.StartListen();
+
+
+while ( uppDiscoverService.Counter<1000000)// keep discovery running
 {
     Thread.Sleep(1000);
 }
