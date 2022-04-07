@@ -13,6 +13,7 @@ public class UDPDiscoveryService
     //LogManager.LoadConfiguration("config/logger.config"); 
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private UdpClient udpClient;
+    private string serviceName = "default name";
     private DiscoverMSG localDiscoverMsg;
     private Dictionary<string, int> firstMsgID = new Dictionary<string, int>();
     private Dictionary<string, int> lastMsgID = new Dictionary<string, int>();
@@ -27,9 +28,9 @@ public class UDPDiscoveryService
     
     public int KeepAliveInterval { get; set; } = 1000 * 3;
     public int Counter => counter;
-    public Dictionary<string, int> MsgCounter { get; } = new Dictionary<string, int>();
+    private Dictionary<string, int> MsgCounter { get; } = new Dictionary<string, int>();
 
-    public Dictionary<string, Dictionary<int, int>> LastDiff => lastDiff;
+    private Dictionary<string, Dictionary<int, int>> LastDiff => lastDiff;
     public bool ExitFlag { get; set; } = false;
     public event EventHandler<DiscoverFoundEventArgs> EndPointDiscoverFound;
 
@@ -39,10 +40,10 @@ public class UDPDiscoveryService
         handler?.Invoke(this,e);
     }
 
-    public UDPDiscoveryService(int rpc_port, int listenPort)
+    public UDPDiscoveryService(int rpc_port, int listenPort,string serviceName)
     {
-       
 
+        this.serviceName = serviceName;
         this.ListenPort = listenPort;
         localDiscoverMsg = new DiscoverMSG(rpc_port, listenPort, DiscoverMSG.MSG_TYPE_BRD, 0);
     }
@@ -85,13 +86,13 @@ public class UDPDiscoveryService
                     
                     sendResponds(fromIP, fromPort, peerDiscoverMsg.Count);
                     lastMsgID[targetKey] = peerDiscoverMsg.Count;
-                    logger.Debug("BROADCAST From : " + fromIP + ":" + from.Port.ToString() + " msg count: " +
+                    logger.Debug("["+serviceName+"]"+"BROADCAST From : " + fromIP + ":" + from.Port.ToString() + " msg count: " +
                                  MsgCounter[targetKey] + " msg diff:" + (peerDiscoverMsg.Count - MsgCounter[targetKey]) +
                                  "  content: " + peerDiscoverMsg.ToString());
                 }
                 else
                 {
-                    logger.Debug("ACK From : " + fromIP + ":" + from.Port.ToString() + "  content: " +
+                    logger.Debug("["+serviceName+"]"+"ACK From : " + fromIP + ":" + from.Port.ToString() + "  content: " +
                                  peerDiscoverMsg.ToString());
                 }
             }
@@ -231,12 +232,12 @@ public class UDPDiscoveryService
         var timeDiff = DateTime.Now.ToFileTime() - lastRestartTimestamp;
         if (restartNetworkAdaptorCount > 2 && timeDiff> KeepAliveInterval*10 ){
             
-            throw new Exception("Network adaptor has changed and we retried " + restartNetworkAdaptorCount + "times, Still failing"+"Last restart in "+ timeDiff/1000 + "secs");
+            throw new Exception("["+serviceName+"]"+"Network adaptor has changed and we retried " + restartNetworkAdaptorCount + "times, Still failing"+"Last restart in "+ timeDiff/1000 + "secs");
         }
         
         restartNetworkAdaptorCount++;
         lastRestartTimestamp=DateTime.Now.ToFileTime();
-        logger.Info("Restarting network: \nCurrent ips:" + JsonConvert.SerializeObject(tempIps)+"\n Old ips:"+JsonConvert.SerializeObject(localIps));
+        logger.Info("["+serviceName+"]"+"Restarting network: \nCurrent ips:" + JsonConvert.SerializeObject(tempIps,Formatting.Indented)+"\n Old ips:"+JsonConvert.SerializeObject(localIps,Formatting.Indented));
         
         //如果想要停止原来的运行，则需要等待原来循环完全结束退出。设置退出标志为true让原来的while循环退出。
         this.ExitFlag = true;
@@ -273,8 +274,8 @@ public class UDPDiscoveryService
 
        
         
-        logger.Info(" Message stats: " +
-                    "\nresponse sent" + JsonConvert.SerializeObject(MsgCounter) +
-                    "\nresponse diff" + JsonConvert.SerializeObject(lastDiff));
+        logger.Info("["+serviceName+"]"+" Message stats: " +
+                    "\nresponse sent" + JsonConvert.SerializeObject(MsgCounter,Formatting.Indented) +
+                    "\nresponse diff {server:{{lastest_msg_id:difference_of_count_between_lastest_and_first_msgid}}}" + JsonConvert.SerializeObject(lastDiff),Formatting.Indented);
     }
 }
