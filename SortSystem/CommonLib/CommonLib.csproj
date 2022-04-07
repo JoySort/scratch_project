@@ -7,11 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Lib\PipleLine" />
+      <Folder Include="Lib\Sort" />
     </ItemGroup>
 
 </Project>

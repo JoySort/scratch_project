@@ -1,25 +1,16 @@
 using CommonLib.Lib.vo;
 using Newtonsoft.Json.Linq;
 
-namespace CommonLib.Lib.Sort.Util;
+namespace CommonLib.Lib.Util;
+
 /**
  * <summary>Usage see @LibUnitTest.vo.JSONParserTest</summary>
  */
 public class JsonParser
 {
-    public List<Criteria> FullCriteria => fullCriteria;
-
-    public List<Criteria> EnabledCriteria => enabledCriteria;
+    private readonly JObject _jresult;
 
 
-    private List<Criteria> fullCriteria = new List<Criteria>();
-    private List<Criteria> enabledCriteria = new List<Criteria>();
-
-    private List<Outlet> outlets = new List<Outlet>();
-
-    public List<Outlet> Outlets => outlets;
-
-    private JObject _jresult;
     public JsonParser(string projectJsonString)
     {
         _jresult = JObject.Parse(projectJsonString);
@@ -27,23 +18,28 @@ public class JsonParser
         ParseOutlet();
     }
 
+    public List<Criteria> FullCriteria { get; } = new();
+
+    public List<Criteria> EnabledCriteria { get; } = new();
+
+    public List<Outlet> Outlets { get; } = new();
+
     private void ParseCriteria()
-    {   
-        var criteria = (JObject)_jresult.SelectToken("criteria")!;
+    {
+        var criteria = (JObject) _jresult.SelectToken("criteria")!;
         foreach (var (key, value) in criteria)
         {
             if (value == null) continue;
             var code = (string?) key;
             var name = (string?) value.SelectToken("name");
-            var criteriaIndex=(int) value.SelectToken("index");
+            var criteriaIndex = (int) value.SelectToken("index");
             var min = (float) value.SelectToken("data").SelectToken("min");
             var max = (float) value.SelectToken("data").SelectToken("max");
             var range = ((JArray) value.SelectToken("data").SelectToken("range")).Select(jv => (float) jv).ToArray();
-            
-            fullCriteria.Add(new Criteria(name,code,criteriaIndex,min,max,range));
-            if (value != null && (bool) value.SelectToken("checked")) {
-                enabledCriteria.Add(new Criteria(name,code,criteriaIndex,min,max,range));
-            }
+
+            FullCriteria.Add(new Criteria(name, code, criteriaIndex, min, max, range));
+            if (value != null && (bool) value.SelectToken("checked"))
+                EnabledCriteria.Add(new Criteria(name, code, criteriaIndex, min, max, range));
         }
     }
 
@@ -58,22 +54,21 @@ public class JsonParser
             var _jobj_filters = (JArray) value.SelectToken("filters");
             var filters = ParseFilter(_jobj_filters);
 
-            Outlet outlet = new Outlet(outlet_no, outlet_type, filters.ToArray());
-            this.outlets.Add(outlet);
+            var outlet = new Outlet(outlet_no, outlet_type, filters.ToArray());
+            Outlets.Add(outlet);
         }
-
     }
 
     private List<Filter[]> ParseFilter(JArray filters)
     {
-        List<Filter[]> filterList = new List<Filter[]>();
-        if(filters!=null){
+        var filterList = new List<Filter[]>();
+        if (filters != null)
             foreach (var value in filters.Children<JObject>())
             {
                 if (value == null) continue;
                 var _filters = new Filter[value.Properties().Count()];
                 var count = 0;
-                foreach (JProperty prop in value.Properties())
+                foreach (var prop in value.Properties())
                 {
                     //Console.WriteLine(prop.Name);
                     var criteria_key = prop.Name;
@@ -82,21 +77,18 @@ public class JsonParser
                     var filter = new Filter(boundrryIndeces, criteria);
                     _filters[count++] = filter;
                 }
+
                 filterList.Add(_filters);
             }
-        }
+
         return filterList;
     }
 
     private Criteria findCriteria(string name)
     {
-        foreach (var item in enabledCriteria)
-        {
+        foreach (var item in EnabledCriteria)
             if (name.Equals(item.Code))
-            {
                 return item;
-            }
-        }
 
         return null;
     }

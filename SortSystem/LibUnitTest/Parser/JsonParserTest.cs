@@ -1,10 +1,10 @@
 using System.IO;
 using System.Reflection;
-using CommonLib.Lib.Sort.Util;
+using CommonLib.Lib.Util;
 
 
 
-namespace LibUnitTest.vo;
+namespace LibUnitTest.Parser;
 using NUnit.Framework;
 
 public class JsonParserTest {
