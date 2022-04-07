@@ -28,6 +28,7 @@ public class UDPDiscoveryService
     
     public int KeepAliveInterval { get; set; } = 1000 * 3;
     public int Counter => counter;
+    private Dictionary<string, long> lastAnouncementSent = new Dictionary<string, long>();
     private Dictionary<string, int> MsgCounter { get; } = new Dictionary<string, int>();
 
     private Dictionary<string, Dictionary<int, int>> LastDiff => lastDiff;
@@ -92,6 +93,24 @@ public class UDPDiscoveryService
                 }
                 else
                 {
+                    if (lastAnouncementSent.ContainsKey(targetKey))
+                    {
+                        var timeDiff = DateTime.Now.ToFileTime() - lastAnouncementSent[targetKey];
+                        if (timeDiff > 1000)
+                        {
+                            SendAnnouncement();
+                        }
+                        else
+                        {
+                            logger.Debug("Last annoucement sent 1s ago, skip this anoucement last:"+lastAnouncementSent[targetKey]);
+                        }
+                    }
+                    else
+                    {
+                        lastAnouncementSent[targetKey] = DateTime.Now.ToFileTime();
+                        SendAnnouncement();
+                    }
+                    
                     logger.Debug("["+serviceName+"]"+"ACK From : " + fromIP + ":" + from.Port.ToString() + "  content: " +
                                  peerDiscoverMsg.ToString());
                 }
