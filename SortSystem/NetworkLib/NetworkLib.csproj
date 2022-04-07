@@ -15,4 +15,8 @@
       <ProjectReference Include="..\CommonLib\CommonLib.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Exception" />
+    </ItemGroup>
+
 </Project>

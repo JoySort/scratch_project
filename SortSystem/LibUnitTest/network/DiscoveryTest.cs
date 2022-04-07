@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -33,6 +34,12 @@ public class DiscoveryTest
         discoverService.KeepAliveInterval = 10;
         discoverService.UnitTestFlag = true;
         discoverService.StartListen();
+        DiscoverFoundEventArgs eventArgsFromInside = null;
+        
+        discoverService.EndPointDiscoverFound += (object sender, DiscoverFoundEventArgs e) =>
+        {
+            eventArgsFromInside = e;
+        };
         while (discoverService.Counter < testCycle) // keep discovery running
         {
             Thread.Sleep(100);
@@ -43,6 +50,7 @@ public class DiscoveryTest
 
                 logger?.Info(JsonConvert.SerializeObject(discoverService.LastDiff));
                 Assert.AreEqual(discoverService.LastDiff.Last().Value.Last().Value, 0);
+                Assert.NotNull(eventArgsFromInside);
             }
         }
     }

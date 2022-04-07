@@ -18,6 +18,10 @@ logger.Fatal("Fatal Message");
 
 
 var discoverService = new UDPDiscoveryService(13456,13455);
+discoverService.EndPointDiscoverFound += (object sender, DiscoverFoundEventArgs e) =>
+{
+    logger.Info("Event catched "+e.ipAddr +" "+ e.rpcPort);
+};
 discoverService.StartListen();
 while ( discoverService.Counter<1000000)// keep discovery running
 {
