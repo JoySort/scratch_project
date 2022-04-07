@@ -84,33 +84,25 @@ public class UDPDiscoveryService
 
                     if (!newTargetInfo.ContainsKey(targetKey)) newTargetInfo[targetKey] = peerDiscoverMsg;
                     
-                    
                     sendResponds(fromIP, fromPort, peerDiscoverMsg.Count);
                     lastMsgID[targetKey] = peerDiscoverMsg.Count;
+                    
+                   
+                    
+                    
                     logger.Debug("["+serviceName+"]"+"BROADCAST From : " + fromIP + ":" + from.Port.ToString() + " msg count: " +
                                  MsgCounter[targetKey] + " msg diff:" + (peerDiscoverMsg.Count - MsgCounter[targetKey]) +
                                  "  content: " + peerDiscoverMsg.ToString());
                 }
                 else
                 {
-                    if (lastAnouncementSent.ContainsKey(targetKey))
+                   
+                    var discoverEventArgs = new DiscoverFoundEventArgs
                     {
-                        var timeDiff = DateTime.Now.ToFileTime() - lastAnouncementSent[targetKey];
-                        if (timeDiff/100 > 5000*10)
-                        {
-                            SendAnnouncement();
-                        }
-                        else
-                        {
-                            logger.Debug("Last annoucement sent 1s ago, skip this anoucement last:"+lastAnouncementSent[targetKey]);
-                        }
-                    }
-                    else
-                    {
-                        lastAnouncementSent[targetKey] = DateTime.Now.ToFileTime();
-                        SendAnnouncement();
-                    }
-                    
+                        ipAddr = fromIP,
+                        rpcPort = peerDiscoverMsg.RpcPort
+                    };
+                    OnEndPointDiscoverFound(discoverEventArgs);
                     logger.Debug("["+serviceName+"]"+"ACK From : " + fromIP + ":" + from.Port.ToString() + "  content: " +
                                  peerDiscoverMsg.ToString());
                 }
