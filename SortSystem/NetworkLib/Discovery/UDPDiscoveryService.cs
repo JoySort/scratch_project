@@ -96,7 +96,7 @@ public class UDPDiscoveryService
                     if (lastAnouncementSent.ContainsKey(targetKey))
                     {
                         var timeDiff = DateTime.Now.ToFileTime() - lastAnouncementSent[targetKey];
-                        if (timeDiff > 1000)
+                        if (timeDiff/100 > 5000*10)
                         {
                             SendAnnouncement();
                         }
@@ -250,7 +250,7 @@ public class UDPDiscoveryService
     private void restartDiscoveryOnNetworkChange(List<string> tempIps)
     {
         var timeDiff = DateTime.Now.ToFileTime() - lastRestartTimestamp;
-        if (restartNetworkAdaptorCount > 2 && timeDiff> KeepAliveInterval*10 ){
+        if (restartNetworkAdaptorCount > 2 && timeDiff> 10000*KeepAliveInterval*10 ){
             
             throw new Exception("["+serviceName+"]"+"Network adaptor has changed and we retried " + restartNetworkAdaptorCount + "times, Still failing"+"Last restart in "+ timeDiff/1000 + "secs");
         }
