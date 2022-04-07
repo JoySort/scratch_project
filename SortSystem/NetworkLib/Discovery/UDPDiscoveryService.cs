@@ -276,6 +276,6 @@ public class UDPDiscoveryService
         
         logger.Info("["+serviceName+"]"+" Message stats: " +
                     "\nresponse sent" + JsonConvert.SerializeObject(MsgCounter,Formatting.Indented) +
-                    "\nresponse diff {server:{{lastest_msg_id:difference_of_count_between_lastest_and_first_msgid}}}" + JsonConvert.SerializeObject(lastDiff),Formatting.Indented);
+                    "\nresponse diff {server:{{lastest_msg_id:difference_of_count_between_lastest_and_first_msgid}}}\n" + JsonConvert.SerializeObject(lastDiff),Formatting.Indented);
     }
 }
