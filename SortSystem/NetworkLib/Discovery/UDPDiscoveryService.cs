@@ -100,6 +100,7 @@ public class UDPDiscoveryService
 
         Task.Run(() =>
         {
+            SendAnnouncement();
             while (!ExitFlag)
             {
                 if (counter % 10 == 0)
@@ -108,7 +109,7 @@ public class UDPDiscoveryService
                     checkForNewDiscovery();
                     checkForNetWorkAdaptorChange();
                 }
-                SendAnnouncement();
+                
                 Thread.Sleep(KeepAliveInterval);
             }
         });
