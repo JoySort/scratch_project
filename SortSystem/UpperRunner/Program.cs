@@ -16,8 +16,15 @@ logger.Info("Info Message");
 logger.Error("Error Message");
 logger.Fatal("Fatal Message");
 
+var rpc_port = 13456;
+var udp_port = 13457;
+if (args.Length > 0)
+{
+    rpc_port = int.Parse(args[0]);
+    udp_port = int.Parse(args[1]);
+}
 
-var discoverService = new UDPDiscoveryService(13456,13455);
+var discoverService = new UDPDiscoveryService(rpc_port,udp_port);
 discoverService.EndPointDiscoverFound += (object sender, DiscoverFoundEventArgs e) =>
 {
     logger.Info("Event catched "+e.ipAddr +" "+ e.rpcPort);
