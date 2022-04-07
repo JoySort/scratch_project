@@ -15,23 +15,16 @@ public class UDPDiscoveryService
     private UdpClient udpClient;
     private string serviceName = "default name";
     private DiscoverMSG localDiscoverMsg;
-    private Dictionary<string, int> firstMsgID = new Dictionary<string, int>();
-    private Dictionary<string, int> lastMsgID = new Dictionary<string, int>();
-    private Dictionary<string, Dictionary<int, int>> lastDiff = new Dictionary<string, Dictionary<int, int>>();
     private List<string> localIps = new List<string>();
     private int counter = 0;
-
-    private Dictionary<string, DiscoverMSG> newTargetInfo =
-        new Dictionary<string, DiscoverMSG>();
+    
     public bool UnitTestFlag { get; set; } = false;
     public int ListenPort { get; set; }
     
     public int KeepAliveInterval { get; set; } = 1000 * 3;
     public int Counter => counter;
-    private Dictionary<string, long> lastAnouncementSent = new Dictionary<string, long>();
-    private Dictionary<string, int> MsgCounter { get; } = new Dictionary<string, int>();
 
-    private Dictionary<string, Dictionary<int, int>> LastDiff => lastDiff;
+   
     public bool ExitFlag { get; set; } = false;
     public event EventHandler<DiscoverFoundEventArgs> EndPointDiscoverFound;
 
@@ -81,28 +74,20 @@ public class UDPDiscoveryService
 
                 if (peerDiscoverMsg.Type == DiscoverMSG.MSG_TYPE_BRD)
                 {
-
-                    if (!newTargetInfo.ContainsKey(targetKey)) newTargetInfo[targetKey] = peerDiscoverMsg;
                     
                     sendResponds(fromIP, fromPort, peerDiscoverMsg.Count);
-                    lastMsgID[targetKey] = peerDiscoverMsg.Count;
+                  
                     
                    
-                    
+                    dispatchDiscovery(peerDiscoverMsg.RpcPort, fromIP);
                     
                     logger.Debug("["+serviceName+"]"+"BROADCAST From : " + fromIP + ":" + from.Port.ToString() + " msg count: " +
-                                 MsgCounter[targetKey] + " msg diff:" + (peerDiscoverMsg.Count - MsgCounter[targetKey]) +
-                                 "  content: " + peerDiscoverMsg.ToString());
+                                 peerDiscoverMsg.Count+ "  content: " + peerDiscoverMsg.ToString());
                 }
                 else
                 {
-                   
-                    var discoverEventArgs = new DiscoverFoundEventArgs
-                    {
-                        ipAddr = fromIP,
-                        rpcPort = peerDiscoverMsg.RpcPort
-                    };
-                    OnEndPointDiscoverFound(discoverEventArgs);
+
+                    dispatchDiscovery(peerDiscoverMsg.RpcPort, fromIP);
                     logger.Debug("["+serviceName+"]"+"ACK From : " + fromIP + ":" + from.Port.ToString() + "  content: " +
                                  peerDiscoverMsg.ToString());
                 }
@@ -116,8 +101,6 @@ public class UDPDiscoveryService
             {
                 if (counter % 10 == 0)
                 {
-                    printStats();
-                    checkForNewDiscovery();
                     checkForNetWorkAdaptorChange();
                 }
                 
@@ -126,37 +109,21 @@ public class UDPDiscoveryService
         });
     }
 
+    private void dispatchDiscovery(int rpcPort, string ip)
+    {
+        var discoverEventArgs = new DiscoverFoundEventArgs
+        {
+            ipAddr = ip,
+            rpcPort = rpcPort
+        };
+        OnEndPointDiscoverFound(discoverEventArgs);
+    }
+
     private void sendResponds(string fromIP, int fromPort, int msgID)
     {
-        var targetKey = fromIP + ":" + fromPort;
-        if (!MsgCounter.ContainsKey(targetKey))
-        {
-            MsgCounter[targetKey] = 0;
-        }
-        else
-        {
-            MsgCounter[targetKey]++;
-        }
-
-        if (!firstMsgID.ContainsKey(targetKey))
-        {
-            firstMsgID[targetKey] = msgID;
-            
-            var discoverEventArgs = new DiscoverFoundEventArgs
-            {
-                ipAddr = fromIP,
-                rpcPort = newTargetInfo[targetKey].RpcPort
-            };
-            OnEndPointDiscoverFound(discoverEventArgs);
-        }
-
-
-        var respondDiscoverMsg = new DiscoverMSG(localDiscoverMsg.RpcPort, ListenPort, DiscoverMSG.MSG_TYPE_ACK,
-            MsgCounter[targetKey]);
+        var respondDiscoverMsg = new DiscoverMSG(localDiscoverMsg.RpcPort, ListenPort, DiscoverMSG.MSG_TYPE_ACK, msgID);
         var msg = JsonConvert.SerializeObject(respondDiscoverMsg);
         var data = Encoding.UTF8.GetBytes(msg);
-
-
         udpClient.Send(data, data.Length, fromIP, fromPort);
     }
 
@@ -171,42 +138,7 @@ public class UDPDiscoveryService
         udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, ListenPort);
     }
 
-    private void checkForNewDiscovery()
-    {
-        foreach ((var key, var value)in firstMsgID)
-        {
-            var diff_value = lastMsgID[key] - value - MsgCounter[key];
-            var diff_key = lastMsgID[key];
-
-
-            if (!lastDiff.ContainsKey(key))
-            {
-                var diff_dic = new Dictionary<int, int>();
-                diff_dic.Add(diff_key, diff_value);
-                lastDiff.Add(key, diff_dic);
-            }
-            else
-            {
-                if (lastDiff[key].Last().Value != diff_value)
-                {
-                    if (lastDiff[key].ContainsKey(diff_key))
-                    {
-                        lastDiff[key][diff_key] = diff_value;
-                    }
-                    else
-                    {
-                        lastDiff[key].Add(diff_key, diff_value);
-                    }
-                    var discoverEventArgs = new DiscoverFoundEventArgs
-                    {
-                        ipAddr = key.Split(":")[0],
-                        rpcPort = newTargetInfo[key].RpcPort
-                    };
-                    OnEndPointDiscoverFound(discoverEventArgs);
-                }
-            }
-        }
-    }
+  
 
     private void checkForNetWorkAdaptorChange()
     {
@@ -253,11 +185,7 @@ public class UDPDiscoveryService
         
         //如果想要停止原来的运行，则需要等待原来循环完全结束退出。设置退出标志为true让原来的while循环退出。
         this.ExitFlag = true;
-        firstMsgID.Clear();
-        lastMsgID.Clear();
-        lastDiff.Clear();
         localIps.Clear();
-        newTargetInfo.Clear();
         udpClient.Client.Close();
       
 
@@ -280,14 +208,5 @@ public class UDPDiscoveryService
             }
         }
     }
-
-    public void printStats()
-    {
-
-       
-        
-        logger.Info("["+serviceName+"]"+" Message stats: " +
-                    "\nresponse sent" + JsonConvert.SerializeObject(MsgCounter,Formatting.Indented) +
-                    "\nresponse diff {server:{{lastest_msg_id:difference_of_count_between_lastest_and_first_msgid}}}\n" + JsonConvert.SerializeObject(lastDiff,Formatting.Indented));
-    }
+    
 }
