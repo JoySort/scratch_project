@@ -24,6 +24,11 @@
        <Content Include="assets\*">
        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+       <Content Include="config\emitters.json">
+         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+       </Content>
        <Content Include="config\state.json">
          <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

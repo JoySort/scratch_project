@@ -1,6 +1,8 @@
 using System.Linq;
 using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.ConfigVO.Emission;
 using CommonLib.Lib.Util;
+using NLog;
 
 namespace LibUnitTest.Parser;
 using NUnit.Framework;
@@ -9,14 +11,16 @@ public class ConfigLoaderTest
     [SetUp]
     public void setup()
     {
-        
+        LogManager.LoadConfiguration("config/logger.config");
+        ConfigUtil.setConfigFolder( "../../../config");;
     }
 
     [Test]
     public void LoadModuleConfigTest()
-    {
-        string JsonFilePath = @"./config/module.json";
-       ModuleConfig cfg =  ConfigLoader.loadModuleConfig(JsonFilePath);
+    { 
+        
+        
+       ModuleConfig cfg =  ConfigUtil.loadModuleConfig();
        
        Assert.AreEqual(cfg.Module,JoyModule.Lower);
        Assert.AreEqual(cfg.LowerConfig.Length,2);
@@ -30,8 +34,8 @@ public class ConfigLoaderTest
     [Test]
     public void LoadStateConfigTest()
     {
-        string JsonFilePath = @"./config/state.json";
-        MachineState[] cfg =  ConfigLoader.loadMachineState(JsonFilePath);
+        
+        MachineState[] cfg =  ConfigUtil.loadMachineState();
         foreach (var state in cfg)
         {
             if (state.Name == StateName.start)
@@ -43,5 +47,22 @@ public class ConfigLoaderTest
             }
         }
         
+    }
+    
+    [Test]
+    public void LoadEmitters()
+    {
+       
+        Emitter[] cfg =  ConfigUtil.LoadEmitters();
+        Assert.AreEqual(cfg.Length,8);
+        Assert.AreEqual(cfg.First().Delay.Length,4);
+        Assert.AreEqual(cfg.Last().Duration.Length,4);
+        
+        Assert.AreEqual(cfg.First().Delay.First().Length,6);
+        Assert.AreEqual(cfg.Last().Duration.First().Length,6);
+        
+        Assert.AreEqual(cfg.First().Offset.Length,4);
+        Assert.AreEqual(cfg.Last().Offset.Length,4);
+
     }
 }

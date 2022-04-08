@@ -1,36 +1,15 @@
+using CommonLib.Lib.Util;
+using LowerRunner;
+using NDesk.Options;
 using NLog;
 using NLog.Web;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
 
+//处理命令行参数
+CMDArgumentUtil.parse(args);// use cmd option --config_folder=../../config to setup a config folder outside the program folder to avoid lose config when upgrade 
+ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
+WebInitializer.init();
+NetworkInitializer.UDPDiscoverSetup();
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Logging.ClearProviders();
-builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-builder.Host.UseNLog();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpperRunner", "UpperRunner\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibUnitTest", "LibUnitTest\LibUnitTest.csproj", "{A7A92FC3-580F-43A0-B88A-96EACD989AF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkLib", "NetworkLib\NetworkLib.csproj", "{856B8D09-8E16-4266-BEDD-9B63E15194AB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LowerRunner", "LowerRunner\LowerRunner.csproj", "{2BFC6744-6F87-4B87-8462-8346A9E2FAE2}"
 EndProject
 Global
@@ -34,10 +32,6 @@ Global
 		{A7A92FC3-580F-43A0-B88A-96EACD989AF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7A92FC3-580F-43A0-B88A-96EACD989AF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7A92FC3-580F-43A0-B88A-96EACD989AF0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{856B8D09-8E16-4266-BEDD-9B63E15194AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{856B8D09-8E16-4266-BEDD-9B63E15194AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{856B8D09-8E16-4266-BEDD-9B63E15194AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{856B8D09-8E16-4266-BEDD-9B63E15194AB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2BFC6744-6F87-4B87-8462-8346A9E2FAE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2BFC6744-6F87-4B87-8462-8346A9E2FAE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BFC6744-6F87-4B87-8462-8346A9E2FAE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
