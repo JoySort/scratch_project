@@ -11,10 +11,10 @@ namespace LibUnitTest.network;
 
 public class DiscoveryTest
 {
-    private readonly UDPDiscoveryService discoverService = new UDPDiscoveryService(13298, 13299,"unitTestInstance");
+    private readonly UDPDiscoveryService discoverService = new UDPDiscoveryService(13298, 13299, "unitTestInstance");
 
     private Logger? logger;
-    private readonly int testCycle = 300 * 1;
+    private readonly int testCycle = 3 * 1;
 
     public DiscoveryTest()
     {
@@ -35,23 +35,15 @@ public class DiscoveryTest
         discoverService.UnitTestFlag = true;
         discoverService.StartListen();
         DiscoverFoundEventArgs eventArgsFromInside = null;
-        
+
         discoverService.EndPointDiscoverFound += (object sender, DiscoverFoundEventArgs e) =>
         {
             eventArgsFromInside = e;
         };
-        while (discoverService.Counter < testCycle) // keep discovery running
-        {
-            Thread.Sleep(100);
-            if (discoverService.Counter > testCycle - 1)
-            {
-                discoverService.ExitFlag = true;
 
-
-                //logger?.Info(JsonConvert.SerializeObject(discoverService.LastDiff));
-                //Assert.AreEqual(discoverService.LastDiff.Last().Value.Last().Value, 0);
-                Assert.NotNull(eventArgsFromInside);
-            }
-        }
+        Thread.Sleep(1000);
+        Assert.NotNull(eventArgsFromInside);
+        Assert.AreEqual(eventArgsFromInside.rpcPort,13298);
+        
     }
 }
