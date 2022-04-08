@@ -8,7 +8,7 @@ namespace LibUnitTest.network;
 public class HTTPClientTest
 {
     private HttpClient client = new HttpClient();
-    [SetUp]
+    //[SetUp]
     public async Task  setup()
     {
         var url = "http://code-server.lan:5133/Discover";
@@ -22,7 +22,7 @@ public class HTTPClientTest
         Console.WriteLine(responseBody);
     }
 
-    [Test]
+    //[Test]
     public void test1()
     {
      
