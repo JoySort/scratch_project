@@ -19,7 +19,7 @@ public class ConfigUtil
         bool dirExists = Directory.Exists(path);
         if (!dirExists)
         {
-            throw new Exception("Folder doesn't exist"+path);
+            throw new Exception("Folder doesn't exist "+path+" original using "+configFolder);
         }
     }
 
