@@ -33,7 +33,6 @@
     <ItemGroup>
       <Content Update="nlog.config">
         <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
 

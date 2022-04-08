@@ -12,8 +12,9 @@ public class ConfigUtil
     public static Logger logger = LogManager.GetCurrentClassLogger();
 
     private static string configFolder ="../../../config";
-    public static void setConfigFolder(string path)
+    public static void setConfigFolder(string configFolder)
     {
+        var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,configFolder);
         bool dirExists = Directory.Exists(path);
         if (!dirExists)
         {

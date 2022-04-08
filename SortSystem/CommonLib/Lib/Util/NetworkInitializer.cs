@@ -10,10 +10,10 @@ public class NetworkInitializer
     public static void UDPDiscoverSetup() {
         
         var rpc_port = ConfigUtil.loadModuleConfig().Network.RpcPort;
-        var udp_port =  ConfigUtil.loadModuleConfig().Network.DiscoveryPorts;
+        var udp_ports =  ConfigUtil.loadModuleConfig().Network.DiscoveryPorts;
         var moduleName = ConfigUtil.loadModuleConfig().Name;
         
-        foreach (var port in udp_port)
+        foreach (var port in udp_ports)
         {
             var uppDiscoverService = new UDPDiscoveryService(rpc_port,port,moduleName);
             uppDiscoverService.EndPointDiscoverFound += (object sender, DiscoverFoundEventArgs e) =>

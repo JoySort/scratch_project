@@ -24,6 +24,7 @@ public class UDPDiscoveryService
     {
         this.serviceName = serviceName;
         ListenPort = listenPort;
+        logger.Info("Discovery Service {} listen at {} reporting rpc {} initialized",serviceName,listenPort,rpc_port);
         localDiscoverMsg = new DiscoverMSG(rpc_port, listenPort, DiscoverMSG.MSG_TYPE_BRD, 0);
     }
 
