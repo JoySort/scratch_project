@@ -24,16 +24,24 @@
        <Content Include="assets\*">
        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+       <Content Include="config\state.json">
+         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+       </Content>
 </ItemGroup>
     <ItemGroup>
-      <None Update="assets\vo\project_start_sample.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="config\logger.config">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="config\joy_config.json">
+      <None Update="config\module.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="config\project_start_sample.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="assets\vo" />
     </ItemGroup>
 </Project>

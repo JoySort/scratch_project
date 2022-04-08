@@ -7,19 +7,22 @@ namespace CommonLib.Lib.Util;
 public class ConfigLoader
 {
 
-    public static Configuration load()
-    {
-        string JsonFilePath = @"./config/joy_config.json";
-        return load(JsonFilePath);
-    }
-
-    public static Configuration load(string filePath)
+ 
+    public static ModuleConfig loadModuleConfig(string filePath)
     { 
         
         var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,filePath);
         var porjectJsonString = File.ReadAllText(path);
 
-        return  JsonConvert.DeserializeObject<Configuration>(porjectJsonString);
+        return  JsonConvert.DeserializeObject<ModuleConfig>(porjectJsonString);
 
+    }
+
+    public static MachineState[] loadMachineState(string filePath)
+    {
+        var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,filePath);
+        var porjectJsonString = File.ReadAllText(path);
+
+        return  JsonConvert.DeserializeObject<MachineState[]>(porjectJsonString);
     }
 }
