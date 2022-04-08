@@ -15,10 +15,11 @@ public class ConfigUtil
     public static void setConfigFolder(string configFolder)
     {
         var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,configFolder);
+        logger.Info("ConfigUtil using path config:{}",path);
         bool dirExists = Directory.Exists(path);
         if (!dirExists)
         {
-            throw new Exception("Folder doesn't exist");
+            throw new Exception("Folder doesn't exist"+path);
         }
     }
 
