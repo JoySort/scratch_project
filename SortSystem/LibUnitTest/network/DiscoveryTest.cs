@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using NetworkLib.Discovery;
+using CommonLib.Lib.Network;
 using Newtonsoft.Json;
 using NLog;
 using NUnit.Framework;

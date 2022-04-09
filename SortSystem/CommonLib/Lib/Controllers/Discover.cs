@@ -1,3 +1,5 @@
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -20,8 +22,8 @@ public class Discover: ControllerBase
     }
     
     [HttpGet(Name = "GetServiceInfo")]
-    public ServerInfo Get()
+    public ModuleConfig Get()
     {
-        return new ServerInfo("lower", 1);
+        return ConfigUtil.loadModuleConfig();
     }
 }

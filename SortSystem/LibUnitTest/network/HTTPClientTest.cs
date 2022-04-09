@@ -13,11 +13,11 @@ public class HTTPClientTest
     {
         var url = "http://code-server.lan:5133/Discover";
         Console.WriteLine("started");
-        var response = await client.GetAsync(url);
-        response.EnsureSuccessStatusCode();
-        string responseBody = await response.Content.ReadAsStringAsync();
+        //var response = await client.GetAsync(url);
+        //response.EnsureSuccessStatusCode();
+        //string responseBody = await response.Content.ReadAsStringAsync();
         // Above three lines can be replaced with new helper method below
-        // string responseBody = await client.GetStringAsync(uri);
+        string responseBody = await client.GetStringAsync(url);
 
         Console.WriteLine(responseBody);
     }

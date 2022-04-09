@@ -4,7 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 using NLog;
 
-namespace NetworkLib.Discovery;
+namespace CommonLib.Lib.Network;
 
 public class UDPDiscoveryService
 {
@@ -32,7 +32,7 @@ public class UDPDiscoveryService
     public int ListenPort { get; set; }
 
     public int KeepAliveInterval { get; set; } = 1000 * 3;
-    public int Counter { get; private set; }
+    private int msgCounter = 0;
 
 
     public bool ExitFlag { get; set; }
@@ -99,9 +99,8 @@ public class UDPDiscoveryService
             SendAnnouncement();
             while (!ExitFlag)
             {
-                if (Counter % 10 == 0) checkForNetWorkAdaptorChange();
-
-                Thread.Sleep(KeepAliveInterval);
+                checkForNetWorkAdaptorChange();
+                Thread.Sleep(KeepAliveInterval*10);
             }
         });
     }
@@ -127,9 +126,9 @@ public class UDPDiscoveryService
 
     public void SendAnnouncement()
     {
-        Counter++;
+        msgCounter++;
         localDiscoverMsg.Type = DiscoverMSG.MSG_TYPE_BRD;
-        localDiscoverMsg.Count = Counter;
+        localDiscoverMsg.Count = msgCounter;
         var msg = JsonConvert.SerializeObject(localDiscoverMsg);
         var data = Encoding.UTF8.GetBytes(msg);
         udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, ListenPort);

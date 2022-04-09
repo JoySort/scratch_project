@@ -1,12 +1,13 @@
-using NetworkLib.Discovery;
+using CommonLib.Lib.Util;
 using NLog;
 
-namespace CommonLib.Lib.Util;
+namespace CommonLib.Lib.Network;
 
-public class NetworkInitializer
+public class NetworkUtil
 {
     private static Logger  logger = LogManager.GetCurrentClassLogger();
-    
+    private static List<UDPDiscoveryService> _discoveryServices = new List<UDPDiscoveryService>();
+    private static Dictionary<string, string> rpcEndPoint = new Dictionary<string, string>(); 
     public static void UDPDiscoverSetup() {
         
         var rpc_port = ConfigUtil.loadModuleConfig().Network.RpcPort;
@@ -19,11 +20,17 @@ public class NetworkInitializer
             uppDiscoverService.EndPointDiscoverFound += (object sender, DiscoverFoundEventArgs e) =>
             {
                 logger.Info("Event catched "+e.ipAddr +" "+ e.rpcPort);
+                registerRPCEndPoint(e.ipAddr, e.rpcPort);
             };
+            _discoveryServices.Add(uppDiscoverService);
             uppDiscoverService.StartListen();
         }
-
-        
-      
     }
+
+    public static void registerRPCEndPoint(string ipAddr,int port)
+    {
+        
+    }
+
+
 }

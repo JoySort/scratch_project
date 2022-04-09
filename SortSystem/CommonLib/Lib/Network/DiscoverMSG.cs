@@ -1,4 +1,4 @@
-namespace NetworkLib.Discovery;
+namespace CommonLib.Lib.Network;
 
 public class DiscoverMSG
 {
