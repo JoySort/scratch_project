@@ -44,7 +44,7 @@ public class DiscoverMSG
     public int RpcPort => rpcPort;
 
     
-    public string ToString()
+    public override string ToString()
     {
         return "rpc port:" + rpcPort +
                " type:"+type+

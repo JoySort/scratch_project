@@ -1,6 +1,6 @@
 using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.ConfigVO.Emission;
 using CommonLib.Lib.Util;
-using CommonLib.Lib.vo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -21,9 +21,23 @@ public class DiscoverController : ControllerBase
     }
     
     [HttpGet]
-    [Route("/apis/service")]
-    public ModuleConfig Get()
+    [Route("/config/module")]
+    public ModuleConfig getModuleConfig()
     {
         return ConfigUtil.loadModuleConfig();
+    }
+    
+    [HttpGet]
+    [Route("/config/state")]
+    public MachineState[] getMachineStateConfig()
+    {
+        return ConfigUtil.loadMachineState();
+    }
+    
+    [HttpGet]
+    [Route("/config/emitters")]
+    public Emitter[] getEmitters()
+    {
+        return ConfigUtil.LoadEmitters();
     }
 }

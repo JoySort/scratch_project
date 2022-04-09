@@ -1,5 +1,7 @@
 using System.Text;
+using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.Controllers;
+using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
 using Microsoft.AspNetCore.Mvc;
@@ -23,40 +25,12 @@ public class SortController: ControllerBase
         this.logger.LogInformation(1, "NLog injected into SortController");
     }
     
-    [Route("/sort/")]
+    [Route("/sort/single")]
     [HttpPost]
-    public UIAPIResult project_start()
+    public void singleSort(RecResult rawResult)
     {
-        var errorObj = new JoyError();
-        using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
-        {  
-            string content = reader.ReadToEndAsync().Result;
-           
-            if(!string.IsNullOrEmpty(content)){
-                try
-                {
-                    ProjectParser parser = new ProjectParser(content);
-                    Project project = parser.getProject();
-                    
-                    if(logger.IsEnabled(LogLevel.Debug))
-                        logger.LogDebug("Project id: {} with name {} of content:{}", project.Id, project.Name,JsonConvert.SerializeObject(project));
-                }
-                catch (Exception e)
-                {
-                    errorObj.e = e.Message;
-                }
-            }
-            else
-            {
-                errorObj.e = "Post content is empty";
-            }
-        }
-
-        var errorCode = errorObj.e != null ? "2" : "1";
-        var errorMessage = (errorObj.e ??"");
-        var status =  (errorObj.e != null ? "error" : "ok");
-        var resultData = new EmptyResult();
+       logger.LogDebug("raw result",rawResult.Coordinates.First().Column);
         
-        return new UIAPIResult(errorCode,errorMessage,errorObj,status,resultData);
+        return ;
     }
 }

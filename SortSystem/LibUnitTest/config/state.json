@@ -5,7 +5,7 @@
     "state": {
       "triggers": [{
         "name": "trigger",
-        "mode": "soft|encoder|switch",
+        "mode": "PhotoelectricSwitch",
         "address": 5,
         "enabled": true,
         "delay": 40000,

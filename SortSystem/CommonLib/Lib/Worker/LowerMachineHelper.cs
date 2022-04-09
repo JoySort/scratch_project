@@ -56,7 +56,7 @@ public class ProjectStatusEventArgs : EventArgs
     {
         set;
         get;
-    }
+    } = null!;
 
     public ProjectStatus status
     {

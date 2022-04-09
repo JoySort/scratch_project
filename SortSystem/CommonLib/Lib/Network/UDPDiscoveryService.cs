@@ -23,7 +23,7 @@ public class UDPDiscoveryService
     public UDPDiscoveryService(int rpc_port, int listenPort, string serviceName)
     {
         this.serviceName = serviceName;
-        ListenPort = listenPort;
+        this.ListenPort = listenPort;
         logger.Info("Discovery Service {} listen at {} reporting rpc {} initialized",serviceName,listenPort,rpc_port);
         localDiscoverMsg = new DiscoverMSG(rpc_port, listenPort, DiscoverMSG.MSG_TYPE_BRD, 0);
     }

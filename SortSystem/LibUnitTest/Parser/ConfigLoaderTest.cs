@@ -17,14 +17,18 @@ public class ConfigLoaderTest
 
     [Test]
     public void LoadModuleConfigTest()
-    { 
-        
-        
-       ModuleConfig cfg =  ConfigUtil.loadModuleConfig();
-       
-       Assert.AreEqual(cfg.Module,JoyModule.Lower);
-       Assert.AreEqual(cfg.LowerConfig.Length,2);
-       Assert.AreEqual(cfg.Network.RpcPort,5113);
+    {
+
+
+        ModuleConfig cfg = ConfigUtil.loadModuleConfig();
+
+        Assert.AreEqual(cfg.Module, JoyModule.Lower);
+        Assert.AreEqual(cfg.LowerConfig.Length, 2);
+        Assert.AreEqual(cfg.LowerConfig.First().HardwarePort, "/dev/com1");
+        Assert.True(cfg.LowerConfig.First().Columns.SequenceEqual(new[]{0, 11 }));
+        Assert.AreEqual(cfg.LowerConfig.Last().HardwarePort, "/dev/com2");
+        Assert.True(cfg.LowerConfig.Last().Columns.SequenceEqual(new[]{12, 23 }));
+        Assert.AreEqual(cfg.Network.RpcPort,5113);
        Assert.True(cfg.Network.DiscoveryPorts.SequenceEqual(new [] {13567,13568,13569}));
        Assert.AreEqual(cfg.Network.RpcBindIp,"*");
        Assert.AreEqual(cfg.Network.UdpBindIp,"*");
@@ -41,7 +45,12 @@ public class ConfigLoaderTest
             if (state.Name == StateName.start)
             {
                 Assert.AreEqual(state.State.Servos.Length, 1);
+                Assert.AreEqual(state.State.Servos.First().Name, "main_motor");
+                Assert.AreEqual(state.State.Servos.First().StartTimeSpan, 30000);
+                
                 Assert.AreEqual(state.State.Triggers.Length, 1);
+                Assert.AreEqual(state.State.Triggers.First().Interval, 300);
+                Assert.AreEqual(state.State.Triggers.First().Mode, TriggerMode.PhotoelectricSwitch);
                 Assert.AreEqual(state.State.StepMotoers.Length, 1);
                 Assert.AreEqual(state.IsDefault, false);
             }

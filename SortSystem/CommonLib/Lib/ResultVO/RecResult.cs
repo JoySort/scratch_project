@@ -2,22 +2,18 @@ using System.Collections;
 
 namespace CommonLib.Lib.Sort.ResultVO;
 
-public class RecResult
+public class RecResult:RawResult
 {
-    private Coordinate coordinate;
+ 
     private Feature[] features;
     
     
-    public Coordinate Coordinate => coordinate;
 
     public Feature[] Features => features;
-    
-    
-    //TODO: write bit transform code 
-    public RecResult(Coordinate coordinate, BitArray featureBits)
+
+
+    public RecResult(Coordinate[] coordinates, int offset, Feature[] features) : base(coordinates, offset)
     {
-        this.coordinate = coordinate;
-
+        this.features = features;
     }
-
 }

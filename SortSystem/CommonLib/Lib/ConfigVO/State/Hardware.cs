@@ -77,21 +77,21 @@ public class Switch : HWBase
 
 public class Trigger : HWBase
 {
-    public Trigger(string name, int address, bool enabled, int delay, string mode, string interval, int step) : base(name, address, enabled, delay)
+    public Trigger(string name, int address, bool enabled, int delay, TriggerMode mode, int interval, int step) : base(name, address, enabled, delay)
     {
         this.mode = mode;
         this.interval = interval;
         this.step = step;
     }
 
-    public string Mode => mode;
+    public TriggerMode Mode => mode;
 
-    public string Interval => interval;
+    public int Interval => interval;
 
     public int Step => step;
 
-    private string mode;
-    private string interval;
+    private TriggerMode mode;
+    private int interval;
     private int step;
 }
 
