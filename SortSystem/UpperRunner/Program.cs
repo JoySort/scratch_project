@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 
+using CommonLib.Lib.Network;
 using NLog;
 
 LogManager.LoadConfiguration("config/logger.config"); 
@@ -42,7 +43,7 @@ CamDiscoverService.EndPointDiscoverFound += (object sender, DiscoverFoundEventAr
 CamDiscoverService.StartListen();
 
 
-while ( uppDiscoverService.Counter<1000000)// keep discovery running
+while ( true)// keep discovery running
 {
     Thread.Sleep(1000);
 }
