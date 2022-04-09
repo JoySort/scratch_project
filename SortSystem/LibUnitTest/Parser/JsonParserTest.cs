@@ -12,7 +12,7 @@ public class JsonParserTest {
     string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
 
     private string? porjectJsonString;
-    private JsonParser? jparser;
+    private ProjectParser? jparser;
 
     private Project project;
    
@@ -20,7 +20,7 @@ public class JsonParserTest {
     public void Setup()
     {   
         porjectJsonString = File.ReadAllText(path);
-        jparser = new JsonParser(porjectJsonString);
+        jparser = new ProjectParser(porjectJsonString);
         project = jparser.getProject();
     }
 

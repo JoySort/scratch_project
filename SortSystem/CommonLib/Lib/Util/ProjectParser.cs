@@ -6,12 +6,12 @@ namespace CommonLib.Lib.Util;
 /**
  * <summary>Usage see @LibUnitTest.vo.JSONParserTest</summary>
  */
-public class JsonParser
+public class ProjectParser
 {
     private readonly JObject _jresult;
     
 
-    public JsonParser(string projectJsonString)
+    public ProjectParser(string projectJsonString)
     {
         _jresult = JObject.Parse(projectJsonString);
         ParseCriteria();

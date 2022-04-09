@@ -1,5 +1,6 @@
 using CommonLib.Lib.Network;
 using CommonLib.Lib.Util;
+
 using LowerRunner;
 using NDesk.Options;
 using NLog;
@@ -12,6 +13,7 @@ logger.Info("init main");
 CMDArgumentUtil.parse(args);// use cmd option --config_folder=../config to setup a config folder outside the program folder to avoid lose config when upgrade 
 ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
 NetworkUtil.UDPDiscoverSetup();
+
 
 
 
