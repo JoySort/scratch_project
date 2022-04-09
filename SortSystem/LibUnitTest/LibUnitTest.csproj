@@ -18,7 +18,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CommonLib\CommonLib.csproj" />
-      <ProjectReference Include="..\NetworkLib\NetworkLib.csproj" />
     </ItemGroup>
     <ItemGroup>
        <Content Include="assets\*">

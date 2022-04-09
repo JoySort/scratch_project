@@ -1,6 +1,7 @@
 {
   "name": "lowerRunner1",
   "module": "Lower",
+  "genre": "palmDate",
   "lowerConfig":[ 
     {
     "hardwarePort": "/dev/com1",
@@ -16,5 +17,10 @@
     "discoveryPorts": [13567,13568,13569],
     "rpcBindIP": "*",
     "udpBindIP": "*"
-  }
+  },
+  "description": "模块配置：下位机模块配置",
+  "minimumCoreVersion": "1.1",
+  "title": "下位机模块配置",
+  "version":1,
+  "author": "bill"
 }

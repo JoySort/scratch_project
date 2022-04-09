@@ -5,19 +5,28 @@ namespace CommonLib.Lib.vo;
  */
 public class Genre
 {
-    private string name;
-    private Category category;
+    private GenreName name;
 
-    public Genre(string name, Category category)
+    public Genre(GenreName name)
     {
         this.name = name;
-        this.category = category;
     }
 
-    public string Name => name;
+    public GenreName Name => name;
 
-    /**
-     * <summary>本次分拣需要用到的子类别</summary>
-     */
-    public Category Category => category;
+}
+
+//椰枣
+//灰枣
+//骏枣
+//苹果
+//栗子
+//封袋
+public enum GenreName{
+    palmDate,
+    greyDate,
+    junJujube,
+    apple,
+    chestnut,
+    packingsealing
 }

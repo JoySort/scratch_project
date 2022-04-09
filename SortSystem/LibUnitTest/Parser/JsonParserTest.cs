@@ -1,7 +1,7 @@
 using System.IO;
 using System.Reflection;
 using CommonLib.Lib.Util;
-
+using CommonLib.Lib.vo;
 
 
 namespace LibUnitTest.Parser;
@@ -14,14 +14,22 @@ public class JsonParserTest {
     private string? porjectJsonString;
     private JsonParser? jparser;
 
-
+    private Project project;
    
     [SetUp]
     public void Setup()
     {   
         porjectJsonString = File.ReadAllText(path);
         jparser = new JsonParser(porjectJsonString);
+        project = jparser.getProject();
+    }
 
+    [Test]
+    public void CheckProject()
+    {
+        Assert.AreEqual(project.Name,"a");
+        Assert.AreEqual(project.Genre.Name,GenreName.palmDate);
+        Assert.AreEqual(project.Category.CatId,2);
     }
 
     [Test]

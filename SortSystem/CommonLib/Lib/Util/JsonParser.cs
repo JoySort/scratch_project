@@ -9,13 +9,19 @@ namespace CommonLib.Lib.Util;
 public class JsonParser
 {
     private readonly JObject _jresult;
-
+    
 
     public JsonParser(string projectJsonString)
     {
         _jresult = JObject.Parse(projectJsonString);
         ParseCriteria();
         ParseOutlet();
+        ParseOtherProperties();
+    }
+
+    public Project getProject()
+    {
+        return new Project(id,name,_genre,_category,EnabledCriteria.ToArray(),Outlets.ToArray());
     }
 
     public List<Criteria> FullCriteria { get; } = new();
@@ -23,6 +29,7 @@ public class JsonParser
     public List<Criteria> EnabledCriteria { get; } = new();
 
     public List<Outlet> Outlets { get; } = new();
+
 
     private void ParseCriteria()
     {
@@ -41,6 +48,19 @@ public class JsonParser
             if (value != null && (bool) value.SelectToken("checked"))
                 EnabledCriteria.Add(new Criteria(name, code, criteriaIndex, min, max, range));
         }
+    }
+
+    private Genre _genre;
+    private Category _category;
+    private string id;
+    private string name;
+    private void ParseOtherProperties()
+    {
+        _genre = new Genre(ConfigUtil.loadModuleConfig().Genre);
+        _category = new Category((string?)_jresult.SelectToken("category"));
+        id = (string?) _jresult.SelectToken("id");
+        name = (string?) _jresult.SelectToken("name");
+
     }
 
     private void ParseOutlet()
