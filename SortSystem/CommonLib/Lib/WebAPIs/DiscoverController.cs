@@ -24,20 +24,20 @@ public class DiscoverController : ControllerBase
     [Route("/config/module")]
     public ModuleConfig getModuleConfig()
     {
-        return ConfigUtil.loadModuleConfig();
+        return ConfigUtil.getModuleConfig();
     }
     
     [HttpGet]
     [Route("/config/state")]
     public MachineState[] getMachineStateConfig()
     {
-        return ConfigUtil.loadMachineState();
+        return ConfigUtil.getMachineState();
     }
     
     [HttpGet]
     [Route("/config/emitters")]
     public Emitter[] getEmitters()
     {
-        return ConfigUtil.LoadEmitters();
+        return ConfigUtil.getEmitters();
     }
 }

@@ -1,6 +1,7 @@
 using System.Linq;
 using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.ConfigVO.Emission;
+using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Util;
 using NLog;
 
@@ -20,7 +21,7 @@ public class ConfigLoaderTest
     {
 
 
-        ModuleConfig cfg = ConfigUtil.loadModuleConfig();
+        ModuleConfig cfg = ConfigUtil.getModuleConfig();
 
         Assert.AreEqual(cfg.Module, JoyModule.Lower);
         Assert.AreEqual(cfg.LowerConfig.Length, 2);
@@ -39,10 +40,10 @@ public class ConfigLoaderTest
     public void LoadStateConfigTest()
     {
         
-        MachineState[] cfg =  ConfigUtil.loadMachineState();
+        MachineState[] cfg =  ConfigUtil.getMachineState();
         foreach (var state in cfg)
         {
-            if (state.Name == StateName.start)
+            if (state.StateName == ProjectState.start)
             {
                 Assert.AreEqual(state.State.Servos.Length, 1);
                 Assert.AreEqual(state.State.Servos.First().Name, "main_motor");
@@ -62,7 +63,7 @@ public class ConfigLoaderTest
     public void LoadEmitters()
     {
        
-        Emitter[] cfg =  ConfigUtil.LoadEmitters();
+        Emitter[] cfg =  ConfigUtil.getEmitters();
         Assert.AreEqual(cfg.Length,8);
         Assert.AreEqual(cfg.First().Delay.Length,4);
         Assert.AreEqual(cfg.Last().Duration.Length,4);

@@ -10,9 +10,9 @@ public class NetworkUtil
     private static Dictionary<string, string> rpcEndPoint = new Dictionary<string, string>(); 
     public static void UDPDiscoverSetup() {
         
-        var rpc_port = ConfigUtil.loadModuleConfig().Network.RpcPort;
-        var udp_ports =  ConfigUtil.loadModuleConfig().Network.DiscoveryPorts;
-        var moduleName = ConfigUtil.loadModuleConfig().Name;
+        var rpc_port = ConfigUtil.getModuleConfig().Network.RpcPort;
+        var udp_ports =  ConfigUtil.getModuleConfig().Network.DiscoveryPorts;
+        var moduleName = ConfigUtil.getModuleConfig().Name;
         
         foreach (var port in udp_ports)
         {

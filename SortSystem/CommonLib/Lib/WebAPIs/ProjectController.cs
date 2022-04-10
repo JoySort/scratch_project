@@ -1,8 +1,8 @@
 using System.Text;
 using CommonLib.Lib.Controllers;
+using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
-using CommonLib.Lib.Worker;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -21,7 +21,7 @@ public class ProjectController: ControllerBase
     public ProjectController(ILogger<ProjectController> logger)
     {
         this.logger = logger;
-        this.logger.LogInformation(1, "NLog injected into ProjectControllers");
+        //this.logger.LogInformation(1, "NLog injected into ProjectControllers");
     }
     
     [Route("/apis/project_start")]
@@ -29,33 +29,18 @@ public class ProjectController: ControllerBase
     public UIAPIResult project_start()
     {
         var errorObj = new JoyError();
-        using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
-        {  
-            string content = reader.ReadToEndAsync().Result;
-           
-            if(!string.IsNullOrEmpty(content)){
+
                 try
                 {
-                    ProjectParser parser = new ProjectParser(content);
-                    Project project = parser.getProject();
-                    //全局播发项目启动事件
-                    //TODO:implement start project operation by registering an event listener 
-                    LowerMachineHelper.getInstance().dispatchProjectStatusChangeEvent( project,ProjectStatus.start);
-                    
-                    
-                    if(logger.IsEnabled(LogLevel.Debug))
-                        logger.LogDebug("Project id: {} with name {} of content:{}", project.Id, project.Name,JsonConvert.SerializeObject(project));
+
+                    Project project = ProjectParser.ParseHttpRequest(Request);
+                    ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent( project,ProjectState.start);
                 }
                 catch (Exception e)
                 {
                     errorObj.e = e.Message;
                 }
-            }
-            else
-            {
-                errorObj.e = "Post content is empty";
-            }
-        }
+        
 
         var errorCode = errorObj.e != null ? "2" : "1";
         var errorMessage = (errorObj.e ??"");
@@ -68,11 +53,17 @@ public class ProjectController: ControllerBase
     [Route("/apis/project_stop")]
     [HttpGet]
     public UIAPIResult project_stop()
-    {
-        
-        LowerMachineHelper.getInstance().dispatchProjectStatusChangeEvent( null,ProjectStatus.stop);
-        //TODO:implement stop project lower operations here;
+    { 
         var errorObj = new JoyError();
+        try
+        {
+            ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(null, ProjectState.stop);
+        }
+        catch (Exception e)
+        {
+            errorObj.e = e.Message;
+        }
+
         var errorCode = errorObj.e != null ? "2" : "1";
         var errorMessage = (errorObj.e ??"");
         var status =  (errorObj.e != null ? "error" : "ok");

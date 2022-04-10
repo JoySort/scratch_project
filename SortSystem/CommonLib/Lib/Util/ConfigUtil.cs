@@ -27,7 +27,7 @@ public class ConfigUtil
     private static ModuleConfig _moduleConfig;
     private static MachineState[] _machineStates;
     private static Emitter[] _emitters;
-    public static ModuleConfig loadModuleConfig()
+    public static ModuleConfig getModuleConfig()
     {
         if (_moduleConfig == null) {
         string filePath = configFolder+"/module.json";
@@ -40,7 +40,7 @@ public class ConfigUtil
 
     }
 
-    public static MachineState[] loadMachineState()
+    public static MachineState[] getMachineState()
     {
         if(_machineStates == null){
         string filePath = configFolder+"/state.json";
@@ -53,7 +53,7 @@ public class ConfigUtil
         return _machineStates;
     }
     
-    public static Emitter[] LoadEmitters()
+    public static Emitter[] getEmitters()
     {
         if (_emitters == null)
         {

@@ -5,11 +5,13 @@
   "lowerConfig":[ 
     {
     "hardwarePort": "/dev/com1",
-     "columns": [0,11] 
+     "columns": [0,11] ,
+      "isMaster": true
     },
     {
       "hardwarePort": "/dev/com2",
-      "columns": [12,23]
+      "columns": [12,23],
+      "isMaster": false
     }
   ],
   "network": {

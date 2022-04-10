@@ -1,19 +1,21 @@
+using CommonLib.Lib.LowerMachine;
+
 namespace CommonLib.Lib.ConfigVO;
 
 public class MachineState
 {
-    private StateName name;
+    private ProjectState stateName;
     private bool isDefault;
     private State state;
 
-    public MachineState(StateName name, bool isDefault, State state)
+    public MachineState(ProjectState stateName, bool isDefault, State state)
     {
-        this.name = name;
+        this.stateName = stateName;
         this.isDefault = isDefault;
         this.state = state;
     }
 
-    public StateName Name => name;
+    public ProjectState StateName => stateName;
 
     public bool IsDefault => isDefault;
 
@@ -44,11 +46,3 @@ public class State
     }
 }
 
-public enum StateName
-{
-    start,
-    stop,
-    pause,
-    washing,
-    reverse
-}

@@ -1,5 +1,10 @@
+using System.Text;
+using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.vo;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace CommonLib.Lib.Util;
 
@@ -10,13 +15,46 @@ public class ProjectParser
 {
     private readonly JObject _jresult;
     
-
+    public static Logger logger = LogManager.GetCurrentClassLogger();
     public ProjectParser(string projectJsonString)
     {
         _jresult = JObject.Parse(projectJsonString);
         ParseCriteria();
         ParseOutlet();
         ParseOtherProperties();
+    }
+    
+    public static Project ParseHttpRequest(HttpRequest Request)
+    {
+        Project project = null;
+        using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+        {  
+            string content = reader.ReadToEndAsync().Result;
+           
+            if(!string.IsNullOrEmpty(content)){
+
+                try
+                {
+                    ProjectParser parser = new ProjectParser(content);
+
+                    project = parser.getProject();
+                    if (project == null) throw new Exception("Project content is not valid " + content);
+                    if (logger.IsEnabled(LogLevel.Debug))
+                        logger.Debug("Parsing Project id: {} with name {} of content:{}", project.Id, project.Name,
+                            JsonConvert.SerializeObject(project));
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Project content is not valid: " + e.Message);
+                }
+            }
+            else
+            {
+               throw new Exception( "Project configuration content is empty");
+            }
+        }
+        return project;
+
     }
 
     public Project getProject()
@@ -56,7 +94,7 @@ public class ProjectParser
     private string name;
     private void ParseOtherProperties()
     {
-        _genre = new Genre(ConfigUtil.loadModuleConfig().Genre);
+        _genre = new Genre(ConfigUtil.getModuleConfig().Genre);
         _category = new Category((string?)_jresult.SelectToken("category"));
         id = (string?) _jresult.SelectToken("id");
         name = (string?) _jresult.SelectToken("name");

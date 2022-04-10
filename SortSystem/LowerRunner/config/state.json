@@ -1,11 +1,11 @@
 [
   {
-    "name": "start",
+    "stateName": "start",
     "isDefault": false,
     "state": {
       "triggers": [{
         "name": "trigger",
-        "mode": "soft|encoder|switch",
+        "mode": "PhotoelectricSwitch",
         "address": 5,
         "enabled": true,
         "delay": 40000,
@@ -115,22 +115,22 @@
     }
   },
   {
-    "name": "stop",
+    "stateName": "stop",
     "isDefault": true,
     "state": {}
   },
   {
-    "name": "pause",
+    "stateName": "pause",
     "isDefault": false,
     "state": {}
   },
   {
-    "name": "washing",
+    "stateName": "washing",
     "isDefault": false,
     "state": {}
   },
   {
-    "name": "reverse",
+    "stateName": "reverse",
     "isDefault": false,
     "state": {
       "servo": {
