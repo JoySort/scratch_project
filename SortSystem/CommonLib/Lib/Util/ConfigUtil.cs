@@ -33,8 +33,8 @@ public class ConfigUtil
         string filePath = configFolder+"/module.json";
         var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,filePath);
         logger.Debug("using path "+path);
-        var porjectJsonString = File.ReadAllText(path);
-        _moduleConfig =   JsonConvert.DeserializeObject<ModuleConfig>(porjectJsonString);
+        var jsonString = File.ReadAllText(path);
+        _moduleConfig =   JsonConvert.DeserializeObject<ModuleConfig>(jsonString);
         }
         return _moduleConfig;
 
@@ -46,8 +46,8 @@ public class ConfigUtil
         string filePath = configFolder+"/state.json";
         var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,filePath);
         logger.Debug("using path "+path);
-        var porjectJsonString = File.ReadAllText(path);
-        _machineStates = JsonConvert.DeserializeObject<MachineState[]>(porjectJsonString);
+        var jsonString = File.ReadAllText(path);
+        _machineStates = JsonConvert.DeserializeObject<MachineState[]>(jsonString);
         }
 
         return _machineStates;
@@ -61,8 +61,8 @@ public class ConfigUtil
             var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
                 filePath);
             logger.Debug("using path " + path);
-            var porjectJsonString = File.ReadAllText(path);
-            _emitters = JsonConvert.DeserializeObject<Emitter[]>(porjectJsonString);
+            var jsonString = File.ReadAllText(path);
+            _emitters = JsonConvert.DeserializeObject<Emitter[]>(jsonString);
         }
 
         return _emitters;

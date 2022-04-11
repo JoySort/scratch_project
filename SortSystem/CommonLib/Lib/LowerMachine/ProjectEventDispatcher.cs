@@ -25,39 +25,48 @@ public class ProjectEventDispatcher
         handler?.Invoke(this, e);
     }
 
-    public void dispatchProjectStatusChangeEvent(Project? p,ProjectState s)
+    public void dispatchProjectStatusStartEvent(Project p, ProjectState s)
     {
-
         if (currentProject!=null && currentProject.Id == p.Id && projectState == s)
         {
             throw new Exception("Duplicated project "+s+" state in project "+p.Name+" with project id:"+p.Id);
         }
-        if (projectState != ProjectState.start && projectState == s)
+
+        if (projectState == ProjectState.pause && s == ProjectState.start)
         {
-            throw new Exception("Project  status is already in this state ");
+            throw new Exception("Invalid project state change from pause to start, it should resume first");
         }
 
-    
         var discoverEventArgs = new ProjectStatusEventArgs
         {
             currentProject = p ,
             State =s
         };
-    
+        currentProject = p;
+        projectState = s;
+        OnProjectStatusChange(discoverEventArgs);
+    }
+
+    public void dispatchProjectStatusChangeEvent(ProjectState s)
+    {
+
+
+        if (projectState != ProjectState.start && projectState == s)
+        {
+            throw new Exception("Project  status is already in this state ");
+        }
+
+        if (s == ProjectState.pause && projectState == ProjectState.stop)
+        {
+            throw new Exception("Invalid project status change to pause from stop");
+        }
+
+        var discoverEventArgs = new ProjectStatusEventArgs
+        {
+            State =s
+        };
         
-        if (s == ProjectState.start && p != null)
-        {
-            currentProject = p;
-            projectState = s;
-        }
-        else
-        {
-            currentProject = null;
-            projectState = s;
-        }
-
-       
-
+        projectState = s;
         OnProjectStatusChange(discoverEventArgs);
     }
 }
@@ -82,6 +91,7 @@ public enum ProjectState
     start,
     stop,
     pause,
+    resume,
     washing,
     reverse,
     invalid

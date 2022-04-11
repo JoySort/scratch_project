@@ -1,6 +1,6 @@
 [
   {
-    "name": "start",
+    "stateName": "start",
     "isDefault": false,
     "state": {
       "triggers": [{
@@ -115,22 +115,131 @@
     }
   },
   {
-    "name": "stop",
+    "stateName": "stop",
     "isDefault": true,
-    "state": {}
+    "state": { "triggers": [{
+      "name": "trigger",
+      "mode": "PhotoelectricSwitch",
+      "address": 5,
+      "enabled": false,
+      "delay": 40000,
+      "step": 120,
+      "interval": 300
+    }],
+      "servos": [{
+        "name": "main_motor",
+        "address": 0,
+        "enable": false,
+        "direction": 0,
+        "speed": 0,
+        "delay": 1500,
+        "startTimeSpan": 30000
+      }],
+      "stepMotoers": [{
+        "name": "differentialMotor",
+        "address": 1,
+        "enabled": false,
+        "direction": 0,
+        "speed": 0,
+        "delay": 1500
+      }],
+      "switches": [
+        {
+          "name": "cam_light",
+          "address": 20,
+          "enabled": false,
+          "delay": 1500
+        },
+        {
+          "name": "constantPower",
+          "address": 23,
+          "enabled": true,
+          "delay": 0
+        },
+        {
+          "name": "flash_indicator",
+          "address": 21,
+          "enabled": false,
+          "mode": "blink",
+          "interval": "1000",
+          "repeat": 3,
+          "delay": 1500
+        },
+        {
+          "name": "feed_lift",
+          "address": 22,
+          "enabled": false,
+          "delay": 15000
+        },
+        {
+          "name": "outlet_extention",
+          "address": 23,
+          "enabled": false,
+          "delay": 7500
+        },
+        {
+          "name": "outlet1",
+          "address": 11,
+          "enabled": false,
+          "delay": 1500
+        },
+        {
+          "name": "outlet2",
+          "address": 12,
+          "enabled": false,
+          "delay": 1500
+        },
+        {
+          "name": "outlet3",
+          "address": 13,
+          "enabled": false,
+          "delay": 1500
+        },
+        {
+          "name": "outlet4",
+          "address": 14,
+          "enabled": false,
+          "delay": 1500
+        },
+        {
+          "name": "outlet5",
+          "address": 14,
+          "enabled": false,
+          "delay": 1500
+        },
+        {
+          "name": "outlet6",
+          "address": 16,
+          "enabled": false,
+          "delay": 1500
+        },
+        {
+          "name": "outlet7",
+          "address": 17,
+          "enabled": false,
+          "delay": 1500
+        },
+        {
+          "name": "loop",
+          "address": 18,
+          "enabled": false,
+          "delay": 1500
+        }
+      ]
+    }
   },
   {
-    "name": "pause",
+    "stateName": "pause",
     "isDefault": false,
     "state": {}
   },
   {
-    "name": "washing",
+    "stateName": "washing",
     "isDefault": false,
     "state": {}
   },
   {
-    "name": "reverse",
+    "stateName": "reverse",
     "isDefault": false,
     "state": {
       "servo": {

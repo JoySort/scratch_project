@@ -34,7 +34,7 @@ public class ProjectController: ControllerBase
                 {
 
                     Project project = ProjectParser.ParseHttpRequest(Request);
-                    ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent( project,ProjectState.start);
+                    ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent( project,ProjectState.start);
                 }
                 catch (Exception e)
                 {
@@ -57,7 +57,7 @@ public class ProjectController: ControllerBase
         var errorObj = new JoyError();
         try
         {
-            ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(null, ProjectState.stop);
+            ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
         }
         catch (Exception e)
         {
