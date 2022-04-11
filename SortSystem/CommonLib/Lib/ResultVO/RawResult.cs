@@ -2,24 +2,24 @@ namespace CommonLib.Lib.Sort.ResultVO;
 
 public class RawResult
 {
-    private Coordinate[] coordinates;
-    private int offset ;
-
-    public RawResult(Coordinate[] coordinates, int offset)
+    private Coordinate coordinate;
+    //苹果会分别给出重量和识别结果，因此，可能会有2批结果需要缓存并且最终整合后才能使用。
+    private int expectedFeatureCount;
+    
+    private long process_timestamp = DateTime.Now.ToFileTime()  ;
+    public long ProcessTimestamp
     {
-        this.coordinates = coordinates;
-        this.offset = offset;
+        get => process_timestamp;
+       
     }
 
-    public Coordinate[] Coordinates
+    public RawResult(Coordinate coordinate, int expectedFeatureCount)
     {
-        get => coordinates;
-        set => coordinates = value ?? throw new ArgumentNullException(nameof(value));
+        this.coordinate = coordinate;
+        this.expectedFeatureCount = expectedFeatureCount;
     }
 
-    public int Offset
-    {
-        get => offset;
-        set => offset = value;
-    }
+    public Coordinate Coordinate => coordinate;
+
+    public int ExpectedFeatureCount => expectedFeatureCount;
 }

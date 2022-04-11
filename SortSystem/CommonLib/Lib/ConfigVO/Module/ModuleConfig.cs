@@ -8,8 +8,16 @@ public class ModuleConfig
     private string name;
     private JoyModule module;
     private LowerConfig[] lowerConfig;
-    private Network network;
+    private NetworkConfig networkConfig;
     private GenreName genre;
+    private SortConfig sortConfig;
+
+    public SortConfig SortConfig
+    {
+        get => sortConfig;
+        set => sortConfig = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
     private string description;
     private int version;
     private string minimumCoreVersion;
@@ -21,7 +29,7 @@ public class ModuleConfig
 
     public LowerConfig[] LowerConfig => lowerConfig;
 
-    public Network Network => network;
+    public NetworkConfig NetworkConfig => networkConfig;
 
     public GenreName Genre
     {
@@ -58,20 +66,21 @@ public class ModuleConfig
         get => author;
         set => author = value ?? throw new ArgumentNullException(nameof(value));
     }
-    public ModuleConfig(string name, JoyModule module, LowerConfig[] lowerConfig, Network network, GenreName genre, string description, int version, string minimumCoreVersion, string title, string author)
+
+    public ModuleConfig(string name, JoyModule module, LowerConfig[] lowerConfig, NetworkConfig networkConfig, GenreName genre, SortConfig sortConfig, string description, int version, string minimumCoreVersion, string title, string author)
     {
         this.name = name;
         this.module = module;
         this.lowerConfig = lowerConfig;
-        this.network = network;
+        this.networkConfig = networkConfig;
         this.genre = genre;
+        this.sortConfig = sortConfig;
         this.description = description;
         this.version = version;
         this.minimumCoreVersion = minimumCoreVersion;
         this.title = title;
         this.author = author;
     }
-
 }
 
 public enum JoyModule

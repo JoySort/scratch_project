@@ -29,10 +29,11 @@ public class ConfigLoaderTest
         Assert.True(cfg.LowerConfig.First().Columns.SequenceEqual(new[]{0, 11 }));
         Assert.AreEqual(cfg.LowerConfig.Last().HardwarePort, "/dev/com2");
         Assert.True(cfg.LowerConfig.Last().Columns.SequenceEqual(new[]{12, 23 }));
-        Assert.AreEqual(cfg.Network.RpcPort,5113);
-       Assert.True(cfg.Network.DiscoveryPorts.SequenceEqual(new [] {13567,13568,13569}));
-       Assert.AreEqual(cfg.Network.RpcBindIp,"*");
-       Assert.AreEqual(cfg.Network.UdpBindIp,"*");
+        Assert.AreEqual(cfg.NetworkConfig.RpcPort,5113);
+       Assert.True(cfg.NetworkConfig.DiscoveryPorts.SequenceEqual(new [] {13567,13568,13569}));
+       Assert.AreEqual(cfg.NetworkConfig.RpcBindIp,"*");
+       Assert.AreEqual(cfg.NetworkConfig.UdpBindIp,"*");
+       Assert.AreEqual(cfg.SortConfig.OutletPriority,OutletPriority.ASC);
        
     }
     

@@ -1,3 +1,5 @@
+using CommonLib.Lib.Sort.ResultVO;
+
 namespace CommonLib.Lib.vo;
 
 public class Filter
@@ -23,6 +25,22 @@ public class Filter
         filterBoundaries = fillBoundries().ToArray();
 
 
+    }
+
+    public bool doFilter(RecResult recResult)
+    {
+        
+        foreach (var feature in recResult.Features)
+        {
+            if (_criteria.Index != feature.CriteriaIndex) continue;
+           
+            foreach (var boundary in filterBoundaries)
+            {
+                if (boundary.First() < feature.Value && boundary.Last() > feature.Value) return true;
+            }
+        }
+
+        return false;
     }
 
     private List<float[]> fillBoundries()

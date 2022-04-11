@@ -27,9 +27,9 @@ public class SortController: ControllerBase
     
     [Route("/sort/single")]
     [HttpPost]
-    public void singleSort(RecResult rawResult)
+    public void singleSort(RawResult rawResult)
     {
-       logger.LogDebug("raw result",rawResult.Coordinates.First().Column);
+       logger.LogDebug("raw result with timestamp{}",rawResult.ProcessTimestamp);
         
         return ;
     }

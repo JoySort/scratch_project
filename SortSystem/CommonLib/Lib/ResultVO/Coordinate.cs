@@ -17,6 +17,15 @@ public class Coordinate
         triggerID = triggerId;
     }
 
+    public bool isSame(Coordinate cd)
+    {
+        if (cd == null) return false;
+        bool result = cd.Section == this.Section && cd.Column == this.Column && cd.RowOffset == this.RowOffset &&
+                      cd.TriggerId == this.TriggerId;
+
+        return result;
+    }
+
     public int Section => section;
 
     public int Column => column;

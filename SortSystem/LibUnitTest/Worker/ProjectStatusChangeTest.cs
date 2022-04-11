@@ -28,7 +28,7 @@ public class ProjectStatusChangeTest {
         
     }
 
-    [Test]
+    [Test, Order(4)]
     public void ProjectStart()
     {
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
@@ -36,11 +36,12 @@ public class ProjectStatusChangeTest {
         
     }
 
-    [Test]
+    [Test, Order(3)]
     public void ProjectPause()
     {
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
         ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.pause);
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
         
     }
     [Test, Order(0)]
@@ -66,6 +67,7 @@ public class ProjectStatusChangeTest {
                
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
         Assert.Throws<Exception>(()=>ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start));
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
     }
     
     

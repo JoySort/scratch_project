@@ -10,7 +10,7 @@ public class WebInitializer
     private static Logger  logger = LogManager.GetCurrentClassLogger();
     public static string[] rpcSetup() {
         
-        var rpcPort = ConfigUtil.getModuleConfig().Network.RpcPort;
+        var rpcPort = ConfigUtil.getModuleConfig().NetworkConfig.RpcPort;
         string rpcListenKey = "--urls";
         string rpcUrl = "http://0.0.0.0:" + rpcPort;
         string[] joyArgs = new[] {rpcListenKey, rpcUrl};

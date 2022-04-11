@@ -2,10 +2,10 @@
   "name": "lowerRunner1",
   "module": "Lower",
   "genre": "palmDate",
-  "lowerConfig":[ 
+  "lowerConfig":[
     {
-    "hardwarePort": "/dev/com1",
-     "columns": [0,11] ,
+      "hardwarePort": "/dev/com1",
+      "columns": [0,11] ,
       "isMaster": true
     },
     {
@@ -14,11 +14,15 @@
       "isMaster": false
     }
   ],
-  "network": {
+  "networkConfig": {
     "rpcPort": 5113,
     "discoveryPorts": [13567,13568,13569],
     "rpcBindIP": "*",
     "udpBindIP": "*"
+  },
+  "sortConfig": {
+    "outletPriority": "ASC",
+    "sortingInterval": 10
   },
   "description": "模块配置：下位机模块配置",
   "minimumCoreVersion": "1.1",

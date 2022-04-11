@@ -1,13 +1,13 @@
 namespace CommonLib.Lib.ConfigVO;
 
-public class Network
+public class NetworkConfig
 {
     private int rpcPort;
     private int[] discoveryPorts;
     private string rpcBindIP;
     private string udpBindIP;
 
-    public Network(int rpcPort, int[] discoveryPorts, string rpcBindIp, string udpBindIp)
+    public NetworkConfig(int rpcPort, int[] discoveryPorts, string rpcBindIp, string udpBindIp)
     {
         this.rpcPort = rpcPort;
         this.discoveryPorts = discoveryPorts;

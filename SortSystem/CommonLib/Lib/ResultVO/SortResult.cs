@@ -2,22 +2,16 @@ using CommonLib.Lib.vo;
 
 namespace CommonLib.Lib.Sort.ResultVO;
 
-public class SortResult
+public class SortResult:RecResult
 {
-    private Coordinate[] coordinates;
-    private Feature[] features;
+  
     private Outlet[] outlets;
 
-    public SortResult(Coordinate[] coordinates, Feature[] features, Outlet[] outlets)
+
+    public SortResult(Coordinate coordinate, int expectedFeatureCount, Feature[] features, Outlet[] outlets) : base(coordinate, expectedFeatureCount, features)
     {
-        this.coordinates = coordinates;
-        this.features = features;
         this.outlets = outlets;
     }
-
-    public Coordinate[] Coordinates => coordinates;
-
-    public Feature[] Features => features;
 
     public Outlet[] Outlets => outlets;
 }

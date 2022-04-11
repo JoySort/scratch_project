@@ -15,7 +15,6 @@
 
     <ItemGroup>
       <Folder Include="Lib\PipleLine" />
-      <Folder Include="Lib\Sort" />
     </ItemGroup>
 
 </Project>

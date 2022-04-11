@@ -12,15 +12,17 @@ public class ConfigUtil
     public static Logger logger = LogManager.GetCurrentClassLogger();
 
     private static string configFolder ="../../../config";
-    public static void setConfigFolder(string configFolder)
+    public static void setConfigFolder(string cFolder)
     {
-        var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,configFolder);
+        var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,cFolder);
         logger.Info("ConfigUtil using path config:{}",path);
+        
         bool dirExists = Directory.Exists(path);
         if (!dirExists)
         {
-            throw new Exception("Folder doesn't exist "+path+" original using "+configFolder);
+            throw new Exception("Folder doesn't exist "+path+" original using "+cFolder);
         }
+        configFolder = cFolder;
     }
 
 
