@@ -4,24 +4,9 @@
     "expectedFeatureCount": 2,
     "features": [ { "criteriaIndex": 1, "value": 10 }]
   },
-  {
-    "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 1},
-    "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 20 }]
-  },
-  {
-    "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 2},
-    "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 15 }]
-  },
-  {
-    "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 3},
-    "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 15 }]
-  },
 
   {
-    "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 15},
+    "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 14},
     "expectedFeatureCount": 2,
     "features": [ { "criteriaIndex": 12, "value": 4 }]
   },
@@ -34,23 +19,7 @@
     "features": [ { "criteriaIndex": 1, "value": 20 }]
   },
   {
-    "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 1},
-    "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 20 }]
-  },
-  {
-    "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 2},
-    "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 15 }]
-  },
-  {
-    "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 3},
-    "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 25 }]
-  },
-
-  {
-    "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 15},
+    "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 14},
     "expectedFeatureCount": 2,
     "features": [ { "criteriaIndex": 12, "value": 24 }]
   }

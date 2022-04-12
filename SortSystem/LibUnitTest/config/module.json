@@ -27,10 +27,10 @@
   "consolidatePolicy":
   {
     "criteriaCode":           ["width","height","area","color","sf"   ,"bp"       ,"sb"   ,"zl"   ,"dd"   ,"ca"   ,"yc"       ,"wt"   ,"fm" ],
-    "offSetRowCount":         [4      ,4       ,4     ,4      ,4      ,4          ,4      ,4      ,4      ,4      ,4          ,4      ,4    ],
+    "offSetRowCount":         [4      ,4       ,4     ,4      ,4      ,4          ,4      ,4      ,4      ,4      ,4          ,15      ,4    ],
     "offSetRowStep":          [1      ,1       ,1     ,1      ,1      ,1          ,1      ,1      ,1      ,1      ,1          ,1      ,1    ],
     "consolidationOperation": ["avg"  ,"avg"   ,"avg" ,"avg"  ,"avg"  ,"maxNAvg"  ,"avg"  ,"avg"  ,"avg"  ,"avg"  ,"maxNAvg"  ,"merge"  ,"avg"],
-    "consolidateArg":         [0      ,0       ,0     ,0      ,0      ,2          ,0      ,0      ,0      ,0      ,2          ,15      ,0    ]
+    "consolidateArg":         [0      ,0       ,0     ,0      ,0      ,2          ,0      ,0      ,0      ,0      ,2          ,0      ,0    ]
   },
   "criteriaMapping":{
     "existence": {

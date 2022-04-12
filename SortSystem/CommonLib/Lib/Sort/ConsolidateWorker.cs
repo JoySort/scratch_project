@@ -158,7 +158,8 @@ public class ConsolidateWorker
 
         return result;
     }
-
+    
+    
     private float calculate(List<float> listValues,ConsolidateOperation ops,int consolidatePolicyIndex)
     {
         List<float> tmpList;
