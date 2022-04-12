@@ -53,6 +53,9 @@
       <None Update="fixtures\pd_rec_result.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="fixtures\project_pd_rec_start.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
     <ItemGroup>
       <Folder Include="assets\vo" />

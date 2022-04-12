@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using CommonLib.Lib.LowerMachine;
@@ -16,12 +18,9 @@ namespace LibUnitTest.Worker;
 public class ConsolidateWorkerTest
 {
     private Logger logger ;
-    private const string JsonFilePath = @"./fixtures/project_apple_rec_start.json";
-    string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
-
+   
     private string? porjectJsonString;
     private ProjectParser? jparser;
-
     private Project project;
     
     private ConsolidateWorker worker = ConsolidateWorker.getInstance();
@@ -31,9 +30,7 @@ public class ConsolidateWorkerTest
         LogManager.LoadConfiguration("config/logger.config");
         logger = LogManager.GetCurrentClassLogger();
         logger.Info("setup test ");
-        porjectJsonString = File.ReadAllText(path);
-        ProjectParser parser = new ProjectParser(porjectJsonString);
-        project = parser.getProject();
+       
         
         
     }
@@ -41,26 +38,102 @@ public class ConsolidateWorkerTest
     [Test]
     public void appleConsolidationTest()
     {
-        logger.Info("Test begin");
+        string JsonFilePath = @"./fixtures/project_apple_rec_start.json";
+        string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
+        porjectJsonString = File.ReadAllText(path);
+        ProjectParser parser = new ProjectParser(porjectJsonString);
+        project = parser.getProject();
+        
+        
+        logger.Info("APPLE Test begin");
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
         string recResultJsonFixture = @"./fixtures/apple_rec_result.json";
         string _path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,recResultJsonFixture);
         string jsonString = File.ReadAllText(_path);
         RecResult[] recResults = JsonConvert.DeserializeObject<RecResult[]>(jsonString);
-        
+
+        bool blocking = true;
         
         worker.Consolidate(new List<RecResult>(recResults));
+
+        worker.ConsolidateResult += ((sender, args) =>
+        {
+           
+            
+            
+            blocking = false;
+        });
+
+        worker.ConsolidateResult += appleEventHanlder;
         
-        Thread.Sleep(30*1000);
-        
+        while (blocking)
+        {
+            Thread.Sleep(100);
+        }
+        worker.ConsolidateResult -= appleEventHanlder;
+
+        logger.Info("APPLE Test stop");
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
     }
-
+    
     [Test]
     public void pdConsolidationTest()
     {
+        logger.Info("PD Test begin");
         
-    }
+        string JsonFilePath = @"./fixtures/project_pd_rec_start.json";
+        string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
+        porjectJsonString = File.ReadAllText(path);
+        ProjectParser parser = new ProjectParser(porjectJsonString);
+        project = parser.getProject();
+        
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+        
+        string recResultJsonFixture = @"./fixtures/pd_rec_result.json";
+        string _path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,recResultJsonFixture);
+        string jsonString = File.ReadAllText(_path);
+        RecResult[] recResults = JsonConvert.DeserializeObject<RecResult[]>(jsonString);
 
+        bool blocking = true;
+        
+        worker.Consolidate(new List<RecResult>(recResults));
+        worker.ConsolidateResult += pdEventHanlder;
+        worker.ConsolidateResult += ((sender, args) =>
+        {
+            logger.Info("PD assert finished {}",JsonConvert.SerializeObject(args.RecResults));
+            blocking = false;
+        });
+        
+        while (blocking)
+        {
+            Thread.Sleep(100);
+        }
+        worker.ConsolidateResult -= pdEventHanlder;
+        
+        logger.Info("PD Test stop");
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
+    }
+    
+    public void appleEventHanlder(Object sender, ConsolidateEventArg args)
+    {
+        Assert.AreEqual(args.RecResults.First().Features.First().Value,15);
+        Assert.AreEqual(args.RecResults.First().Features.Last().Value,4);
+            
+        Assert.AreEqual(args.RecResults.Last().Features.First().Value,20);
+        Assert.AreEqual(args.RecResults.Last().Features.Last().Value,24);
+        logger.Info("APPLE assert finished");
+    }
+    
+    public void pdEventHanlder(Object sender, ConsolidateEventArg args)
+    {
+        Assert.AreEqual(args.RecResults.First().Features.First().Value,25);
+        Assert.AreEqual(args.RecResults.First().Features[1].Value,25);
+        Assert.AreEqual(args.RecResults.First().Features.Last().Value,15);
+        
+        Assert.AreEqual(args.RecResults.Last().Features.First().Value,10);
+        Assert.AreEqual(args.RecResults.Last().Features[1].Value,22.5);
+        Assert.AreEqual(args.RecResults.Last().Features.Last().Value,12.5);
+        logger.Info("PD assert finished process time {} ms",(DateTime.Now.ToFileTime()-args.RecResults.Last().ProcessTimestamp)/10000);
+    }
 
 }

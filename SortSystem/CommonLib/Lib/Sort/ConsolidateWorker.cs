@@ -3,6 +3,7 @@ using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
+using Newtonsoft.Json;
 using NLog;
 
 namespace CommonLib.Lib.Sort;
@@ -19,14 +20,13 @@ public class ConsolidateWorker
     }
 
     private Dictionary<string,List<RecResult>> cacheRecResultDictionary = new Dictionary<string,List<RecResult>>();
-    private List<RecResult> toBeProcessedResults = new List<RecResult>();
-    private List<RecResult> consolidatedResults = new List<RecResult>();
-    private Dictionary<string,List<Feature>> uncompleteRecResultList = new Dictionary<string,List<Feature>>();
-    private Dictionary<string,Coordinate> uncompleteCoordinate = new Dictionary<string,Coordinate>();
+    private Dictionary<string,List<Feature>> incompleteRecResultList = new Dictionary<string,List<Feature>>();
+    private Dictionary<string,Coordinate> incompleteCoordinate = new Dictionary<string,Coordinate>();
     private bool isProjectRunning;
     private int sortingInterval;
     private Project currentProject;
     private int expectedFeatureCount;
+    private Criteria[] enabledCriterias;
     private ConsolidatePolicy consolidationPolicy;
     private Dictionary<string,CriteriaMapping> criteriaMapping;
 
@@ -45,8 +45,11 @@ public class ConsolidateWorker
             this.currentProject = statusEventArgs.currentProject;
             this.isProjectRunning = true;
             this.expectedFeatureCount = currentProject.Criterias.Length;
+            this.enabledCriterias = currentProject.Criterias;
             
-            
+            cacheRecResultDictionary = new Dictionary<string,List<RecResult>>();
+            incompleteRecResultList = new Dictionary<string,List<Feature>>();
+            incompleteCoordinate = new Dictionary<string,Coordinate>();
             processResult();
         }
 
@@ -73,12 +76,13 @@ public class ConsolidateWorker
         }
         cacheRecResultDictionary[recResult.Coordinate.Key()].Add(recResult);
         
-        if(!uncompleteRecResultList.ContainsKey(recResult.Coordinate.Key()))uncompleteRecResultList.Add(recResult.Coordinate.Key(),new List<Feature>());
-        if(!uncompleteCoordinate.ContainsKey(recResult.Coordinate.Key())) uncompleteCoordinate.Add(recResult.Coordinate.Key(),recResult.Coordinate);
+        if(!incompleteRecResultList.ContainsKey(recResult.Coordinate.Key()))incompleteRecResultList.Add(recResult.Coordinate.Key(),new List<Feature>());
+        if(!incompleteCoordinate.ContainsKey(recResult.Coordinate.Key())) incompleteCoordinate.Add(recResult.Coordinate.Key(),recResult.Coordinate);
     }
 
     private int[] cacheStatus = new int[3];
     private long runningCounter = 0;
+   
     private void processResult()
     {
         Task.Run(() =>
@@ -90,40 +94,59 @@ public class ConsolidateWorker
                 foreach ( (var key,  var value) in cacheRecResultDictionary)
                 {
                     //
-                    for(var i=0;i<consolidationPolicy.OffSetRowCount.Length;i++){
-                        if (value.Last().Coordinate.RowOffset == consolidationPolicy.OffSetRowCount[i]-1)//rowOffset starts from 0 so, count -1 
+                    for(var i=0;i<consolidationPolicy.OffSetRowCount.Length;i++)
+                    {
+                        var found = false;
+                        foreach (var criteria in enabledCriterias)
                         {
-                            var criteriaIndex = criteriaMapping[consolidationPolicy.CriteriaCode[i]].Index;
-                            float consolidatedFeatureValue = consolidateFeature(cacheRecResultDictionary[key],
-                                key,criteriaIndex,i);
-                            uncompleteRecResultList[key].Add(new Feature(criteriaIndex,consolidatedFeatureValue));
-                            
+                            if (criteria.Code != null && criteria.Code == consolidationPolicy.CriteriaCode[i])
+                            {
+                                found = true;
+                            }
                         }
+
+                        if (!found) continue;
+
+                        for (var j = value.Count - 1; j >= 0; j--)
+                        {
+                            if (value[j].Coordinate.RowOffset == consolidationPolicy.OffSetRowCount[i] - 1)
+                            {
+                                var criteriaIndex = criteriaMapping[consolidationPolicy.CriteriaCode[i]].Index;
+                                float consolidatedFeatureValue = consolidateFeature(cacheRecResultDictionary[key],
+                                    key,criteriaIndex,i);
+                                incompleteRecResultList[key].Add(new Feature(criteriaIndex,consolidatedFeatureValue));
+                                break;
+                            }
+                        }
+
+                      
                     }
 
                 }
 
                 //check for merge completion;
                 var completeResult = new List<RecResult>();
-                foreach( (var key, var features) in uncompleteRecResultList){
+                foreach( (var key, var features) in incompleteRecResultList){
                     if (features.Count == expectedFeatureCount)
                     {
-                        completeResult.Add(new RecResult(uncompleteCoordinate[key],expectedFeatureCount,features));
-                       
+                        completeResult.Add(new RecResult(incompleteCoordinate[key],expectedFeatureCount,features));
+                       logger.Debug("consolidated results{}",JsonConvert.SerializeObject(completeResult.Last()));
                     }
                 }
+
+                if (completeResult.Count > 0) OnConsolidateResult(new ConsolidateEventArg(completeResult));
                 
                 //cleanup the caches
                 foreach (var value in completeResult)
                 {
                     cacheRecResultDictionary.Remove(value.Coordinate.Key());
-                    uncompleteRecResultList.Remove(value.Coordinate.Key());
-                    uncompleteCoordinate.Remove(value.Coordinate.Key());
+                    incompleteRecResultList.Remove(value.Coordinate.Key());
+                    incompleteCoordinate.Remove(value.Coordinate.Key());
                 }
 
                 cacheStatus[0] = cacheRecResultDictionary.Count;
-                cacheStatus[1] = uncompleteRecResultList.Count;
-                cacheStatus[2] = uncompleteCoordinate.Count;
+                cacheStatus[1] = incompleteRecResultList.Count;
+                cacheStatus[2] = incompleteCoordinate.Count;
 
                 if (runningCounter * sortingInterval % 30000 == 0)
                 {
@@ -190,7 +213,7 @@ public class ConsolidateWorker
                 return tmpList.Average();
             case ConsolidateOperation.maxNAvg:
                 tmpList = new List<float>();
-                listValues = listValues.OrderBy(v=>v).ToList();
+                listValues = listValues.OrderByDescending(v=>v).ToList();
                 for (var i = 0; i < consolidationPolicy.ConsolidateArg[consolidatePolicyIndex]; i++)
                 {
                     tmpList.Add(listValues[i]);
@@ -198,7 +221,7 @@ public class ConsolidateWorker
                 return tmpList.Average();
             case ConsolidateOperation.minNAvg:
                 tmpList = new List<float>();
-                listValues = listValues.OrderByDescending(v=>v).ToList();
+                listValues = listValues.OrderBy(v=>v).ToList();
                 for (var i = 0; i < consolidationPolicy.ConsolidateArg[consolidatePolicyIndex]; i++)
                 {
                     tmpList.Add(listValues[i]);
@@ -208,5 +231,21 @@ public class ConsolidateWorker
 
         return 0;
     }
+    
+    public event EventHandler<ConsolidateEventArg> ConsolidateResult;
+    protected virtual void OnConsolidateResult(ConsolidateEventArg e)
+    {
+        var handler = ConsolidateResult;
+        handler?.Invoke(this, e);
+    }
 }
 
+public class ConsolidateEventArg
+{
+    public List<RecResult> RecResults;
+
+    public ConsolidateEventArg(List<RecResult> recResults)
+    {
+        RecResults = recResults;
+    }
+}

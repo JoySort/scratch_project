@@ -2,19 +2,23 @@
   {
     "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 0},
     "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 10 }]
+    "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 10 },{ "criteriaIndex": 8, "value": 10 }]
   },
   {
     "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 1},
     "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 20 }]
+    "features": [ { "criteriaIndex": 1, "value": 20 },{ "criteriaIndex": 7, "value": 20 },{ "criteriaIndex": 8, "value": 20 }]
   },
   {
     "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 2},
     "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 15 }]
+    "features": [ { "criteriaIndex": 1, "value": 30 },{ "criteriaIndex": 7, "value": 20 },{ "criteriaIndex": 8, "value": 30 }]
   },
-
+  {
+    "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 3},
+    "expectedFeatureCount": 2,
+    "features": [ { "criteriaIndex": 1, "value": 40 },{ "criteriaIndex": 7, "value": 30 },{ "criteriaIndex": 8, "value": 45 }]
+  },
 
 
 
@@ -23,22 +27,22 @@
   {
     "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 0},
     "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 20 }]
+    "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 10 },{ "criteriaIndex": 8, "value": 10 }]
   },
   {
     "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 1},
     "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 20 }]
+    "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 15 },{ "criteriaIndex": 8, "value": 15 }]
   },
   {
     "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 2},
     "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 15 }]
+    "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 20 },{ "criteriaIndex": 8, "value": 17 }]
   },
   {
     "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 3},
     "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 25 }]
+    "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 25 },{ "criteriaIndex": 8, "value": 18 }]
   }
 
 ]
