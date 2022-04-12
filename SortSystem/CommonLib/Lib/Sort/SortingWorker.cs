@@ -3,6 +3,7 @@ using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
+using Newtonsoft.Json;
 using NLog;
 
 namespace CommonLib.Lib.Sort;
@@ -86,11 +87,13 @@ public class SortingWorker
             while (isProjectRunning)
             {
                 var processBatch = toBeProcessedResults;
+                if (processBatch.Count == 0) continue;
+                
                 toBeProcessedResults = new List<RecResult>();
                 sortResults = new List<SortResult>();
                 foreach (var item in processBatch)
                 {
-                    if (item.ExpectedFeatureCount == item.Features.Length)
+                    if (item.ExpectedFeatureCount == item.Features.Count)
                     {
                         applySortingRules(item);
                     }
@@ -153,7 +156,15 @@ public class SortingWorker
 
             
         }
-        if(selectedOutlets.Count>0)
-            sortResults.Add( new SortResult(recResult.Coordinate,recResult.ExpectedFeatureCount,recResult.Features,selectedOutlets.ToArray()));
+
+        if (selectedOutlets.Count > 0)
+        {
+            sortResults.Add(new SortResult(recResult.Coordinate, recResult.ExpectedFeatureCount, recResult.Features,
+                selectedOutlets.ToArray()));
+        }
+        else
+        {
+            logger.Debug("SortingWorker: No outlet is selected for date {}",JsonConvert.SerializeObject(recResult));
+        }
     }
 }

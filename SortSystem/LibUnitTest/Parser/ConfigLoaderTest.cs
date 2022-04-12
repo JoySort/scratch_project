@@ -34,6 +34,10 @@ public class ConfigLoaderTest
        Assert.AreEqual(cfg.NetworkConfig.RpcBindIp,"*");
        Assert.AreEqual(cfg.NetworkConfig.UdpBindIp,"*");
        Assert.AreEqual(cfg.SortConfig.OutletPriority,OutletPriority.ASC);
+       Assert.AreEqual(cfg.ConsolidatePolicy.ConsolidateArg.First(),0);
+       Assert.AreEqual(cfg.ConsolidatePolicy.ConsolidationOperation.Last(),ConsolidateOperation.avg);
+       Assert.AreEqual(cfg.ConsolidatePolicy.CriteriaCode.Last(),"fm");
+       Assert.AreEqual(cfg.CriteriaMapping["fm"].Key,"fm");
        
     }
     

@@ -8,7 +8,7 @@ public class SortResult:RecResult
     private Outlet[] outlets;
 
 
-    public SortResult(Coordinate coordinate, int expectedFeatureCount, Feature[] features, Outlet[] outlets) : base(coordinate, expectedFeatureCount, features)
+    public SortResult(Coordinate coordinate, int expectedFeatureCount, List<Feature> features, Outlet[] outlets) : base(coordinate, expectedFeatureCount, features)
     {
         this.outlets = outlets;
     }

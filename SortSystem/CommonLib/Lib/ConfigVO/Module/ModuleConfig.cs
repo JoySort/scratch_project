@@ -4,13 +4,42 @@ namespace CommonLib.Lib.ConfigVO;
 
 public class ModuleConfig
 {
+    private string author;
+    private ConsolidatePolicy consolidatePolicy;
+    private Dictionary<string, CriteriaMapping> criteriaMapping;
 
-    private string name;
-    private JoyModule module;
-    private LowerConfig[] lowerConfig;
-    private NetworkConfig networkConfig;
+    private string description;
     private GenreName genre;
+    private LowerConfig[] lowerConfig;
+    private string minimumCoreVersion;
+    private JoyModule module;
+    private string name;
+    private NetworkConfig networkConfig;
     private SortConfig sortConfig;
+    private string title;
+    private int version;
+
+    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, string description, GenreName genre,
+        LowerConfig[] lowerConfig, string minimumCoreVersion, JoyModule module, string name,
+        NetworkConfig networkConfig, SortConfig sortConfig, string title, int version,
+        Dictionary<string, CriteriaMapping> criteriaMapping)
+    {
+        this.author = author;
+        this.consolidatePolicy = consolidatePolicy;
+        this.description = description;
+        this.genre = genre;
+        this.lowerConfig = lowerConfig;
+        this.minimumCoreVersion = minimumCoreVersion;
+        this.module = module;
+        this.name = name;
+        this.networkConfig = networkConfig;
+        this.sortConfig = sortConfig;
+        this.title = title;
+        this.version = version;
+        this.criteriaMapping = criteriaMapping;
+    }
+
+    public Dictionary<string, CriteriaMapping> CriteriaMapping => criteriaMapping;
 
     public SortConfig SortConfig
     {
@@ -18,11 +47,6 @@ public class ModuleConfig
         set => sortConfig = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    private string description;
-    private int version;
-    private string minimumCoreVersion;
-    private string title;
-    private string author;
     public string Name => name;
 
     public JoyModule Module => module;
@@ -67,20 +91,7 @@ public class ModuleConfig
         set => author = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public ModuleConfig(string name, JoyModule module, LowerConfig[] lowerConfig, NetworkConfig networkConfig, GenreName genre, SortConfig sortConfig, string description, int version, string minimumCoreVersion, string title, string author)
-    {
-        this.name = name;
-        this.module = module;
-        this.lowerConfig = lowerConfig;
-        this.networkConfig = networkConfig;
-        this.genre = genre;
-        this.sortConfig = sortConfig;
-        this.description = description;
-        this.version = version;
-        this.minimumCoreVersion = minimumCoreVersion;
-        this.title = title;
-        this.author = author;
-    }
+    public ConsolidatePolicy ConsolidatePolicy => consolidatePolicy;
 }
 
 public enum JoyModule

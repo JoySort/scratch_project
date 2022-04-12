@@ -17,6 +17,8 @@ public class Coordinate
         triggerID = triggerId;
     }
 
+    public string Key() => section + "-" + column + triggerID;
+
     public bool isSame(Coordinate cd)
     {
         if (cd == null) return false;

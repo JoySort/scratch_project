@@ -23,14 +23,20 @@ public class Criteria
     private string name;
     private string code;
 
-   
 
     private int index;
     private float min;
     private float max;
     private float[] boundaries;
+    private bool isChecked;
 
-    public Criteria(string name, string code, int index, float min, float max, float[] boundaries)
+    public bool IsChecked
+    {
+        get => isChecked;
+        set => isChecked = value;
+    }
+
+    public Criteria(string name, string code, int index, float min, float max, float[] boundaries, bool isChecked)
     {
         this.name = name;
         this.code = code;
@@ -38,5 +44,6 @@ public class Criteria
         this.min = min;
         this.max = max;
         this.boundaries = boundaries;
+        this.isChecked = isChecked;
     }
 }

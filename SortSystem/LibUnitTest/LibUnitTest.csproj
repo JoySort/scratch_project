@@ -44,6 +44,9 @@
       <None Update="config\project_start_sample.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="fixtures\project_apple_rec_start.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
     <ItemGroup>
       <Folder Include="assets\vo" />

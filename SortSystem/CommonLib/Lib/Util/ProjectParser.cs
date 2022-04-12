@@ -77,14 +77,15 @@ public class ProjectParser
             if (value == null) continue;
             var code = (string?) key;
             var name = (string?) value.SelectToken("name");
+            var isChecked = (bool) value.SelectToken("checked");
             var criteriaIndex = (int) value.SelectToken("index");
             var min = (float) value.SelectToken("data").SelectToken("min");
             var max = (float) value.SelectToken("data").SelectToken("max");
             var range = ((JArray) value.SelectToken("data").SelectToken("range")).Select(jv => (float) jv).ToArray();
 
-            FullCriteria.Add(new Criteria(name, code, criteriaIndex, min, max, range));
+            FullCriteria.Add(new Criteria(name, code, criteriaIndex, min, max, range,isChecked));
             if (value != null && (bool) value.SelectToken("checked"))
-                EnabledCriteria.Add(new Criteria(name, code, criteriaIndex, min, max, range));
+                EnabledCriteria.Add(new Criteria(name, code, criteriaIndex, min, max, range,isChecked));
         }
     }
 
