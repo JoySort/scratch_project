@@ -108,7 +108,7 @@ public class LBWorker
             var signiture = "";
             foreach (var andFilters in tmpFilters)
             {
-                signiture += andFilters.Criteria + String.Join(",", andFilters.FilterBoundrryIndices);
+                signiture += andFilters.Criteria.Code + String.Join(",", andFilters.FilterBoundrryIndices);
                 
             }
             signitures.Add(signiture);
