@@ -63,7 +63,9 @@ public class LBWorker
        
         for (var i = 0; i < outlets.Length; i++)
         {
-            outletFilterSignitures.Add( generateFilterSigniture(outlets[i]));
+            var sig = generateFilterSigniture(outlets[i]);
+            //if(String.IsNullOrEmpty(sig))
+                outletFilterSignitures.Add(sig);
             
         }
         
@@ -72,7 +74,7 @@ public class LBWorker
             for (var j = i+1; j < outletFilterSignitures.Count; j++)
             {
                 var found = false;
-                if (outletFilterSignitures[i] == outletFilterSignitures[j])
+                if (outletFilterSignitures[i]!=null && outletFilterSignitures[i] == outletFilterSignitures[j])
                 {
                     found = true;
                     if (!loadBalanceCount.ContainsKey(outlets[i].ChannelNo))
@@ -101,22 +103,31 @@ public class LBWorker
 
     private string generateFilterSigniture(Outlet outlet)
     {
-        var signitures = new List<string>();
-        foreach (var Orfilters in outlet.Filters)
-        {
-            var tmpFilters = Orfilters.OrderBy(filter => filter.Criteria.Code).ToArray();
-            var signiture = "";
-            foreach (var andFilters in tmpFilters)
+        
+            var signitures = new List<string>();
+            try
             {
-                signiture += andFilters.Criteria.Code + String.Join(",", andFilters.FilterBoundrryIndices);
-                
-            }
-            signitures.Add(signiture);
-        }
+                foreach (var Orfilters in outlet.Filters)
+                {
+                    var tmpFilters = Orfilters.OrderBy(filter => filter.Criteria.Code).ToArray();
+                    var signiture = "";
+                    foreach (var andFilters in tmpFilters)
+                    {
+                        signiture += andFilters.Criteria.Code + String.Join(",", andFilters.FilterBoundrryIndices);
 
-        var result = String.Join(",", signitures.OrderBy(value => value).ToArray());
-        logger.Info("Outlet {} filter signiture{}",outlet.ChannelNo,result);
-        return result;
+                    }
+
+                    signitures.Add(signiture);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error("generateFilterSigniture for outlet {}",outlet.ChannelNo);
+            }
+            var result = String.Join(",", signitures.OrderBy(value => value).ToArray());
+            logger.Info("Outlet {} filter signiture{}", outlet.ChannelNo, result);
+            return result;
+        
     }
 
    
