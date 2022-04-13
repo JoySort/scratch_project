@@ -20,8 +20,7 @@ public class LBWorker
     private int sortingInterval;
     private List<SortResult> toBeProcessedResults = new List<SortResult>();
     private Dictionary<string,Dictionary<string,int>> loadBalanceCount = new Dictionary<string,Dictionary<string,int>>();
-
-    private int[] outletLBCount ;
+    private OutletPriority priority;
     private LBWorker()
     {
         ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnProjectStatusChange;
@@ -47,7 +46,7 @@ public class LBWorker
     {
         var outlets = currentProject.Outlets;
         // priority 
-        var priority = ConfigUtil.getModuleConfig().SortConfig.OutletPriority;
+        priority = ConfigUtil.getModuleConfig().SortConfig.OutletPriority;
         if (priority == OutletPriority.DESC)
         {
             outlets = outlets.OrderByDescending(outlet => outlet.ChannelNo).ToArray();
@@ -58,12 +57,15 @@ public class LBWorker
         }
 
         var outletFilterSignitures = new List<string>();
-        
+        loadBalanceCount= new Dictionary<string, Dictionary<string, int>>();
+
         //outlet 已经根据优先级排序，分拣操作也是根据优先级排序的。因此，符合条件的分选结果遇到第一个负载均衡的通道就停止了。
-       
+
         for (var i = 0; i < outlets.Length; i++)
         {
-            outletFilterSignitures.Add( generateFilterSigniture(outlets[i]));
+            var sig = generateFilterSigniture(outlets[i]);
+            //if(String.IsNullOrEmpty(sig))
+                outletFilterSignitures.Add(sig);
             
         }
         
@@ -72,23 +74,28 @@ public class LBWorker
             for (var j = i+1; j < outletFilterSignitures.Count; j++)
             {
                 var found = false;
-                if (outletFilterSignitures[i] == outletFilterSignitures[j])
+                if (!String.IsNullOrEmpty(outletFilterSignitures[i]) && outletFilterSignitures[i] == outletFilterSignitures[j])
                 {
                     found = true;
                     if (!loadBalanceCount.ContainsKey(outlets[i].ChannelNo))
                     {
-                        
-                        loadBalanceCount.Add(outlets[i].ChannelNo,new Dictionary<string, int>());
+
+                        loadBalanceCount.Add(outlets[i].ChannelNo, new Dictionary<string, int>());
                     }
                     if (loadBalanceCount[outlets[i].ChannelNo] != null)
                     {
                         //这里获得filter签名后，逐个找到跟他相同的通道后，就可以保证齐全。不必反向寻找
-                        loadBalanceCount[outlets[i].ChannelNo].Add(outlets[j].ChannelNo,0);
-                        logger.Info("Load balance aligble outlent {}{}",outlets[i].ChannelNo,outlets[j].ChannelNo);
+                        loadBalanceCount[outlets[i].ChannelNo].Add(outlets[j].ChannelNo, 0);
+                        logger.Info("Load balance aligble outlent {}{}", outlets[i].ChannelNo, outlets[j].ChannelNo);
                     }
                 }
 
-                if (found && !loadBalanceCount[outlets[i].ChannelNo].ContainsKey(outlets[i].ChannelNo)) loadBalanceCount[outlets[i].ChannelNo].Add(outlets[i].ChannelNo, 0);
+                if (found && !loadBalanceCount[outlets[i].ChannelNo].ContainsKey(outlets[i].ChannelNo))
+                {
+                    loadBalanceCount[outlets[i].ChannelNo].Add(outlets[i].ChannelNo, 0);
+                    loadBalanceCount[outlets[i].ChannelNo] = priority == OutletPriority.ASC ? loadBalanceCount[outlets[i].ChannelNo].OrderBy(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value):
+                        loadBalanceCount[outlets[i].ChannelNo].OrderByDescending(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                }
             }
             
         }
@@ -96,27 +103,36 @@ public class LBWorker
 
         this.sortingInterval = ConfigUtil.getModuleConfig().SortConfig.SortingInterval;
         this.currentOutlets = outlets;
-        this.outletLBCount = new int[outlets.Length+1];//为未来的loop通道预留一个位置
+        
     }
 
     private string generateFilterSigniture(Outlet outlet)
     {
-        var signitures = new List<string>();
-        foreach (var Orfilters in outlet.Filters)
-        {
-            var tmpFilters = Orfilters.OrderBy(filter => filter.Criteria.Code).ToArray();
-            var signiture = "";
-            foreach (var andFilters in tmpFilters)
+        
+            var signitures = new List<string>();
+            try
             {
-                signiture += andFilters.Criteria.Code + String.Join(",", andFilters.FilterBoundrryIndices);
-                
-            }
-            signitures.Add(signiture);
-        }
+                foreach (var Orfilters in outlet.Filters)
+                {
+                    var tmpFilters = Orfilters.OrderBy(filter => filter.Criteria.Code).ToArray();
+                    var signiture = "";
+                    foreach (var andFilters in tmpFilters)
+                    {
+                        signiture += andFilters.Criteria.Code + String.Join(",", andFilters.FilterBoundrryIndices);
 
-        var result = String.Join(",", signitures.OrderBy(value => value).ToArray());
-        logger.Info("Outlet {} filter signiture{}",outlet.ChannelNo,result);
-        return result;
+                    }
+
+                    signitures.Add(signiture);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error("generateFilterSigniture for outlet {}",outlet.ChannelNo);
+            }
+            var result = String.Join(",", signitures.OrderBy(value => value).ToArray());
+            logger.Info("Outlet {} filter signiture{}", outlet.ChannelNo, result);
+            return result;
+        
     }
 
    
@@ -140,40 +156,42 @@ public class LBWorker
 
     private void processResult()
     {
-        Task.Run(() =>
-        {
-            logger.Info("LBWorker starts process project id {} project name {} ",currentProject.Id,currentProject.Name);
+        _ = Task.Run(() =>
+          {
+              logger.Info("LBWorker starts process project id {} project name {} ", currentProject.Id, currentProject.Name);
 
-            while (isProjectRunning)
-            {
+              while (isProjectRunning)
+              {
 
-                var processBatch = toBeProcessedResults;
-                toBeProcessedResults = new List<SortResult>();
+                  var processBatch = toBeProcessedResults;
+                  toBeProcessedResults = new List<SortResult>();
                 //Load and Balancing
                 var lbResults = new List<LBResult>();
-                foreach (var sortResult in processBatch)
-                {
-                    var outletNO = sortResult.Outlets.First().ChannelNo;
-                    if (loadBalanceCount[outletNO]!=null && loadBalanceCount[outletNO].Count>0)
-                    {
-                       var lbChannelNO = loadBalanceCount[outletNO].OrderBy(dic=>dic.Value).ToDictionary(kvp => kvp.Key, kvp => kvp.Value).Keys.First();
-                       loadBalanceCount[outletNO][lbChannelNO]++;
-                       outletNO = lbChannelNO;
-                    }
-                    
-                    var lbResult = new LBResult(sortResult.Coordinate, sortResult.ExpectedFeatureCount, sortResult.Features,
-                        sortResult.Outlets,
-                        new Outlet[] {new Outlet(outletNO, sortResult.Outlets.First().Type,sortResult.Outlets.First().Filters)});
-                    lbResults.Add(lbResult);
-                    
-                }
+                  foreach (var sortResult in processBatch)
+                  {
+                      var outletNO = sortResult.Outlets.First().ChannelNo;
+                      string lbChannelNO = outletNO;
+                      if (loadBalanceCount.ContainsKey(outletNO) && loadBalanceCount[outletNO] != null && loadBalanceCount[outletNO].Count > 0)
+                      {
+                          loadBalanceCount[outletNO] = loadBalanceCount[outletNO].OrderBy(dic => dic.Value).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                          lbChannelNO = loadBalanceCount[outletNO].Keys.First();
+                          loadBalanceCount[outletNO][lbChannelNO]++;
+                          //outletNO = lbChannelNO;
+                      }
 
-                OnConsolidateResult(new LBResultEventArg(lbResults));
-                
-                Thread.Sleep(sortingInterval);
-            }
-            logger.Info("LBWorker stops process project id {} project name {} ",currentProject.Id,currentProject.Name);
-        });
+                      var lbResult = new LBResult(sortResult.Coordinate, sortResult.ExpectedFeatureCount, sortResult.Features,
+                          sortResult.Outlets,
+                          new Outlet[] { new Outlet(lbChannelNO, sortResult.Outlets.First().Type, sortResult.Outlets.First().Filters) });
+                      lbResults.Add(lbResult);
+                      logger.Debug("loadBalanceCount obj status when outletNO:{} outletNO {} loadBalanceCount {} ", outletNO, lbChannelNO, JsonConvert.SerializeObject(loadBalanceCount,Formatting.Indented));
+                  }
+
+                  OnLBResult(new LBResultEventArg(lbResults));
+
+                  Thread.Sleep(sortingInterval);
+              }
+              logger.Info("LBWorker stops process project id {} project name {} ", currentProject.Id, currentProject.Name);
+          });
     }
 
    
@@ -181,7 +199,7 @@ public class LBWorker
    
   
     public event EventHandler<LBResultEventArg> OnResult;
-    protected virtual void OnConsolidateResult(LBResultEventArg e)
+    protected virtual void OnLBResult(LBResultEventArg e)
     {
         var handler = OnResult;
         handler?.Invoke(this, e);

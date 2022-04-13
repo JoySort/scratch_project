@@ -83,13 +83,13 @@ public class LBWorkerTest
                     void LBEventHandler(object sender, LBResultEventArg args)
                     {
                         
-                        var expected = (priority == OutletPriority.ASC) ? new string[] {"1","2","1","3","2" } : new string[] {"1","3","1","2","5" };
+                        var expected = (priority == OutletPriority.ASC) ? new string[] {"1","2","1","3","3" } : new string[] {"1","3","1","2","5" };
                         
                         for (var i = 0; i < args.Results.Count; i++)
                         {
                            Assert.AreEqual(expected[i], args.Results[i].LoadBalancedOutlet.First().ChannelNo);
                         }
-                        
+                        LBWorker.getInstance().OnResult -= LBEventHandler;
                         blocking = false;
                         
                     }
