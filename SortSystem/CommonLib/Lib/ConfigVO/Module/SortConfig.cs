@@ -17,7 +17,11 @@ public class SortConfig
 
     public int SortingInterval => sortingInterval;
 
-    public OutletPriority OutletPriority => outletPriority;
+    public OutletPriority OutletPriority
+    {
+        get => outletPriority;
+        set => outletPriority = value;
+    }
 }
 
 public enum OutletPriority

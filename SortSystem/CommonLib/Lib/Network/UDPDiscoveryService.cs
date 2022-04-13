@@ -99,7 +99,15 @@ public class UDPDiscoveryService
             SendAnnouncement();
             while (!ExitFlag)
             {
-                checkForNetWorkAdaptorChange();
+                try
+                {
+                    checkForNetWorkAdaptorChange();
+                }
+                catch (Exception e)
+                {
+                    logger.Error("Exception when detect network status change, error msg:{}",e.Message);
+                }
+
                 Thread.Sleep(KeepAliveInterval*10);
             }
         });

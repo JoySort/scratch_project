@@ -69,11 +69,13 @@ public class SortingWorker
 
     public void processSingle(RecResult recResult)
     {
+        if (!isProjectRunning) throw new ProjectDependencyException("SortingWorker:");
         toBeProcessedResults.Add(recResult);
     }
 
     public void processBulk(List<RecResult> recResults)
     {
+        if (!isProjectRunning) throw new ProjectDependencyException("SortingWorker:");
         toBeProcessedResults.AddRange(recResults);
     }
 
@@ -93,36 +95,11 @@ public class SortingWorker
                 sortResults = new List<SortResult>();
                 foreach (var item in processBatch)
                 {
-                    if (item.ExpectedFeatureCount == item.Features.Count)
-                    {
-                        applySortingRules(item);
-                    }
-                    else
-                    {
-                        incompleteWaitingList.Add(item);
-                        //TODO: write code to cross check incomplete waiting list to add them back to toBeProcessedResults for sorting
-                    }
-                }
-                
-                //Load and Balancing
-                
-                foreach (var sortResult in sortResults)
-                {
-                    if (sortResult.Outlets.Length == 1)
-                    {
-                        
-                    }
-                    else if(sortResult.Outlets.Length>1)
-                    {
-                        foreach (var outlet in sortResult.Outlets)
-                        {
-                            outletLBCount[Int32.Parse(outlet.ChannelNo)]++;
-                        }
-
-                       
-                    }
+                    applySortingRules(item);
                 }
 
+                OnConsolidateResult(new SortingResultEventArg(sortResults));
+                
                 Thread.Sleep(sortingInterval);
             }
             logger.Info("SortingWorker stops process project id {} project name {} ",currentProject.Id,currentProject.Name);
@@ -152,6 +129,7 @@ public class SortingWorker
             if (oRResult)
             {
                 selectedOutlets.Add(outlet);
+                break;
             }
 
             
@@ -166,5 +144,22 @@ public class SortingWorker
         {
             logger.Debug("SortingWorker: No outlet is selected for date {}",JsonConvert.SerializeObject(recResult));
         }
+    }
+  
+    public event EventHandler<SortingResultEventArg> OnResult;
+    protected virtual void OnConsolidateResult(SortingResultEventArg e)
+    {
+        var handler = OnResult;
+        handler?.Invoke(this, e);
+    }
+}
+
+public class SortingResultEventArg
+{
+    public List<SortResult> Results;
+
+    public SortingResultEventArg(List<SortResult> results)
+    {
+        Results = results;
     }
 }

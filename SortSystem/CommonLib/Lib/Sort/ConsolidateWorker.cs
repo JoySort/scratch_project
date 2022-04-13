@@ -70,6 +70,7 @@ public class ConsolidateWorker
 
     public void Consolidate(RecResult recResult)
     {
+        if (!isProjectRunning) throw new Exception("No project is running, Can not work without project,At least one project needs to be running to be able to process consolidation");
         if (!cacheRecResultDictionary.ContainsKey(recResult.Coordinate.Key()))
         {
             cacheRecResultDictionary.Add(recResult.Coordinate.Key(),new List<RecResult>());
@@ -134,7 +135,7 @@ public class ConsolidateWorker
                     }
                 }
 
-                if (completeResult.Count > 0) OnConsolidateResult(new ConsolidateEventArg(completeResult));
+                if (completeResult.Count > 0) OnConsolidateResult(new ResultEventArg(completeResult));
                 
                 //cleanup the caches
                 foreach (var value in completeResult)
@@ -162,7 +163,7 @@ public class ConsolidateWorker
     private float consolidateFeature(List<RecResult> toBeConsolidatePartialRecResultList,string coordinateKey,int criteriaIndex,int consolidatePolicyIndex)
     {
 
-        var calculationSelector = new List<float>();
+        var featureValuesToBeConsolidated = new List<float>();
         toBeConsolidatePartialRecResultList = toBeConsolidatePartialRecResultList.OrderBy(rrs => rrs.Coordinate.RowOffset).ToList();//order to make sure first and last operations are correct
         
         foreach (var recResult in toBeConsolidatePartialRecResultList)
@@ -171,23 +172,27 @@ public class ConsolidateWorker
                 {
                     if (feature.CriteriaIndex == criteriaIndex)
                     {
-                        calculationSelector.Add(feature.Value);
+                        featureValuesToBeConsolidated.Add(feature.Value);
     
                     }
                 }
         }
 
-        var result = calculate(calculationSelector, consolidationPolicy.ConsolidationOperation[consolidatePolicyIndex],consolidatePolicyIndex);
+        var result = consolidateFeatureValue(
+            featureValuesToBeConsolidated,
+            consolidationPolicy.ConsolidationOperation[consolidatePolicyIndex],
+            consolidationPolicy.ConsolidateArg[consolidatePolicyIndex]
+            );
 
         return result;
     }
     
     
-    private float calculate(List<float> listValues,ConsolidateOperation ops,int consolidatePolicyIndex)
+    private float consolidateFeatureValue(List<float> listValues,ConsolidateOperation consolidationOperation,int consolidatePolicyArg)
     {
         List<float> tmpList;
         
-        switch (ops){
+        switch (consolidationOperation){
             case ConsolidateOperation.avg:
                 return listValues.Average();
             case ConsolidateOperation.min:
@@ -198,7 +203,7 @@ public class ConsolidateWorker
                 return listValues.First();// like apple weight sensor, feature weight only from sensor, so consolidation will only have one feature element and just choose first 1 to consolidate
             case ConsolidateOperation.firstNAvg:
                  tmpList = new List<float>();
-                for (var i = 0; i < consolidationPolicy.ConsolidateArg[consolidatePolicyIndex]; i++)
+                for (var i = 0; i < consolidatePolicyArg; i++)
                 {
                     tmpList.Add(listValues[i]);
                 }
@@ -206,7 +211,7 @@ public class ConsolidateWorker
                 return tmpList.Average();
             case ConsolidateOperation.lastNAvg:
                  tmpList = new List<float>();
-                for (var i = consolidationPolicy.ConsolidateArg[consolidatePolicyIndex]-1 ; i >=0 ; i--)
+                for (var i = listValues.Count-1 ; i >= ((listValues.Count - 1) - consolidatePolicyArg ); i--)
                 {
                     tmpList.Add(listValues[i]);
                 }
@@ -214,7 +219,7 @@ public class ConsolidateWorker
             case ConsolidateOperation.maxNAvg:
                 tmpList = new List<float>();
                 listValues = listValues.OrderByDescending(v=>v).ToList();
-                for (var i = 0; i < consolidationPolicy.ConsolidateArg[consolidatePolicyIndex]; i++)
+                for (var i = 0; i < consolidatePolicyArg; i++)
                 {
                     tmpList.Add(listValues[i]);
                 }
@@ -222,7 +227,7 @@ public class ConsolidateWorker
             case ConsolidateOperation.minNAvg:
                 tmpList = new List<float>();
                 listValues = listValues.OrderBy(v=>v).ToList();
-                for (var i = 0; i < consolidationPolicy.ConsolidateArg[consolidatePolicyIndex]; i++)
+                for (var i = 0; i < consolidatePolicyArg; i++)
                 {
                     tmpList.Add(listValues[i]);
                 }
@@ -232,19 +237,19 @@ public class ConsolidateWorker
         return 0;
     }
     
-    public event EventHandler<ConsolidateEventArg> ConsolidateResult;
-    protected virtual void OnConsolidateResult(ConsolidateEventArg e)
+    public event EventHandler<ResultEventArg> OnResult;
+    protected virtual void OnConsolidateResult(ResultEventArg e)
     {
-        var handler = ConsolidateResult;
+        var handler = OnResult;
         handler?.Invoke(this, e);
     }
 }
 
-public class ConsolidateEventArg
+public class ResultEventArg
 {
     public List<RecResult> RecResults;
 
-    public ConsolidateEventArg(List<RecResult> recResults)
+    public ResultEventArg(List<RecResult> recResults)
     {
         RecResults = recResults;
     }

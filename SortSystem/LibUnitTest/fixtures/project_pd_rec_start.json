@@ -1,8 +1,8 @@
 {
-  "id": "apple001",
+  "id": "PD 001",
   "time_created": null,
   "time_last_used": null,
-  "name": "Appple Level 1",
+  "name": "PD Level 1",
   "category": "apple",
   "class": null,
   "hasSampling": true,
@@ -22,7 +22,7 @@
         "min": 8,
         "max": 65,
         "range": [
-          15
+          15,34
          
         ]
       }
@@ -78,25 +78,29 @@
     {
       "channel_no": "1",
       "type": "auto",
-      "filters":[{"sb": [ 0 ], "width": [1]}]
+      "filters":[{"sb": [ 0 ], "width": [0]}]
     },
     {
       "channel_no": "2",
       "type": "auto",
       "filters":
-      [{"sb": [ 1 ], "width": [1]}]
+      [{"zl": [ 1 ], "width": [1]},{"zl": [ 0 ], "width": [0]}]
     },
     {
       "channel_no": "3",
-      "type": "auto"
+      "type": "auto",
+      "filters":
+      [{"zl": [ 0 ], "width": [0]},{"zl": [ 1 ], "width": [1]}]
     },
     {
       "channel_no": "4",
-      "type": "auto"
+      "type": "auto",
+      "filters":[{"sb": [ 1 ], "width": [1],"zl": [ 1 ]}]
     },
     {
       "channel_no": "5",
-      "type": "auto"
+      "type": "auto",
+      "filters":[{"sb": [ 1 ], "width": [1],"zl": [ 1 ]}]
     },
     {
       "channel_no": "6",

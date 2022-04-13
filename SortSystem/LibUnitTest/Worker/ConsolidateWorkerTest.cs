@@ -56,21 +56,18 @@ public class ConsolidateWorkerTest
         
         worker.Consolidate(new List<RecResult>(recResults));
 
-        worker.ConsolidateResult += ((sender, args) =>
+        worker.OnResult += ((sender, args) =>
         {
-           
-            
-            
             blocking = false;
         });
 
-        worker.ConsolidateResult += appleEventHanlder;
+        worker.OnResult += appleEventHanlder;
         
         while (blocking)
         {
             Thread.Sleep(100);
         }
-        worker.ConsolidateResult -= appleEventHanlder;
+        worker.OnResult -= appleEventHanlder;
 
         logger.Info("APPLE Test stop");
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
@@ -97,8 +94,8 @@ public class ConsolidateWorkerTest
         bool blocking = true;
         
         worker.Consolidate(new List<RecResult>(recResults));
-        worker.ConsolidateResult += pdEventHanlder;
-        worker.ConsolidateResult += ((sender, args) =>
+        worker.OnResult += pdEventHanlder;
+        worker.OnResult += ((sender, args) =>
         {
             logger.Info("PD assert finished {}",JsonConvert.SerializeObject(args.RecResults));
             blocking = false;
@@ -108,13 +105,13 @@ public class ConsolidateWorkerTest
         {
             Thread.Sleep(100);
         }
-        worker.ConsolidateResult -= pdEventHanlder;
+        worker.OnResult -= pdEventHanlder;
         
         logger.Info("PD Test stop");
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
     }
     
-    public void appleEventHanlder(Object sender, ConsolidateEventArg args)
+    public void appleEventHanlder(Object sender, ResultEventArg args)
     {
         Assert.AreEqual(args.RecResults.First().Features.First().Value,15);
         Assert.AreEqual(args.RecResults.First().Features.Last().Value,4);
@@ -124,7 +121,7 @@ public class ConsolidateWorkerTest
         logger.Info("APPLE assert finished");
     }
     
-    public void pdEventHanlder(Object sender, ConsolidateEventArg args)
+    public void pdEventHanlder(Object sender, ResultEventArg args)
     {
         Assert.AreEqual(args.RecResults.First().Features.First().Value,25);
         Assert.AreEqual(args.RecResults.First().Features[1].Value,25);

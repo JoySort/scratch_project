@@ -1,6 +1,7 @@
 using System.Text;
 using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.Controllers;
+using CommonLib.Lib.Sort;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
@@ -12,25 +13,50 @@ using EmptyResult = CommonLib.Lib.Controllers.EmptyResult;
 namespace CommonLib.Lib.WebAPIs;
 
 /**
- * <summary>发现服务，用来提供给调用端，作为第一个调用的方法来获得其提供的服务类型。</summary>
+ * <summary>sorting server</summary>
  */
 [ApiController]
 public class SortController: ControllerBase
 {
     private readonly ILogger<SortController> logger;
-    
+    private ConsolidateWorker consolidateWorker = ConsolidateWorker.getInstance();
+    private SortingWorker sortingWorker = SortingWorker.getInstance();
     public SortController(ILogger<SortController> logger)
     {
         this.logger = logger;
-        this.logger.LogInformation(1, "NLog injected into SortController");
+        //this.logger.LogInformation(1, "NLog injected into SortController");
     }
     
-    [Route("/sort/single")]
+    [Route("/sort/consolidate_single")]
     [HttpPost]
-    public void singleSort(RawResult rawResult)
+    public void consolidate(RecResult recResult)
     {
-       logger.LogDebug("raw result with timestamp{}",rawResult.ProcessTimestamp);
-        
-        return ;
+      
+       consolidateWorker.Consolidate(recResult);
+      
+    }
+    
+    [Route("/sort/consolidate_batch")]
+    [HttpPost]
+    public void consolidate(List<RecResult> recResults)
+    {
+        consolidateWorker.Consolidate(recResults);
+       
+    }
+    
+    [Route("/sort/sort_single")]
+    [HttpPost]
+    public void sort(RecResult recResult)
+    {
+      
+        sortingWorker.processSingle(recResult);
+      
+    }
+    
+    [Route("/sort/sort_batch")]
+    [HttpPost]
+    public void sort(List<RecResult> recResults)
+    {
+       sortingWorker.processBulk(recResults);
     }
 }

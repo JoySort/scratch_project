@@ -1,5 +1,6 @@
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Network;
+using CommonLib.Lib.Sort;
 using CommonLib.Lib.Util;
 
 using LowerRunner;
@@ -16,7 +17,11 @@ ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
 NetworkUtil.UDPDiscoverSetup();
 LowerMachineWorker.init();
 
-
+// 组合piple line 
+ConsolidateWorker.getInstance().OnResult += ((sender, args) =>
+{
+    SortingWorker.getInstance().processBulk(args.RecResults);
+});
 
 
 
