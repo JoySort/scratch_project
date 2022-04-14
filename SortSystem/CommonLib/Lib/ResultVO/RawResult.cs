@@ -10,7 +10,7 @@ public class RawResult
     public long ProcessTimestamp
     {
         get => process_timestamp;
-        set => process_timestamp = value;
+        //set => process_timestamp = value;
 
     }
 
