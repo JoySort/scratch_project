@@ -67,9 +67,7 @@ public class LBWorkerTest
             ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
             sortingWorker.processBulk(new List<RecResult>(recResults));
             
-            string[] ascExpected  = new string[] {"1", "2", "1", "2", "2"};
-            string[] descExpected = new string[] {"1", "3", "1", "3", "5"};
-            
+
             void pdEventHanlder(Object sender, SortingResultEventArg args)
             {
                 try
@@ -83,7 +81,7 @@ public class LBWorkerTest
                     void LBEventHandler(object sender, LBResultEventArg args)
                     {
                         
-                        var expected = (priority == OutletPriority.ASC) ? new string[] {"1","2","1","3","3" } : new string[] {"1","3","1","2","5" };
+                        var expected = (priority == OutletPriority.ASC) ? new string[] {"1","2","1","3","3","2","2","3" } : new string[] {"1","3","1","2","5","4","2","3" };
                         
                         for (var i = 0; i < args.Results.Count; i++)
                         {

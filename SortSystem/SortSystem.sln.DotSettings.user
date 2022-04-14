@@ -7,6 +7,7 @@
     &lt;ProjectFile&gt;A7A92FC3-580F-43A0-B88A-96EACD989AF0/d:Worker/f:ConsolidateWorkerTest.cs&lt;/ProjectFile&gt;
     &lt;TestAncestor&gt;
       &lt;TestId&gt;NUnit3x::A7A92FC3-580F-43A0-B88A-96EACD989AF0::net6.0::LibUnitTest.Worker.LBWorkerTest.LBTest&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::A7A92FC3-580F-43A0-B88A-96EACD989AF0::net6.0::LibUnitTest.Worker.SortingWorkerTest.pdConsolidationTest&lt;/TestId&gt;
     &lt;/TestAncestor&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>

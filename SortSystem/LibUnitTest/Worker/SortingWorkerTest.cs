@@ -107,8 +107,8 @@ public class SortingWorkerTest
             ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
             sortingWorker.processBulk(new List<RecResult>(recResults));
             
-            string[] ascExpected  = new string[] {"1", "2", "1", "2", "2"};
-            string[] descExpected = new string[] {"1", "3", "1", "3", "5"};
+            string[] ascExpected  = new string[] {"1", "2", "1", "2", "2","2","2","2"};
+            string[] descExpected = new string[] {"1", "3", "1", "3", "5","5","3","3"};
             
             void pdEventHanlder(Object sender, SortingResultEventArg args)
             {

@@ -26,24 +26,22 @@
 
 
   { "_comment": "data fit channel [2,3],[4,5] but they are different criterias. this test the channel priority ASC and DESC ",
-    "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 1},
+    "coordinate": { "section": 0, "column": 0,"triggerId": 4,"rowOffset": 1},
     "expectedFeatureCount": 2,
     "features": [ { "criteriaIndex": 1, "value": 16 },{ "criteriaIndex": 7, "value": 7 },{ "criteriaIndex": 8, "value": 20 }]
   },
-  {
-    "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 1},
+  {"_comment": "data fit channel [2,3],[4,5] but they are different criterias. this test the channel priority ASC and DESC ",
+    "coordinate": { "section": 0, "column": 0,"triggerId": 5,"rowOffset": 1},
     "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 15 },{ "criteriaIndex": 8, "value": 15 }]
+    "features": [ { "criteriaIndex": 1, "value": 16 },{ "criteriaIndex": 7, "value": 7 },{ "criteriaIndex": 8, "value": 20 }]
   },
-  {
-    "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 2},
+  {"_comment":"channel [2,3] and also test for loadbalance",
+    "coordinate": { "section": 0, "column": 0,"triggerId": 6,"rowOffset": 3},
     "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 20 },{ "criteriaIndex": 8, "value": 17 }]
-  },
-  {
-    "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 3},
-    "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 25 },{ "criteriaIndex": 8, "value": 18 }]
-  }
-
+    "features": [ { "criteriaIndex": 1, "value": 14 },{ "criteriaIndex": 7, "value": 30 },{ "criteriaIndex": 8, "value": 4 }]
+  },  {"_comment":"channel [2,3] and also test for loadbalance",
+  "coordinate": { "section": 0, "column": 0,"triggerId": 7,"rowOffset": 3},
+  "expectedFeatureCount": 2,
+  "features": [ { "criteriaIndex": 1, "value": 14 },{ "criteriaIndex": 7, "value": 30 },{ "criteriaIndex": 8, "value": 4 }]
+}
 ]
