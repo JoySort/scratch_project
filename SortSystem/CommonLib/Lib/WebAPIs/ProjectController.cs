@@ -49,6 +49,30 @@ public class ProjectController: ControllerBase
         
         return new UIAPIResult(errorCode,errorMessage,errorObj,status,resultData);
     }
+    [Route("/apis/project_start_v1")]
+    [HttpPost]
+    public UIAPIResult project_start(Project project)
+    {
+        var errorObj = new JoyError();
+
+        try
+        {
+            
+            ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent( project,ProjectState.start);
+        }
+        catch (Exception e)
+        {
+            errorObj.e = e.Message;
+        }
+        
+
+        var errorCode = errorObj.e != null ? "2" : "1";
+        var errorMessage = (errorObj.e ??"");
+        var status =  (errorObj.e != null ? "error" : "ok");
+        var resultData = new EmptyResult();
+        
+        return new UIAPIResult(errorCode,errorMessage,errorObj,status,resultData);
+    }
 
     [Route("/apis/project_stop")]
     [HttpGet]

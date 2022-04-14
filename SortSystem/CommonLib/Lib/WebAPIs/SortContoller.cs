@@ -34,7 +34,7 @@ public class SortController: ControllerBase
     public void consolidate(RecResult recResult)
     {
       
-       consolidateWorker.processBulk(recResult);
+       consolidateWorker.processSingle(recResult);
       
     }
     
@@ -42,7 +42,7 @@ public class SortController: ControllerBase
     [HttpPost]
     public void consolidate(List<RecResult> recResults)
     {
-        consolidateWorker.processSingle(recResults);
+        consolidateWorker.processBulk(recResults);
        
     }
     

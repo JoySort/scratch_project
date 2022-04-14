@@ -15,16 +15,20 @@ public class VirtualComLinkDriver:ComLinkDriver
     
     public VirtualComLinkDriver(LowerConfig lowerConfig) : base(lowerConfig)
     {
+        
+        machineID = "";
         ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnProjectStatusChange;
     }
+
+  
 
     public void OnProjectStatusChange(object sender,ProjectStatusEventArgs statusEventArgs)
     {
         if (statusEventArgs.State == ProjectState.start && statusEventArgs.currentProject != null)
         {
-            this.currentProject = statusEventArgs.currentProject;
+            currentProject = statusEventArgs.currentProject;
             
-            this.isProjectRunning = true;
+            isProjectRunning = true;
             startSimulate();
         }
 
@@ -35,7 +39,7 @@ public class VirtualComLinkDriver:ComLinkDriver
     }
 
     private int interval = 1000 / 14;
-    private long count = 0;
+    private long count;
     private void startSimulate()
     {
         count = 0;
@@ -43,9 +47,10 @@ public class VirtualComLinkDriver:ComLinkDriver
         {
             while (isProjectRunning)
             {
-
-
-                dispatchTriggerEvent(new TriggerEventArg(count));
+                
+                byte[] intBytes = BitConverter.GetBytes(count);
+                //dispatchTriggerEvent(new TriggerEventArg(count));
+                OnTriggerCMDFired(intBytes);
                 count++;
                 Thread.Sleep(count < interval ? (int)count:interval);
             }
@@ -53,11 +58,11 @@ public class VirtualComLinkDriver:ComLinkDriver
 
     }
 
-    public void init()
+    public override void init()
     {
-        //TODO: implement actual link with lowerconfig 
+        
         logger.Info("ComLink init begin with address:{}",lowerConfig.HardwarePort);
-        var comPort = lowerConfig.HardwarePort;
+        onMachineIDChanged("Simulator-Machine-ID");
         
     }
 
@@ -70,4 +75,6 @@ public class VirtualComLinkDriver:ComLinkDriver
     {
         //TODO: when recieve lower machine communication notify other interested party
     }
+
+    
 }

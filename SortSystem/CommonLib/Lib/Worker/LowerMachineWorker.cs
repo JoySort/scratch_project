@@ -15,6 +15,9 @@ public class LowerMachineWorker
     private bool isProjectRunning = false;
     private Project currentProject;
     private LowerMachineDriver lowerMachineDriver;
+
+    public LowerMachineDriver LowerMachineDriver => lowerMachineDriver;
+
     private static readonly LowerMachineWorker instance = new();
     private List<EmitResult> toBeProcessedResults = new();
     private int currentInterval;
@@ -29,8 +32,8 @@ public class LowerMachineWorker
     
     private LowerMachineWorker()
     {
-        ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnSwitchProjectState;
         lowerMachineDriver =  LowerMachineDriver.getInstance();
+        ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnSwitchProjectState;
     }
 
    
@@ -50,7 +53,8 @@ public class LowerMachineWorker
     //Auto invoke when lower machine trigger send event. @see TriggerDriver
     private void onTrigger(object sender, TriggerEventArg args)
     {
-         this.currentTriggerId = args.triggerID;
+         this.currentTriggerId = args.TriggerId;
+         //logger.Debug("Trigger id in LowerMachine {}",this.currentTriggerId);
        
     }
 
@@ -88,18 +92,28 @@ public class LowerMachineWorker
         this.currentInterval = ConfigUtil.getModuleConfig().SortConfig.SortingInterval;
     }
 
+    private long counter = 0;
     private void processResult()
     {
         Task.Run(()=>{
             while (isProjectRunning)
             {
-                logger.Info("current trigger id from lower machine{}",this.currentTriggerId);
+                Thread.Sleep(currentInterval);
+                counter++;
+                //logger.Info("current lowermachine running cycle counter {} from lower machine{} isProjectRunning{} currentInterval {} currentProject {} ",counter,this.currentTriggerId,isProjectRunning,currentInterval,currentProject);
                 var tmpBatch = toBeProcessedResults;
+                if (tmpBatch.Count <= 0) continue;
                 toBeProcessedResults = new List<EmitResult>();
                 lowerMachineDriver.advancedEmitter.EmitBulk(tmpBatch);
-                Thread.Sleep(currentInterval);
+               
+                
             }
             
         });
+    }
+
+    public static void init()
+    {
+        getInstance();
     }
 }

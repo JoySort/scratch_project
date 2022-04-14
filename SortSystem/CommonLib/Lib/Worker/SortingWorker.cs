@@ -89,6 +89,7 @@ public class SortingWorker
 
             while (isProjectRunning)
             {
+                Thread.Sleep(sortingInterval);
                 var processBatch = toBeProcessedResults;
                 if (processBatch.Count == 0) continue;
                 
@@ -101,7 +102,7 @@ public class SortingWorker
 
                 DispatchResultEvent(new SortingResultEventArg(sortResults));
                 
-                Thread.Sleep(sortingInterval);
+               
             }
             logger.Info("SortingWorker stops process project id {} project name {} ",currentProject.Id,currentProject.Name);
         });

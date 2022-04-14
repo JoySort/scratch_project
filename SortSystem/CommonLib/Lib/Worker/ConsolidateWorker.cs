@@ -63,15 +63,15 @@ public class ConsolidateWorker
         }
     }
 
-    public void processSingle(List<RecResult> rrs)
+    public void processBulk(List<RecResult> rrs)
     {
         foreach (var value in rrs)
         {
-            processBulk(value);
+            processSingle(value);
         }
     }
 
-    public void processBulk(RecResult recResult)
+    public void processSingle(RecResult recResult)
     {
         if (!isProjectRunning) throw new ProjectDependencyException("ConsolidateWorker");
         if (!cacheRecResultDictionary.ContainsKey(recResult.Coordinate.Key()))

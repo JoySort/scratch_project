@@ -38,6 +38,14 @@ public class LowerMachineController : ControllerBase
 
     }
     
+    [HttpGet]
+    [Route("/lower/machineID")]
+    public string getMachineID()
+    {
+        return LowerMachineWorker.getInstance().LowerMachineDriver.machineID;
+
+    }
+    
 
     
   

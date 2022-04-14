@@ -2,14 +2,17 @@
   "name": "lowerRunner1",
   "module": "Lower",
   "genre": "palmDate",
+  "lowerMachineSimulationMode": true,
   "lowerConfig":[
     {
       "hardwarePort": "/dev/com1",
+      "baudRate": 115200,
       "columns": [0,11] ,
       "isMaster": true
     },
     {
       "hardwarePort": "/dev/com2",
+      "baudRate": 115200,
       "columns": [12,23],
       "isMaster": false
     }
@@ -35,7 +38,7 @@
   "criteriaMapping":{
     "existence": {
       "index": 0,
-      "key": "existence",
+      "key": "existence"
     },
     "width": {
       "index": 1,

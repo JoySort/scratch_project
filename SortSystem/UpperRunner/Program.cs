@@ -22,7 +22,7 @@ ConsolidateWorker.getInstance().OnResult+=((sender, args) => SortingWorker.getIn
 SortingWorker.getInstance().OnResult+=((sender, args) => LBWorker.getInstance().processBulk(args.Results));
 LBWorker.getInstance().OnResult+=((sender, args) => EmitWorker.getInstance().processBulk(args.Results));
 EmitWorker.getInstance().OnResult+=((sender, args) => LowerMachineWorker.getInstance().processBulk(args.Results));
-
+LowerMachineWorker.init();
 
 
 

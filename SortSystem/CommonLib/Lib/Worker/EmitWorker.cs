@@ -67,7 +67,9 @@ public class EmitWorker
 
             while (isProjectRunning)
             {
+                Thread.Sleep(sortingInterval);
                 var processBatch = toBeProcessedResults;
+                if (processBatch.Count == 0) continue;
                 toBeProcessedResults = new List<LBResult>();
 
                 var emitResults = new List<EmitResult>();
@@ -75,7 +77,7 @@ public class EmitWorker
                     emitResults.Add(new EmitResult(item.Coordinate.Column, int.Parse(item.LoadBalancedOutlet.First().ChannelNo),item.Coordinate.TriggerId));
                 DispatchResultEvent(new EmitResultEventArg(emitResults));
 
-                Thread.Sleep(sortingInterval);
+                
             }
 
             logger.Info("EmiitWorker stops process project id {} project name {} ", currentProject.Id,

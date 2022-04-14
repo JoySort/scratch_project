@@ -10,6 +10,7 @@ public class SwitchDriver:DriverBase
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     public SwitchDriver(ComLinkDriver cl) : base(cl)
     {
+        cl.onSwitchCMD += onData;
     }
     
     public void ApplyChange(Switch config)
@@ -19,5 +20,14 @@ public class SwitchDriver:DriverBase
         
         //comlink.send();
         //TODO: link to com communication
+    }
+    
+    public void onData(object obj, byte[] cmd)
+    {
+        //解析代码
+        // if (cmd)
+        // {
+        //     var isStopped = true;
+        // }
     }
 }

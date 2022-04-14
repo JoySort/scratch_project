@@ -54,7 +54,7 @@ public class ConsolidateWorkerTest
 
         bool blocking = true;
         
-        worker.processSingle(new List<RecResult>(recResults));
+        worker.processBulk(new List<RecResult>(recResults));
 
         worker.OnResult += ((sender, args) =>
         {
@@ -93,7 +93,7 @@ public class ConsolidateWorkerTest
 
         bool blocking = true;
         
-        worker.processSingle(new List<RecResult>(recResults));
+        worker.processBulk(new List<RecResult>(recResults));
         worker.OnResult += pdEventHanlder;
         worker.OnResult += ((sender, args) =>
         {

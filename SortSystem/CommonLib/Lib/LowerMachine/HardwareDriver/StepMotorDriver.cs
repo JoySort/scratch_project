@@ -9,6 +9,7 @@ public class StepMotorDriver:DriverBase
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     public StepMotorDriver(ComLinkDriver cl) : base(cl)
     {
+        cl.onStepMotorrCMD += onData;
     }
     
     public void ApplyChange(StepMotoer config)
@@ -17,5 +18,14 @@ public class StepMotorDriver:DriverBase
   
         //comlink.send();
         //TODO: link to com communication
+    }
+    
+    public void onData(object obj, byte[] cmd)
+    {
+        //解析代码
+        // if (cmd)
+        // {
+        //     var isStopped = true;
+        // }
     }
 }

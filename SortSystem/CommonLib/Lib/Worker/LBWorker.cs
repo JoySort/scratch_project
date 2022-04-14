@@ -159,11 +159,12 @@ public class LBWorker
         _ = Task.Run(() =>
           {
               logger.Info("LBWorker starts process project id {} project name {} ", currentProject.Id, currentProject.Name);
-
+             
               while (isProjectRunning)
               {
-
+                  Thread.Sleep(sortingInterval);
                   var processBatch = toBeProcessedResults;
+                  if (processBatch.Count <= 0) continue;
                   toBeProcessedResults = new List<SortResult>();
                 //Load and Balancing
                 var lbResults = new List<LBResult>();
@@ -188,7 +189,7 @@ public class LBWorker
 
                   DispatchResultEvent(new LBResultEventArg(lbResults));
 
-                  Thread.Sleep(sortingInterval);
+                 
               }
               logger.Info("LBWorker stops process project id {} project name {} ", currentProject.Id, currentProject.Name);
           });
