@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraRunner", "CameraRunne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibUnitTest", "LibUnitTest\LibUnitTest.csproj", "{A7A92FC3-580F-43A0-B88A-96EACD989AF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LowerRunner", "LowerRunner\LowerRunner.csproj", "{2BFC6744-6F87-4B87-8462-8346A9E2FAE2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpperRunner", "UpperRunner\UpperRunner.csproj", "{2BFC6744-6F87-4B87-8462-8346A9E2FAE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
