@@ -15,13 +15,15 @@ logger.Info("init main");
 CMDArgumentUtil.parse(args);// use cmd option --config_folder=../config to setup a config folder outside the program folder to avoid lose config when upgrade 
 ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
 NetworkUtil.UDPDiscoverSetup();
-LowerMachineWorker.init();
 
-// 组合piple line 
-ConsolidateWorker.getInstance().OnResult += ((sender, args) =>
-{
-    SortingWorker.getInstance().processBulk(args.RecResults);
-});
+
+//Piple line wireup;
+ConsolidateWorker.getInstance().OnResult+=((sender, args) => SortingWorker.getInstance().processBulk(args.Results));
+SortingWorker.getInstance().OnResult+=((sender, args) => LBWorker.getInstance().processBulk(args.Results));
+LBWorker.getInstance().OnResult+=((sender, args) => EmitWorker.getInstance().processBulk(args.Results));
+EmitWorker.getInstance().OnResult+=((sender, args) => LowerMachineWorker.getInstance().processBulk(args.Results));
+
+
 
 
 

@@ -24,8 +24,8 @@ public class ProjectStatusChangeTest {
         porjectJsonString = File.ReadAllText(path);
         ProjectParser parser = new ProjectParser(porjectJsonString);
         project = parser.getProject();
-        LowerMachineWorker.init();
-        
+        LowerMachineWorker.getInstance();
+
     }
 
     [Test, Order(4)]

@@ -1,12 +1,14 @@
+using CommonLib.Lib.Util;
+
 namespace CommonLib.Lib.LowerMachine.HardwareDriver;
 
 public class DriverBase
 {
-    internal COMLink comlink;
-
-    public DriverBase(COMLink cl)
+    internal ComLinkDriver comlink;
+    
+    public DriverBase(ComLinkDriver cl)
     {
         this.comlink = cl;
     }
-    
+ 
 }

@@ -54,7 +54,7 @@ public class ConsolidateWorkerTest
 
         bool blocking = true;
         
-        worker.Consolidate(new List<RecResult>(recResults));
+        worker.processSingle(new List<RecResult>(recResults));
 
         worker.OnResult += ((sender, args) =>
         {
@@ -93,11 +93,11 @@ public class ConsolidateWorkerTest
 
         bool blocking = true;
         
-        worker.Consolidate(new List<RecResult>(recResults));
+        worker.processSingle(new List<RecResult>(recResults));
         worker.OnResult += pdEventHanlder;
         worker.OnResult += ((sender, args) =>
         {
-            logger.Info("PD assert finished {}",JsonConvert.SerializeObject(args.RecResults));
+            logger.Info("PD assert finished {}",JsonConvert.SerializeObject(args.Results));
             blocking = false;
         });
         
@@ -113,24 +113,24 @@ public class ConsolidateWorkerTest
     
     public void appleEventHanlder(Object sender, ResultEventArg args)
     {
-        Assert.AreEqual(args.RecResults.First().Features.First().Value,15);
-        Assert.AreEqual(args.RecResults.First().Features.Last().Value,4);
+        Assert.AreEqual(args.Results.First().Features.First().Value,15);
+        Assert.AreEqual(args.Results.First().Features.Last().Value,4);
             
-        Assert.AreEqual(args.RecResults.Last().Features.First().Value,20);
-        Assert.AreEqual(args.RecResults.Last().Features.Last().Value,24);
+        Assert.AreEqual(args.Results.Last().Features.First().Value,20);
+        Assert.AreEqual(args.Results.Last().Features.Last().Value,24);
         logger.Info("APPLE assert finished");
     }
     
     public void pdEventHanlder(Object sender, ResultEventArg args)
     {
-        Assert.AreEqual(args.RecResults.First().Features.First().Value,25);
-        Assert.AreEqual(args.RecResults.First().Features[1].Value,25);
-        Assert.AreEqual(args.RecResults.First().Features.Last().Value,15);
+        Assert.AreEqual(args.Results.First().Features.First().Value,25);
+        Assert.AreEqual(args.Results.First().Features[1].Value,25);
+        Assert.AreEqual(args.Results.First().Features.Last().Value,15);
         
-        Assert.AreEqual(args.RecResults.Last().Features.First().Value,10);
-        Assert.AreEqual(args.RecResults.Last().Features[1].Value,22.5);
-        Assert.AreEqual(args.RecResults.Last().Features.Last().Value,12.5);
-        logger.Info("PD assert finished process time {} ms",(DateTime.Now.ToFileTime()-args.RecResults.Last().ProcessTimestamp)/10000);
+        Assert.AreEqual(args.Results.Last().Features.First().Value,10);
+        Assert.AreEqual(args.Results.Last().Features[1].Value,22.5);
+        Assert.AreEqual(args.Results.Last().Features.Last().Value,12.5);
+        logger.Info("PD assert finished process time {} ms",(DateTime.Now.ToFileTime()-args.Results.Last().ProcessTimestamp)/10000);
     }
 
 }

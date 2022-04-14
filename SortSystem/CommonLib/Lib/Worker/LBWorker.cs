@@ -1,5 +1,6 @@
 using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Sort.Exception;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
@@ -15,7 +16,6 @@ public class LBWorker
     private static LBWorker worker = new LBWorker();
 
     private Project currentProject;
-    private Outlet[] currentOutlets;
     private bool isProjectRunning;
     private int sortingInterval;
     private List<SortResult> toBeProcessedResults = new List<SortResult>();
@@ -102,7 +102,7 @@ public class LBWorker
         
 
         this.sortingInterval = ConfigUtil.getModuleConfig().SortConfig.SortingInterval;
-        this.currentOutlets = outlets;
+        //this.currentOutlets = outlets;
         
     }
 
@@ -125,7 +125,7 @@ public class LBWorker
                     signitures.Add(signiture);
                 }
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
                 logger.Error("generateFilterSigniture for outlet {}",outlet.ChannelNo);
             }
@@ -186,7 +186,7 @@ public class LBWorker
                       logger.Debug("loadBalanceCount obj status when outletNO:{} outletNO {} loadBalanceCount {} ", outletNO, lbChannelNO, JsonConvert.SerializeObject(loadBalanceCount,Formatting.Indented));
                   }
 
-                  OnLBResult(new LBResultEventArg(lbResults));
+                  DispatchResultEvent(new LBResultEventArg(lbResults));
 
                   Thread.Sleep(sortingInterval);
               }
@@ -199,7 +199,7 @@ public class LBWorker
    
   
     public event EventHandler<LBResultEventArg> OnResult;
-    protected virtual void OnLBResult(LBResultEventArg e)
+    protected virtual void DispatchResultEvent(LBResultEventArg e)
     {
         var handler = OnResult;
         handler?.Invoke(this, e);

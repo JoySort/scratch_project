@@ -1,5 +1,6 @@
 using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Sort.Exception;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
@@ -32,9 +33,7 @@ public class ConsolidateWorker
 
     private ConsolidateWorker()
     {
-        consolidationPolicy = ConfigUtil.getModuleConfig().ConsolidatePolicy;
-        criteriaMapping = ConfigUtil.getModuleConfig().CriteriaMapping;
-        this.sortingInterval = ConfigUtil.getModuleConfig().SortConfig.SortingInterval;
+
         ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnProjectStatusChange;
     }
 
@@ -46,6 +45,10 @@ public class ConsolidateWorker
             this.isProjectRunning = true;
             this.expectedFeatureCount = currentProject.Criterias.Length;
             this.enabledCriterias = currentProject.Criterias;
+            
+            consolidationPolicy = ConfigUtil.getModuleConfig().ConsolidatePolicy;
+            criteriaMapping = ConfigUtil.getModuleConfig().CriteriaMapping;
+            this.sortingInterval = ConfigUtil.getModuleConfig().SortConfig.SortingInterval;
             
             cacheRecResultDictionary = new Dictionary<string,List<RecResult>>();
             incompleteRecResultList = new Dictionary<string,List<Feature>>();
@@ -60,17 +63,17 @@ public class ConsolidateWorker
         }
     }
 
-    public void Consolidate(List<RecResult> rrs)
+    public void processSingle(List<RecResult> rrs)
     {
         foreach (var value in rrs)
         {
-            Consolidate(value);
+            processBulk(value);
         }
     }
 
-    public void Consolidate(RecResult recResult)
+    public void processBulk(RecResult recResult)
     {
-        if (!isProjectRunning) throw new Exception("No project is running, Can not work without project,At least one project needs to be running to be able to process consolidation");
+        if (!isProjectRunning) throw new ProjectDependencyException("ConsolidateWorker");
         if (!cacheRecResultDictionary.ContainsKey(recResult.Coordinate.Key()))
         {
             cacheRecResultDictionary.Add(recResult.Coordinate.Key(),new List<RecResult>());
@@ -135,7 +138,7 @@ public class ConsolidateWorker
                     }
                 }
 
-                if (completeResult.Count > 0) OnConsolidateResult(new ResultEventArg(completeResult));
+                if (completeResult.Count > 0) DispatchResultEvent(new ResultEventArg(completeResult));
                 
                 //cleanup the caches
                 foreach (var value in completeResult)
@@ -238,7 +241,7 @@ public class ConsolidateWorker
     }
     
     public event EventHandler<ResultEventArg> OnResult;
-    protected virtual void OnConsolidateResult(ResultEventArg e)
+    protected virtual void DispatchResultEvent(ResultEventArg e)
     {
         var handler = OnResult;
         handler?.Invoke(this, e);
@@ -247,10 +250,10 @@ public class ConsolidateWorker
 
 public class ResultEventArg
 {
-    public List<RecResult> RecResults;
+    public List<RecResult> Results;
 
-    public ResultEventArg(List<RecResult> recResults)
+    public ResultEventArg(List<RecResult> results)
     {
-        RecResults = recResults;
+        Results = results;
     }
 }

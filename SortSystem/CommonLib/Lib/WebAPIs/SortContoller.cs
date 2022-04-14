@@ -1,6 +1,7 @@
 using System.Text;
 using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.Controllers;
+using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
@@ -19,8 +20,9 @@ namespace CommonLib.Lib.WebAPIs;
 public class SortController: ControllerBase
 {
     private readonly ILogger<SortController> logger;
-    private ConsolidateWorker consolidateWorker = ConsolidateWorker.getInstance();
-    private SortingWorker sortingWorker = SortingWorker.getInstance();
+    private static ConsolidateWorker consolidateWorker = ConsolidateWorker.getInstance();
+    private static SortingWorker sortingWorker = SortingWorker.getInstance();
+    private static LBWorker lbWorker = LBWorker.getInstance();
     public SortController(ILogger<SortController> logger)
     {
         this.logger = logger;
@@ -32,7 +34,7 @@ public class SortController: ControllerBase
     public void consolidate(RecResult recResult)
     {
       
-       consolidateWorker.Consolidate(recResult);
+       consolidateWorker.processBulk(recResult);
       
     }
     
@@ -40,7 +42,7 @@ public class SortController: ControllerBase
     [HttpPost]
     public void consolidate(List<RecResult> recResults)
     {
-        consolidateWorker.Consolidate(recResults);
+        consolidateWorker.processSingle(recResults);
        
     }
     
@@ -58,5 +60,37 @@ public class SortController: ControllerBase
     public void sort(List<RecResult> recResults)
     {
        sortingWorker.processBulk(recResults);
+    }
+    
+    [Route("/sort/lb_single")]
+    [HttpPost]
+    public void sort(SortResult result)
+    {
+      
+        lbWorker.processSingle(result);
+      
+    }
+    
+    [Route("/sort/lb_batch")]
+    [HttpPost]
+    public void sort(List<SortResult> results)
+    {
+        lbWorker.processBulk(results);
+    }
+    
+    [HttpPost]
+    [Route("/sort/emit_single")]
+    public void emitSingle(EmitResult result)
+    {
+        LowerMachineWorker.getInstance().processSingle(result);
+        return ;
+    }
+    
+    [HttpPost]
+    [Route("/sort/emit_batch")]
+    public void emitSingle(List<EmitResult> results)
+    {
+        LowerMachineWorker.getInstance().processBulk(results);
+        return ;
     }
 }

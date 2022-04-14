@@ -1,5 +1,6 @@
 using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Sort.Exception;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
@@ -67,10 +68,10 @@ public class SortingWorker
         return worker;
     }
 
-    public void processSingle(RecResult recResult)
+    public void processSingle(RecResult result)
     {
         if (!isProjectRunning) throw new ProjectDependencyException("SortingWorker:");
-        toBeProcessedResults.Add(recResult);
+        toBeProcessedResults.Add(result);
     }
 
     public void processBulk(List<RecResult> recResults)
@@ -98,7 +99,7 @@ public class SortingWorker
                     applySortingRules(item);
                 }
 
-                OnConsolidateResult(new SortingResultEventArg(sortResults));
+                DispatchResultEvent(new SortingResultEventArg(sortResults));
                 
                 Thread.Sleep(sortingInterval);
             }
@@ -147,7 +148,7 @@ public class SortingWorker
     }
   
     public event EventHandler<SortingResultEventArg> OnResult;
-    protected virtual void OnConsolidateResult(SortingResultEventArg e)
+    protected virtual void DispatchResultEvent(SortingResultEventArg e)
     {
         var handler = OnResult;
         handler?.Invoke(this, e);

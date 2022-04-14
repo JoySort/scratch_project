@@ -5,7 +5,7 @@ namespace CommonLib.Lib.LowerMachine.HardwareDriver;
 public class EmitterDriver:DriverBase
 {
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-    public EmitterDriver(COMLink cl) : base(cl)
+    public EmitterDriver(ComLinkDriver cl) : base(cl)
     {
     }
 
@@ -17,14 +17,16 @@ public class EmitterDriver:DriverBase
         set => address = value;
     }
 
-    public COMLink Comlink
+    public ComLinkDriver Comlink
     {
         get => comlink;
         set => comlink = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public void trigger()
+    public void Emit(int column,int outletNo)
     {
-        logger.Debug("Emitter triggered row:{}-column:{}",address[0],address[1]);
+        logger.Debug("Emitter triggered row:{}-column:{}",column,outletNo);
+        //TODO: link to com communication
     }
+  
 }

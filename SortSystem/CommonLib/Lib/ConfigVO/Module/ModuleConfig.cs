@@ -16,16 +16,19 @@ public class ModuleConfig
     private string name;
     private NetworkConfig networkConfig;
     private SortConfig sortConfig;
-    private string title;
-    private int version;
+    private bool lowerMachineSimulationMode = false;
 
-    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, string description, GenreName genre,
-        LowerConfig[] lowerConfig, string minimumCoreVersion, JoyModule module, string name,
-        NetworkConfig networkConfig, SortConfig sortConfig, string title, int version,
-        Dictionary<string, CriteriaMapping> criteriaMapping)
+    public bool LowerMachineSimulationMode
+    {
+        get => lowerMachineSimulationMode;
+        set => lowerMachineSimulationMode = value;
+    }
+
+    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, string title, int version)
     {
         this.author = author;
         this.consolidatePolicy = consolidatePolicy;
+        this.criteriaMapping = criteriaMapping;
         this.description = description;
         this.genre = genre;
         this.lowerConfig = lowerConfig;
@@ -34,10 +37,14 @@ public class ModuleConfig
         this.name = name;
         this.networkConfig = networkConfig;
         this.sortConfig = sortConfig;
+        this.lowerMachineSimulationMode = lowerMachineSimulationMode;
         this.title = title;
         this.version = version;
-        this.criteriaMapping = criteriaMapping;
     }
+
+    private string title;
+    private int version;
+
 
     public Dictionary<string, CriteriaMapping> CriteriaMapping => criteriaMapping;
 

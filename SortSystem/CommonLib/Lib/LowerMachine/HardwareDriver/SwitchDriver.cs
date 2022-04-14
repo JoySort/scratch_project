@@ -8,14 +8,16 @@ public class SwitchDriver:DriverBase
 {
     
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-    public SwitchDriver(COMLink cl) : base(cl)
+    public SwitchDriver(ComLinkDriver cl) : base(cl)
     {
     }
     
     public void ApplyChange(Switch config)
     {
+        
         logger.Info(" {} is applying parameters{}",config.Name,JsonConvert.SerializeObject(config));
+        
         //comlink.send();
-        //TODO: do actual config update 
+        //TODO: link to com communication
     }
 }

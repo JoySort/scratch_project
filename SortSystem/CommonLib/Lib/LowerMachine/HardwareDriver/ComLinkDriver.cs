@@ -4,12 +4,13 @@ using NLog;
 
 namespace CommonLib.Lib.LowerMachine.HardwareDriver;
 
-public class COMLink
+public class ComLinkDriver
 {
 
-    private LowerConfig lowerConfig;
+    internal LowerConfig lowerConfig;
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-    public COMLink(LowerConfig lowerConfig)
+
+    public ComLinkDriver(LowerConfig lowerConfig)
     {
         this.lowerConfig = lowerConfig;
     }
@@ -36,5 +37,21 @@ public class COMLink
     public void invoke()
     {
         //TODO: when recieve lower machine communication notify other interested party
+    }
+    public event EventHandler<TriggerEventArg> OnTrigger;
+    internal virtual void dispatchTriggerEvent(TriggerEventArg e)
+    {
+        var handler = OnTrigger;
+        handler?.Invoke(this, e);
+    }
+}
+
+public class TriggerEventArg
+{
+    public long triggerID;
+
+    public TriggerEventArg(long triggerID)
+    {
+        triggerID = triggerID;
     }
 }
