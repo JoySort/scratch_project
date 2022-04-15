@@ -5,16 +5,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["LowerRunner/LowerRunner.csproj", "LowerRunner/"]
-RUN dotnet restore "LowerRunner/LowerRunner.csproj"
+COPY ["UpperRunner/UpperRunner.csproj", "UpperRunner/"]
+RUN dotnet restore "UpperRunner/UpperRunner.csproj"
 COPY . .
-WORKDIR "/src/LowerRunner"
-RUN dotnet build "LowerRunner.csproj" -c Release -o /app/build
+WORKDIR "/src/UpperRunner"
+RUN dotnet build "UpperRunner.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "LowerRunner.csproj" -c Release -o /app/publish
+RUN dotnet publish "UpperRunner.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "LowerRunner.dll"]
+ENTRYPOINT ["dotnet", "UpperRunner.dll"]
