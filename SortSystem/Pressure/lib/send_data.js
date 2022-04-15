@@ -39,7 +39,8 @@ function send_consolidate_bulk(){
     axios.post('http://'+host+':'+port+'/sort/consolidate_batch', data, config)
     .then(function(response) {
         
-       
+        //console.log(global_counter*1000/(batch_count*count_per_batch));
+        printProgress("Current progress: ",(Math.round(global_counter*1000/(batch_count*count_per_batch))/10)+"%"+" "+(new Date().getTime()-timestamp) ,"ms");
         //global_counter++;
         //console.log("sending data, took "+(new Date().getTime()-timestamp)+" ms");
         //console.log("finished. batch "+ (Math.floor(global_counter/batch_count)+1)+" server response:"+JSON.stringify(response.data))
@@ -106,12 +107,19 @@ function generate_rec_obj(start,count){
     global_counter=start+count;
     //console.log(JSON.stringify(results));
     //console.log("finish prepare data ready to send request, took "+(new Date().getTime()-timestamp)+" ms");
-    console.log(`trigger: `,global_counter);
+    //console.log(`trigger: `,global_counter);
     //console.log(results.length);
     //console.log("expected results from server"+results.length/5)
     
     return results
 }
 
-
+function colorize(color, output) {
+    return ['\033[', color, 'm', output, '\033[0m'].join('');
+}
+function printProgress(text1,progress,text2){
+    process.stdout.clearLine();
+    process.stdout.cursorTo(0);
+    process.stdout.write(text1+colorize(32,progress)+text2);
+}
 module.exports.send_consolidate_bulk=send_bulk
