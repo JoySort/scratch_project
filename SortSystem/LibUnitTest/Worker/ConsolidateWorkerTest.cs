@@ -51,24 +51,10 @@ public class ConsolidateWorkerTest
         string _path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,recResultJsonFixture);
         string jsonString = File.ReadAllText(_path);
         RecResult[] recResults = JsonConvert.DeserializeObject<RecResult[]>(jsonString);
-
-        bool blocking = true;
-        
-        worker.processBulk(new List<RecResult>(recResults));
-
-        worker.OnResult += ((sender, args) =>
-        {
-            blocking = false;
-        });
-
         worker.OnResult += appleEventHanlder;
+        worker.processBulk(new List<RecResult>(recResults));
         
-        while (blocking)
-        {
-            Thread.Sleep(100);
-        }
-        worker.OnResult -= appleEventHanlder;
-
+        
         logger.Info("APPLE Test stop");
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
     }
@@ -91,21 +77,12 @@ public class ConsolidateWorkerTest
         string jsonString = File.ReadAllText(_path);
         RecResult[] recResults = JsonConvert.DeserializeObject<RecResult[]>(jsonString);
 
-        bool blocking = true;
-        
-        worker.processBulk(new List<RecResult>(recResults));
+
         worker.OnResult += pdEventHanlder;
-        worker.OnResult += ((sender, args) =>
-        {
-            logger.Info("PD assert finished {}",JsonConvert.SerializeObject(args.Results));
-            blocking = false;
-        });
+        worker.processBulk(new List<RecResult>(recResults));
+       
+
         
-        while (blocking)
-        {
-            Thread.Sleep(100);
-        }
-        worker.OnResult -= pdEventHanlder;
         
         logger.Info("PD Test stop");
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
@@ -119,6 +96,7 @@ public class ConsolidateWorkerTest
         Assert.AreEqual(args.Results.Last().Features.First().Value,20);
         Assert.AreEqual(args.Results.Last().Features.Last().Value,24);
         logger.Info("APPLE assert finished");
+        worker.OnResult -= appleEventHanlder;
     }
     
     public void pdEventHanlder(Object sender, ResultEventArg args)
@@ -131,6 +109,7 @@ public class ConsolidateWorkerTest
         Assert.AreEqual(args.Results.Last().Features[1].Value,22.5);
         Assert.AreEqual(args.Results.Last().Features.Last().Value,12.5);
         logger.Info("PD assert finished process time {} ms",(DateTime.Now.ToFileTime()-args.Results.Last().ProcessTimestamp)/10000);
+        worker.OnResult -= pdEventHanlder;
     }
 
 }

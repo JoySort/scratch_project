@@ -65,6 +65,7 @@ public class LBWorkerTest
             var currentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
             
             ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+            sortingWorker.OnResult += pdEventHanlder;
             sortingWorker.processBulk(new List<RecResult>(recResults));
             
 
@@ -75,7 +76,7 @@ public class LBWorkerTest
                     
                     logger.Info("time consumed (ms):{}",( new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds() - currentTimeStamp));
                    
-                    
+                    LBWorker.getInstance().OnResult += LBEventHandler;
                     LBWorker.getInstance().processBulk(args.Results);
 
                     void LBEventHandler(object sender, LBResultEventArg args)
@@ -88,11 +89,11 @@ public class LBWorkerTest
                            Assert.AreEqual(expected[i], args.Results[i].LoadBalancedOutlet.First().ChannelNo);
                         }
                         LBWorker.getInstance().OnResult -= LBEventHandler;
-                        blocking = false;
+                      
                         
                     }
 
-                    LBWorker.getInstance().OnResult += LBEventHandler;
+                   
 
 
                 }
@@ -100,15 +101,12 @@ public class LBWorkerTest
                 {
                     logger.Info(e.Message);
                 }
+                sortingWorker.OnResult -= pdEventHanlder;
             }
             
-            sortingWorker.OnResult += pdEventHanlder;
-            while (blocking)
-            {
-                Thread.Sleep(1000);
-                logger.Info("blocking...");
-            }
-            sortingWorker.OnResult -= pdEventHanlder;
+            
+        
+            
             
             logger.Info("PD Test stop");
             ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);

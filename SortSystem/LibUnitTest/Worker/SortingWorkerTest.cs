@@ -53,22 +53,8 @@ public class SortingWorkerTest
         RecResult[] recResults = JsonConvert.DeserializeObject<RecResult[]>(jsonString);
 
         bool blocking = true;
-        
-        sortingWorker.processBulk(new List<RecResult>(recResults));
-
-        sortingWorker.OnResult += ((sender, args) =>
-        {
-            
-            blocking = false;
-        });
-
         sortingWorker.OnResult += appleEventHanlder;
-        
-        while (blocking)
-        {
-            Thread.Sleep(100);
-        }
-        sortingWorker.OnResult -= appleEventHanlder;
+        sortingWorker.processBulk(new List<RecResult>(recResults));
 
         logger.Info("APPLE Test stop");
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
@@ -98,10 +84,7 @@ public class SortingWorkerTest
         {
            
             
-            bool blocking = true;
             ConfigUtil.getModuleConfig().SortConfig.OutletPriority = priority;
-
-
             var currentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
             
             ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
@@ -109,7 +92,7 @@ public class SortingWorkerTest
             
             string[] ascExpected  = new string[] {"1", "2", "1", "2", "2","2","2","2"};
             string[] descExpected = new string[] {"1", "3", "1", "3", "5","5","3","3"};
-            
+            sortingWorker.OnResult += pdEventHanlder;
             void pdEventHanlder(Object sender, SortingResultEventArg args)
             {
                 try
@@ -117,43 +100,36 @@ public class SortingWorkerTest
                     logger.Info("time consumed (ms):{}",( new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds() - currentTimeStamp));
                     var expected = (priority == OutletPriority.ASC) ? ascExpected : descExpected;
                     
+
+                    var actual = new string[args.Results.Count];
                     for (var i = 0; i < args.Results.Count; i++)
                     {
                         List<string> result = args.Results[i].Outlets.Select(outlet => outlet.ChannelNo).ToList();
-                
+                        actual[i] = String.Join(",", result.OrderBy(x => x).ToArray());
                         
-                        Assert.AreEqual(expected[i], String.Join(",",result.OrderBy(x=>x).ToArray()));
-                
                     }
-
-                    logger.Info("PD assert finished {}", JsonConvert.SerializeObject(args.Results));
+                    
+                    logger.Info("PD assert finished priority {} expected {} acture {}", Enum.GetName(priority),expected,actual);
+                    
+                    Assert.AreEqual(expected,actual);
+                    
+                    if(priority== OutletPriority.ASC) 
+                        outletPriorityChange(OutletPriority.DESC);
                 }
                 catch (Exception e)
                 {
                     logger.Info(e.Message);
                 }
+                sortingWorker.OnResult -= pdEventHanlder;
             }
-            
-            sortingWorker.OnResult += pdEventHanlder;
-            sortingWorker.OnResult += ((sender, args) =>
-            {
-              logger.Info("PD stop blocking");
-                blocking = false;
-            });
-            
-            while (blocking)
-            {
-                Thread.Sleep(1000);
-                logger.Info("blocking...");
-            }
-            sortingWorker.OnResult -= pdEventHanlder;
             
             logger.Info("PD Test stop");
             ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
+            
         }
 
-        outletPriorityChange(OutletPriority.ASC);
-        outletPriorityChange(OutletPriority.DESC);
+        outletPriorityChange(OutletPriority.ASC); 
+  
 
     }
     
@@ -171,6 +147,7 @@ public class SortingWorkerTest
         {
             logger.Error(e.Message);
         }
+        sortingWorker.OnResult -= appleEventHanlder;
     }
 
 

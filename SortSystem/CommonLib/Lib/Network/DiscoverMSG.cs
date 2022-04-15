@@ -9,7 +9,8 @@ public class DiscoverMSG
     public const string MSG_TYPE_ACK = "ACK";
     public const string MSG_TYPE_BRD = "BRD";
 
-
+    private string uuid;
+    
     private int rpcPort;
     private int listenPort;
 
@@ -30,16 +31,21 @@ public class DiscoverMSG
         set => type = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-
-    public DiscoverMSG(int rpcPort,int listenPort,string type,int msgId)
+    public string Uuid
     {
+        get => uuid;
+        set => uuid = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public DiscoverMSG(string uuid, int rpcPort, int listenPort, string type, int msgId)
+    {
+        this.uuid = uuid;
         this.rpcPort = rpcPort;
         this.listenPort = listenPort;
         this.type = type;
-        this.msgID = msgId;
-
-
+        msgID = msgId;
     }
+
 
     public int RpcPort => rpcPort;
 

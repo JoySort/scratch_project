@@ -19,13 +19,17 @@ public class UDPDiscoveryService
     private int restartNetworkAdaptorCount;
     private readonly string serviceName = "default name";
     private UdpClient udpClient;
+    private string uuid;
 
     public UDPDiscoveryService(int rpc_port, int listenPort, string serviceName)
     {
         this.serviceName = serviceName;
         this.ListenPort = listenPort;
         logger.Info("Discovery Service {} listen at {} reporting rpc {} initialized",serviceName,listenPort,rpc_port);
-        localDiscoverMsg = new DiscoverMSG(rpc_port, listenPort, DiscoverMSG.MSG_TYPE_BRD, 0);
+        
+        Guid guidObj = Guid.NewGuid();
+        uuid=guidObj.ToString();
+        localDiscoverMsg = new DiscoverMSG(uuid,rpc_port, listenPort, DiscoverMSG.MSG_TYPE_BRD, 0);
     }
 
     public bool UnitTestFlag { get; set; } = false;
@@ -54,6 +58,7 @@ public class UDPDiscoveryService
         initLocalIps();
         bindAddress = bindAddr;
         udpClient = new UdpClient();
+        udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
         udpClient.Client.Bind(new IPEndPoint(bindAddress, ListenPort));
 
         var from = new IPEndPoint(0, 0);
@@ -71,8 +76,8 @@ public class UDPDiscoveryService
 
                 var targetKey = fromIP + ":" + fromPort;
 
-                if (!UnitTestFlag && localIps.Contains(fromIP)) continue; // ignore local msgs;
-
+                //if (!UnitTestFlag && localIps.Contains(fromIP)) continue; // ignore local msgs;
+                if (this.uuid.Equals(peerDiscoverMsg.Uuid)) continue;
                 if (peerDiscoverMsg.Type == DiscoverMSG.MSG_TYPE_BRD)
                 {
                     sendResponds(fromIP, fromPort, peerDiscoverMsg.Count);
@@ -125,10 +130,10 @@ public class UDPDiscoveryService
 
     private void sendResponds(string fromIP, int fromPort, int msgID)
     {
-        var respondDiscoverMsg = new DiscoverMSG(localDiscoverMsg.RpcPort, ListenPort, DiscoverMSG.MSG_TYPE_ACK, msgID);
+        var respondDiscoverMsg = new DiscoverMSG(uuid,localDiscoverMsg.RpcPort, ListenPort, DiscoverMSG.MSG_TYPE_ACK, msgID);
         var msg = JsonConvert.SerializeObject(respondDiscoverMsg);
         var data = Encoding.UTF8.GetBytes(msg);
-        udpClient.Send(data, data.Length, fromIP, fromPort);
+        udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, fromPort);
     }
 
 
