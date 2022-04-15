@@ -169,10 +169,7 @@ public class UDPDiscoveryService
     private void restartDiscoveryOnNetworkChange(List<string> tempIps)
     {
         var timeDiff = DateTime.Now.ToFileTime() - lastRestartTimestamp;
-        if (restartNetworkAdaptorCount > 2 && timeDiff > 10000 * KeepAliveInterval * 10)
-            throw new Exception("[" + serviceName + "]" + "Network adaptor has changed and we retried " +
-                                restartNetworkAdaptorCount + "times, Still failing" + "Last restart in " +
-                                timeDiff / 1000 + "secs");
+ 
 
         restartNetworkAdaptorCount++;
         lastRestartTimestamp = DateTime.Now.ToFileTime();

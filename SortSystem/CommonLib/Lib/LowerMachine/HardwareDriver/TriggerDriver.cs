@@ -16,7 +16,7 @@ public class TriggerDriver:DriverBase
     public void ApplyChange(Trigger config)
     {
         
-        logger.Info(" {} is applying parameters{}",config.Name,JsonConvert.SerializeObject(config));
+        //logger.Info(" {} is applying parameters{}",config.Name,JsonConvert.SerializeObject(config));
         //comlink.send();
         //TODO: link to com communication
     }

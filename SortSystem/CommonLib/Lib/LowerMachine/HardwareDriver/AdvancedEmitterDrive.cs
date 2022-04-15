@@ -25,7 +25,7 @@ public class AdvancedEmitterDrive:DriverBase
 
     public void EmitSingle(int column,int outletNo,long triggerID)
     {
-        logger.Debug("Emitter triggered row:{}-column:{}-triggerID{}",column,outletNo,triggerID);
+        //logger.Debug("Emitter triggered column:{}-outletNo:{} triggerID:{}",column,outletNo,triggerID);
         //TODO: link to com communication
         
     }

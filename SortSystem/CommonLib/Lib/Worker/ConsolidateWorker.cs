@@ -53,7 +53,7 @@ public class ConsolidateWorker
             cacheRecResultDictionary = new Dictionary<string,List<RecResult>>();
             incompleteRecResultList = new Dictionary<string,List<Feature>>();
             incompleteCoordinate = new Dictionary<string,Coordinate>();
-            processResult();
+            //processResult();
         }
 
         if (statusEventArgs.State == ProjectState.stop || statusEventArgs.State == ProjectState.reverse ||
@@ -69,19 +69,41 @@ public class ConsolidateWorker
         {
             processSingle(value);
         }
-    }
 
+        processResult();
+    }
+    
     public void processSingle(RecResult recResult)
     {
+      
         if (!isProjectRunning) throw new ProjectDependencyException("ConsolidateWorker");
         if (!cacheRecResultDictionary.ContainsKey(recResult.Coordinate.Key()))
-        {
-            cacheRecResultDictionary.Add(recResult.Coordinate.Key(),new List<RecResult>());
+        { 
+            
+                 cacheRecResultDictionary.Add(recResult.Coordinate.Key(),new List<RecResult>());
+            
         }
+
+      
+        
         cacheRecResultDictionary[recResult.Coordinate.Key()].Add(recResult);
         
-        if(!incompleteRecResultList.ContainsKey(recResult.Coordinate.Key()))incompleteRecResultList.Add(recResult.Coordinate.Key(),new List<Feature>());
-        if(!incompleteCoordinate.ContainsKey(recResult.Coordinate.Key())) incompleteCoordinate.Add(recResult.Coordinate.Key(),recResult.Coordinate);
+
+        if (!incompleteRecResultList.ContainsKey(recResult.Coordinate.Key()))
+        {
+           
+                 incompleteRecResultList.Add(recResult.Coordinate.Key(),new List<Feature>());
+           
+        }
+
+        if (!incompleteCoordinate.ContainsKey(recResult.Coordinate.Key()))
+        {
+         
+                 incompleteCoordinate.Add(recResult.Coordinate.Key(),recResult.Coordinate);
+           
+        }
+
+      
     }
 
     private int[] cacheStatus = new int[3];
@@ -89,11 +111,10 @@ public class ConsolidateWorker
    
     private void processResult()
     {
-        Task.Run(() =>
-        {   logger.Info("Consolidation worker starts");
-            while (isProjectRunning)
-            {   
-                Thread.Sleep(sortingInterval);
+ 
+            //logger.Info("Consolidation worker starts");
+  
+                
                 runningCounter++;
                 foreach ( (var key,  var value) in cacheRecResultDictionary)
                 {
@@ -127,20 +148,18 @@ public class ConsolidateWorker
                     }
 
                 }
-
-                //check for merge completion;
+                
                 var completeResult = new List<RecResult>();
                 foreach( (var key, var features) in incompleteRecResultList){
                     if (features.Count == expectedFeatureCount)
                     {
                         completeResult.Add(new RecResult(incompleteCoordinate[key],expectedFeatureCount,features));
-                       logger.Debug("consolidated results{}",JsonConvert.SerializeObject(completeResult.Last()));
+                       //logger.Debug("consolidated results{}",JsonConvert.SerializeObject(completeResult.Last()));
                     }
                 }
-
+                logger.Debug("Consolidate Worker with count:{}",completeResult.Count);
                 if (completeResult.Count > 0) DispatchResultEvent(new ResultEventArg(completeResult));
                 
-                //cleanup the caches
                 foreach (var value in completeResult)
                 {
                     cacheRecResultDictionary.Remove(value.Coordinate.Key());
@@ -156,10 +175,16 @@ public class ConsolidateWorker
                 {
                     logger.Info("Consolidate worker cache stats main cache {} processing cache {}",cacheStatus[0],cacheStatus[1]);
                 }
-            }
+
+                if (cacheRecResultDictionary.Count > 0 || incompleteRecResultList.Count > 0 ||
+                    incompleteCoordinate.Count>0)
+                {
+                    logger.Warn("Consolidate worker cache is none zero {} processing cache {} {}",cacheStatus[0],cacheStatus[1],cacheStatus[2]);
+                }
+     
             
-            logger.Info("Consolidation worker stops");
-        });
+            //logger.Info("Consolidation worker stops");
+      
 
     }
 

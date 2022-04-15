@@ -33,7 +33,7 @@ public class LBWorker
             this.currentProject = statusEventArgs.currentProject;
             prepareConfig();
             this.isProjectRunning = true;
-            processResult();
+            //processResult();
         }
 
         if (statusEventArgs.State == ProjectState.stop || statusEventArgs.State == ProjectState.reverse || statusEventArgs.State == ProjectState.washing)
@@ -130,7 +130,7 @@ public class LBWorker
                 logger.Error("generateFilterSigniture for outlet {}",outlet.ChannelNo);
             }
             var result = String.Join(",", signitures.OrderBy(value => value).ToArray());
-            logger.Info("Outlet {} filter signiture{}", outlet.ChannelNo, result);
+            //logger.Info("Outlet {} filter signiture{}", outlet.ChannelNo, result);
             return result;
         
     }
@@ -151,20 +151,21 @@ public class LBWorker
     {
         if (!isProjectRunning) throw new ProjectDependencyException("LBWorker:");
         toBeProcessedResults.AddRange(sortResults);
+        processResult();
     }
 
 
     private void processResult()
     {
-        _ = Task.Run(() =>
-          {
-              logger.Info("LBWorker starts process project id {} project name {} ", currentProject.Id, currentProject.Name);
+         //Task.Run(() =>
+         // {
+            //  logger.Info("LBWorker starts process project id {} project name {} ", currentProject.Id, currentProject.Name);
              
-              while (isProjectRunning)
-              {
-                  Thread.Sleep(sortingInterval);
+           //   while (isProjectRunning)
+          //    {
+                //  Thread.Sleep(sortingInterval);
                   var processBatch = toBeProcessedResults;
-                  if (processBatch.Count <= 0) continue;
+              //    if (processBatch.Count <= 0) continue;
                   toBeProcessedResults = new List<SortResult>();
                 //Load and Balancing
                 var lbResults = new List<LBResult>();
@@ -184,15 +185,16 @@ public class LBWorker
                           sortResult.Outlets,
                           new Outlet[] { new Outlet(lbChannelNO, sortResult.Outlets.First().Type, sortResult.Outlets.First().Filters) });
                       lbResults.Add(lbResult);
-                      logger.Debug("loadBalanceCount obj status when outletNO:{} outletNO {} loadBalanceCount {} ", outletNO, lbChannelNO, JsonConvert.SerializeObject(loadBalanceCount,Formatting.Indented));
+                      //logger.Debug("loadBalanceCount obj status when outletNO:{} outletNO {} loadBalanceCount {} ", outletNO, lbChannelNO, JsonConvert.SerializeObject(loadBalanceCount,Formatting.Indented));
                   }
-
+                
+                  logger.Debug("LB result with count:{}",lbResults.Count);
                   DispatchResultEvent(new LBResultEventArg(lbResults));
 
                  
-              }
-              logger.Info("LBWorker stops process project id {} project name {} ", currentProject.Id, currentProject.Name);
-          });
+              //}
+              //logger.Info("LBWorker stops process project id {} project name {} ", currentProject.Id, currentProject.Name);
+         // });
     }
 
    

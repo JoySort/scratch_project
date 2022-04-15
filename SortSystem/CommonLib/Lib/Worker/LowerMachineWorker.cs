@@ -48,6 +48,7 @@ public class LowerMachineWorker
     {
         if (!isProjectRunning) throw new ProjectDependencyException("LowerMachine:");
         toBeProcessedResults.AddRange(results);
+        processResult();
     }
 
     //Auto invoke when lower machine trigger send event. @see TriggerDriver
@@ -68,7 +69,7 @@ public class LowerMachineWorker
             
             lowerMachineDriver.applyStateChange( statusEventArgs.State);
             
-            processResult();
+            
             
             
           
@@ -95,21 +96,21 @@ public class LowerMachineWorker
     private long counter = 0;
     private void processResult()
     {
-        Task.Run(()=>{
-            while (isProjectRunning)
-            {
-                Thread.Sleep(currentInterval);
+        //Task.Run(()=>{
+         //   while (isProjectRunning)
+        //    {
+        //        Thread.Sleep(currentInterval);
                 counter++;
                 //logger.Info("current lowermachine running cycle counter {} from lower machine{} isProjectRunning{} currentInterval {} currentProject {} ",counter,this.currentTriggerId,isProjectRunning,currentInterval,currentProject);
                 var tmpBatch = toBeProcessedResults;
-                if (tmpBatch.Count <= 0) continue;
+               // if (tmpBatch.Count <= 0) continue;
                 toBeProcessedResults = new List<EmitResult>();
+                logger.Debug("LowerMachine AdvancedEmitter count{}",tmpBatch.Count);
                 lowerMachineDriver.advancedEmitter.EmitBulk(tmpBatch);
-               
-                
-            }
-            
-        });
+
+                // }
+
+                // });
     }
 
     public static void init()

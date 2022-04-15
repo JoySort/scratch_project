@@ -35,7 +35,7 @@ public class SortingWorker
             this.currentProject = statusEventArgs.currentProject;
             prepareConfig();
             this.isProjectRunning = true;
-            processResult();
+            //processResult();
         }
 
         if (statusEventArgs.State == ProjectState.stop || statusEventArgs.State == ProjectState.reverse || statusEventArgs.State == ProjectState.washing)
@@ -78,20 +78,21 @@ public class SortingWorker
     {
         if (!isProjectRunning) throw new ProjectDependencyException("SortingWorker:");
         toBeProcessedResults.AddRange(recResults);
+        processResult();
     }
 
 
     private void processResult()
     {
-        Task.Run(() =>
-        {
-            logger.Info("SortingWorker starts process project id {} project name {} ",currentProject.Id,currentProject.Name);
+        //Task.Run(() =>
+       // {
+            //logger.Info("SortingWorker starts process project id {} project name {} ",currentProject.Id,currentProject.Name);
 
-            while (isProjectRunning)
-            {
-                Thread.Sleep(sortingInterval);
+           // while (isProjectRunning)
+          //  {
+               // Thread.Sleep(sortingInterval);
                 var processBatch = toBeProcessedResults;
-                if (processBatch.Count == 0) continue;
+               // if (processBatch.Count == 0) continue;
                 
                 toBeProcessedResults = new List<RecResult>();
                 sortResults = new List<SortResult>();
@@ -99,13 +100,13 @@ public class SortingWorker
                 {
                     applySortingRules(item);
                 }
-
+                logger.Debug("Sortingworker with count {} ",sortResults.Count);
                 DispatchResultEvent(new SortingResultEventArg(sortResults));
                 
                
-            }
-            logger.Info("SortingWorker stops process project id {} project name {} ",currentProject.Id,currentProject.Name);
-        });
+           // }
+        //    logger.Info("SortingWorker stops process project id {} project name {} ",currentProject.Id,currentProject.Name);
+       // });
     }
 
    

@@ -1,5 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System;
+using LibUnitTest.network;
 
-Console.WriteLine("Hello, World!");
+var tmp = new UDPTransportPerformanceTest();
+tmp.Main();
+tmp.udpToReciveData();

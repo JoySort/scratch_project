@@ -37,6 +37,7 @@ public class EmitWorker
     {
         if (!isProjectRunning) throw new ProjectDependencyException("Emitworker:");
         toBeProcessedResults.AddRange(results);
+        processResult();
     }
 
     public void OnProjectStatusChange(object sender, ProjectStatusEventArgs statusEventArgs)
@@ -46,7 +47,7 @@ public class EmitWorker
             currentProject = statusEventArgs.currentProject;
             prepareConfig();
             isProjectRunning = true;
-            processResult();
+            //processResult();
         }
 
         if (statusEventArgs.State == ProjectState.stop || statusEventArgs.State == ProjectState.reverse ||
@@ -60,16 +61,15 @@ public class EmitWorker
 
     private void processResult()
     {
-        _ = Task.Run(() =>
-        {
-            logger.Info("EmiitWorker starts process project id {} project name {} ", currentProject.Id,
-                currentProject.Name);
+       // Task.Run(() =>
+       // {
+            //logger.Info("EmiitWorker starts process project id {} project name {} ", currentProject.Id,currentProject.Name);
 
-            while (isProjectRunning)
-            {
-                Thread.Sleep(sortingInterval);
+           // while (isProjectRunning)
+           // {
+               // Thread.Sleep(sortingInterval);
                 var processBatch = toBeProcessedResults;
-                if (processBatch.Count == 0) continue;
+                //if (processBatch.Count == 0) continue;
                 toBeProcessedResults = new List<LBResult>();
 
                 var emitResults = new List<EmitResult>();
@@ -78,11 +78,10 @@ public class EmitWorker
                 DispatchResultEvent(new EmitResultEventArg(emitResults));
 
                 
-            }
+           // }
 
-            logger.Info("EmiitWorker stops process project id {} project name {} ", currentProject.Id,
-                currentProject.Name);
-        });
+            //logger.Info("EmiitWorker stops process project id {} project name {} ", currentProject.Id,currentProject.Name);
+       // });
     }
 
     public event EventHandler<EmitResultEventArg> OnResult;

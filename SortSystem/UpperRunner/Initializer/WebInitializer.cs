@@ -14,7 +14,7 @@ public class WebInitializer
         string rpcListenKey = "--urls";
         string rpcUrl = "http://0.0.0.0:" + rpcPort;
         string[] joyArgs = new[] {rpcListenKey, rpcUrl};
-        logger.Info("Listening on {}",rpcUrl);
+        //logger.Info("Listening on {}",rpcUrl);
         return joyArgs;
     }
     public static void init()
