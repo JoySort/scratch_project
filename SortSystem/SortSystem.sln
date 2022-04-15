@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibUnitTest", "LibUnitTest\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpperRunner", "UpperRunner\UpperRunner.csproj", "{2BFC6744-6F87-4B87-8462-8346A9E2FAE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UDPUpperRunner", "UDPUpperRunner\UDPUpperRunner.csproj", "{799EF6E4-208A-4B72-9C97-F9E9D4085332}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{2BFC6744-6F87-4B87-8462-8346A9E2FAE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BFC6744-6F87-4B87-8462-8346A9E2FAE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BFC6744-6F87-4B87-8462-8346A9E2FAE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{799EF6E4-208A-4B72-9C97-F9E9D4085332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{799EF6E4-208A-4B72-9C97-F9E9D4085332}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{799EF6E4-208A-4B72-9C97-F9E9D4085332}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{799EF6E4-208A-4B72-9C97-F9E9D4085332}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

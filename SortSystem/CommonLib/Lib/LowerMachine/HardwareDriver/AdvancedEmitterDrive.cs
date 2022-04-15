@@ -12,7 +12,7 @@ public class AdvancedEmitterDrive:DriverBase
 
     public void EmitBulk(List<EmitResult> results)
     {
-
+        logger.Debug("Advanced debugger emitting count:{}",results.Count);
         foreach (var item in results)
         {
             var column = item.Column;
