@@ -1,0 +1,114 @@
+{
+  "id": "apple001",
+  "time_created": null,
+  "time_last_used": null,
+  "name": "Appple Level 1",
+  "category": "apple",
+  "class": null,
+  "hasSampling": true,
+  "criteria": {
+    
+    "width": {
+      "name": "Width",
+      "index":1,
+      "lang": {
+        "name": "width_slider_label",
+        "checked": "width_slider_status"
+      },
+      "checked": true,
+      "type": "slider",
+      "data": {
+        "unit": "mm",
+        "min": 8,
+        "max": 65,
+        "range": [
+          15
+         
+        ]
+      }
+    },
+    "wt": {
+      "name": "Weight",
+      "index":12,
+      "lang": {
+        "name": "wt_slider_label",
+        "checked": "wt_slider_label"
+      },
+      "styles": {
+        "background": "#8C7BE8",
+        "fontColor": "#000000"
+      },
+      "checked": true,
+      "type": "slider",
+      "config": {
+        "step": 0.1
+      },
+      "data": {
+        "range": [5],
+        "unit": "",
+        "min": 0,
+        "max": 30
+      }
+    },
+    "sb": {
+      "name": "Sun burn",
+      "index":7,
+      "lang": {
+        "name": "sb_slider_label",
+        "checked": "sb_slider_label"
+      },
+      "styles": {
+        "background": "#8C7BE8",
+        "fontColor": "#000000"
+      },
+      "checked": false,
+      "type": "slider",
+      "config": {
+        "step": 0.1
+      },
+      "data": {
+        "range": [5,10],
+        "unit": "",
+        "min": 0,
+        "max": 30
+      }
+    }
+  },
+  "channels": [
+    {
+      "channel_no": "1",
+      "type": "auto",
+      "filters":[{"wt": [ 0 ], "width": [1]}]
+    },
+    {
+      "channel_no": "2",
+      "type": "auto",
+      "filters":
+      [{"wt": [ 1 ], "width": [1]}]
+    },
+    {
+      "channel_no": "3",
+      "type": "auto"
+    },
+    {
+      "channel_no": "4",
+      "type": "auto"
+    },
+    {
+      "channel_no": "5",
+      "type": "auto"
+    },
+    {
+      "channel_no": "6",
+      "type": "auto"
+    },
+    {
+      "channel_no": "7",
+      "type": "auto"
+    },
+    {
+      "channel_no": "8",
+      "type": "auto"
+    }
+  ]
+}
