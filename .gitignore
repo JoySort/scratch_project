@@ -105,4 +105,4 @@ dist
 .vs
 .idea
 
-
+.DS_Store
