@@ -22,7 +22,7 @@ public class ProjectParser
     public  const string V2 = "v2";
     public ProjectParser(string projectJsonString,string version)
     {
-        version = this.version;
+        this.version = version ;
         _jresult = JObject.Parse(projectJsonString);
         ParseCriteria();
         ParseOutlet();

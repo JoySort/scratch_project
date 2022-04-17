@@ -81,16 +81,23 @@ public class LBWorkerTest
 
                     void LBEventHandler(object sender, LBResultEventArg args)
                     {
-                        
+
+                        List<string> lbresults = new List<string>();
+
+                        foreach (var item in args.Results)
+                        {
+                            lbresults.Add(item.LoadBalancedOutlet.First().ChannelNo);
+                        }
+
                         var expected = (priority == OutletPriority.ASC) ? new string[] {"1","2","1","3","3","2","2","3" } : new string[] {"1","3","1","2","5","4","2","3" };
-                        
+                        var lbresultArray = lbresults.ToArray();
                         for (var i = 0; i < args.Results.Count; i++)
                         {
-                           Assert.AreEqual(expected[i], args.Results[i].LoadBalancedOutlet.First().ChannelNo);
+                           Assert.AreEqual(expected[i], lbresultArray[i]);
                         }
                         LBWorker.getInstance().OnResult -= LBEventHandler;
                       
-                        
+                        if(OutletPriority.ASC == priority)outletPriorityChange(OutletPriority.DESC);
                     }
 
                    
@@ -113,7 +120,7 @@ public class LBWorkerTest
         }
 
         outletPriorityChange(OutletPriority.ASC);
-        outletPriorityChange(OutletPriority.DESC);
+        
 
     }
 }

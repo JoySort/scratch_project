@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
@@ -54,5 +55,21 @@ public class JsonParserTestV2 {
         var outlets = jparser?.Outlets;
         var outletNO = 8;
         Assert.AreEqual(outlets?.Count,outletNO);
+        var expectedFilters = new string[][] {
+            new string[]{"height","zl"},
+            new string[]{"height","zl"}, //new string[]{"wdith","zl"},
+            new string[]{},
+            new string[]{},
+            new string[]{},
+            new string[]{},
+            new string[]{},
+            new string[]{}
+        };
+        foreach (var outlet in outlets)
+        {
+            if (outlet.Filters.Length == 0) continue;
+            Assert.True(outlet.Filters.First().Select((filter=>filter.Criteria.Code)).ToArray().OrderBy(value=>value).SequenceEqual(expectedFilters[int.Parse(outlet.ChannelNo)-1].OrderBy(value=>value)));  
+        }
+        
     }
 }

@@ -10,7 +10,7 @@ namespace LibUnitTest.Parser;
 using NUnit.Framework;
 
 public class ProjectStatusChangeTest {
-    private const string JsonFilePath = @"./config/project_start_sample.json";
+    private const string JsonFilePath = @"./fixtures/project_start_sample.json";
     string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
 
     private string? porjectJsonString;
