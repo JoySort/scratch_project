@@ -43,9 +43,9 @@ public class WebInitializer
             app.UseSwaggerUI();
         }
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
-        app.UseAuthorization();
+        //app.UseAuthorization();
 
         app.MapControllers();
 

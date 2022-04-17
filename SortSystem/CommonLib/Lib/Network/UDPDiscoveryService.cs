@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using CommonLib.Lib.Util;
 using Newtonsoft.Json;
 using NLog;
 
@@ -27,8 +28,8 @@ public class UDPDiscoveryService
         this.ListenPort = listenPort;
         logger.Info("Discovery Service {} listen at {} reporting rpc {} initialized",serviceName,listenPort,rpc_port);
         
-        Guid guidObj = Guid.NewGuid();
-        uuid=guidObj.ToString();
+       
+        uuid=ConfigUtil.getModuleConfig().Uuid;
         localDiscoverMsg = new DiscoverMSG(uuid,rpc_port, listenPort, DiscoverMSG.MSG_TYPE_BRD, 0);
     }
 

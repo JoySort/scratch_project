@@ -28,15 +28,7 @@ public class SortController: ControllerBase
         this.logger = logger;
         //this.logger.LogInformation(1, "NLog injected into SortController");
     }
-    
-    [Route("/sort/consolidate_single")]
-    [HttpPost]
-    public void consolidate(RecResult recResult)
-    {
-      
-       consolidateWorker.processSingle(recResult);
-      
-    }
+   
     
     [Route("/sort/consolidate_batch")]
     [HttpPost]
@@ -46,14 +38,7 @@ public class SortController: ControllerBase
        
     }
     
-    [Route("/sort/sort_single")]
-    [HttpPost]
-    public void sort(RecResult recResult)
-    {
-      
-        sortingWorker.processSingle(recResult);
-      
-    }
+    
     
     [Route("/sort/sort_batch")]
     [HttpPost]
@@ -62,14 +47,7 @@ public class SortController: ControllerBase
        sortingWorker.processBulk(recResults);
     }
     
-    [Route("/sort/lb_single")]
-    [HttpPost]
-    public void sort(SortResult result)
-    {
-      
-        lbWorker.processSingle(result);
-      
-    }
+   
     
     [Route("/sort/lb_batch")]
     [HttpPost]
@@ -78,13 +56,7 @@ public class SortController: ControllerBase
         lbWorker.processBulk(results);
     }
     
-    [HttpPost]
-    [Route("/sort/emit_single")]
-    public void emitSingle(EmitResult result)
-    {
-        LowerMachineWorker.getInstance().processSingle(result);
-        return ;
-    }
+   
     
     [HttpPost]
     [Route("/sort/emit_batch")]

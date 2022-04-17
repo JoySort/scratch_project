@@ -12,4 +12,14 @@
       <ProjectReference Include="..\CommonLib\CommonLib.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Terminal.Gui" Version="1.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="test.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

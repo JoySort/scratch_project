@@ -47,7 +47,7 @@ public class UDPTransportPerformanceTest
             string project_file_path = @"../../../../LibUnitTest/fixtures/project_apple_rec_start.json";
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,project_file_path);
             porjectJsonString = File.ReadAllText(path);
-            ProjectParser parser = new ProjectParser(porjectJsonString);
+            ProjectParser parser = new ProjectParser(porjectJsonString,ProjectParser.V2);
             project = parser.getProject();
         }catch(Exception e){
          logger.Error(e.Message);   

@@ -7,8 +7,8 @@ using CommonLib.Lib.vo;
 namespace LibUnitTest.Parser;
 using NUnit.Framework;
 
-public class JsonParserTest {
-    private const string JsonFilePath = @"./config/project_start_sample.json";
+public class JsonParserTestV2 {
+    private const string JsonFilePath = @"./fixtures/project_start_sample.json";
     string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
 
     private string? porjectJsonString;
@@ -20,7 +20,7 @@ public class JsonParserTest {
     public void Setup()
     {   
         porjectJsonString = File.ReadAllText(path);
-        jparser = new ProjectParser(porjectJsonString);
+        jparser = new ProjectParser(porjectJsonString,ProjectParser.V2);
         project = jparser.getProject();
     }
 

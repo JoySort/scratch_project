@@ -16,15 +16,20 @@ public class ProjectParser
     private readonly JObject _jresult;
     
     public static Logger logger = LogManager.GetCurrentClassLogger();
-    public ProjectParser(string projectJsonString)
+    private string version;
+
+    public  const string V1 = "v1";
+    public  const string V2 = "v2";
+    public ProjectParser(string projectJsonString,string version)
     {
+        version = this.version;
         _jresult = JObject.Parse(projectJsonString);
         ParseCriteria();
         ParseOutlet();
         ParseOtherProperties();
     }
     
-    public static Project ParseHttpRequest(HttpRequest Request)
+    public static Project ParseHttpRequest(HttpRequest Request,string version)
     {
         Project project = null;
         using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
@@ -35,7 +40,7 @@ public class ProjectParser
 
                 try
                 {
-                    ProjectParser parser = new ProjectParser(content);
+                    ProjectParser parser = new ProjectParser(content,version);
 
                     project = parser.getProject();
                     if (project == null) throw new Exception("Project content is not valid " + content);
@@ -78,7 +83,23 @@ public class ProjectParser
             var code = (string?) key;
             var name = (string?) value.SelectToken("name");
             var isChecked = (bool) value.SelectToken("checked");
-            var criteriaIndex = (int) value.SelectToken("index");
+            
+            int  criteriaIndex = ConfigUtil.getModuleConfig().CriteriaMapping[code].Index;;
+            
+            switch (version)
+            {
+                case V2 : 
+                    criteriaIndex = (int) value.SelectToken("index");
+                    break;
+                case V1 : 
+                    criteriaIndex = ConfigUtil.getModuleConfig().CriteriaMapping[code].Index;
+                    break;
+                default: 
+                    criteriaIndex = ConfigUtil.getModuleConfig().CriteriaMapping[code].Index;
+                    break;
+            }
+        
+            
             var min = (float) value.SelectToken("data").SelectToken("min");
             var max = (float) value.SelectToken("data").SelectToken("max");
             var range = ((JArray) value.SelectToken("data").SelectToken("range")).Select(jv => (float) jv).ToArray();
@@ -105,17 +126,59 @@ public class ProjectParser
     private void ParseOutlet()
     {
         var outlets = (JArray) _jresult.SelectToken("channels");
-        foreach (var value in outlets)
+        foreach (var outletDetail in outlets)
         {
-            if (value == null) continue;
-            var outlet_no = (string?) value.SelectToken("channel_no");
-            var outlet_type = (string?) value.SelectToken("type");
-            var _jobj_filters = (JArray) value.SelectToken("filters");
-            var filters = ParseFilter(_jobj_filters);
+            if (outletDetail == null) continue;
+            var outlet_no = (string?) outletDetail.SelectToken("channel_no");
+            var outlet_type = (string?) outletDetail.SelectToken("type");
+
+            List<Filter[]> filters = null;
+            switch (version)
+            {
+                case V2 : 
+                    filters = ParseFilter( (JArray) outletDetail.SelectToken("filters"));
+                    break;
+                case V1 :
+                    filters = praserFilterV1(outletDetail);
+                    break;
+                default: 
+                    filters = praserFilterV1(outletDetail);
+                    break;
+            }
+            
 
             var outlet = new Outlet(outlet_no, outlet_type, filters.ToArray());
             Outlets.Add(outlet);
         }
+    }
+
+    private List<Filter[]> praserFilterV1(JToken outletDetail)
+    {
+        List<Filter[]> filters = new List<Filter[]>();
+        var criteriaMapping = ConfigUtil.getModuleConfig().CriteriaMapping;
+        
+        List<Filter> firstLevelFilter = new List<Filter>();
+        List<string>  foundKeys = new List<string>();
+        foreach ((var key, var critieraDetails) in criteriaMapping)
+        {
+            
+            foreach (JProperty prop in outletDetail)
+            {
+                if (key.Equals(prop.Name))
+                {
+                    foundKeys.Add(prop.Name);
+                   
+                        //Console.WriteLine(prop.Name);
+                        var criteria_key = prop.Name;
+                        var criteria = findCriteria(criteria_key);
+                        var boundrryIndeces = ((JArray) prop.Value).Select(jv => (int) jv).ToArray();
+                        var filter = new Filter(boundrryIndeces, criteria);
+                        firstLevelFilter.Add( filter);
+                }
+            }
+        }
+        filters.Add(firstLevelFilter.ToArray());
+        return filters;
     }
 
     private List<Filter[]> ParseFilter(JArray filters)
@@ -152,3 +215,4 @@ public class ProjectParser
         return null;
     }
 }
+

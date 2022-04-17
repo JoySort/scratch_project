@@ -22,7 +22,7 @@ public class ProjectStatusChangeTest {
     public void Setup()
     {   
         porjectJsonString = File.ReadAllText(path);
-        ProjectParser parser = new ProjectParser(porjectJsonString);
+        ProjectParser parser = new ProjectParser(porjectJsonString,ProjectParser.V2);
         project = parser.getProject();
         LowerMachineWorker.getInstance();
 

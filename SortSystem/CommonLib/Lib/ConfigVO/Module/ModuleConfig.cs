@@ -17,6 +17,9 @@ public class ModuleConfig
     private NetworkConfig networkConfig;
     private SortConfig sortConfig;
     private bool lowerMachineSimulationMode = false;
+    private string uuid = Guid.NewGuid().ToString();
+
+    public string Uuid => uuid;
 
     public bool LowerMachineSimulationMode
     {

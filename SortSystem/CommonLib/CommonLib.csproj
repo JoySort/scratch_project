@@ -15,8 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Lib\Controllers" />
-      <Folder Include="Lib\PipleLine" />
+      <Folder Include="Lib\JoyHTTPClient" />
     </ItemGroup>
 
 </Project>

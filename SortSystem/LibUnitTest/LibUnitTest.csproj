@@ -41,9 +41,6 @@
       <None Update="config\module.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="config\project_start_sample.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="fixtures\project_apple_rec_start.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -60,6 +57,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="fixtures\pd_sorttest_data.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="fixtures\project_start_v1.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

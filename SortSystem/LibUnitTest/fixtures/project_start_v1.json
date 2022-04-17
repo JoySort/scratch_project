@@ -1,0 +1,206 @@
+{
+  "id": "5_T75D61G",
+  "time_created": null,
+  "time_last_used": null,
+  "name": "Final TestRun Khalas(VIP,Retail,Bulk) with Peeling and defect detection dryness",
+  "category": "khalas",
+  "class": null,
+  "hasSampling": true,
+  "criteria": {
+    "color": {
+      "name": "Color",
+      "lang": {
+        "name": "color_slider_label",
+        "checked": "color_slider_status"
+      },
+      "checked": true,
+      "type": "slider",
+      "data": {
+        "unit": "%",
+        "min": 0,
+        "max": 100,
+        "range": [
+          12,
+          33,
+          54,
+          68
+        ]
+      }
+    },
+    "sf": {
+      "name": "Skin peeling",
+      "lang": {
+        "name": "sf_slider_label",
+        "checked": "sf_slider_status"
+      },
+      "checked": true,
+      "type": "slider",
+      "data": {
+        "unit": "",
+        "min": 0,
+        "max": 100,
+        "range": [
+          36
+        ]
+      }
+    },
+    "wt": {
+      "name": "Weight",
+      "lang": {
+        "name": "wt_slider_label",
+        "checked": "wt_slider_label"
+      },
+      "styles": {
+        "background": "#8C7BE8",
+        "fontColor": "#000000"
+      },
+      "checked": true,
+      "type": "slider",
+      "config": {
+        "step": 0.1
+      },
+      "data": {
+        "unit": "",
+        "min": 0,
+        "max": 30,
+        "range": [
+          5.365192582025674,
+          8.316405135520686
+        ]
+      }
+    },
+    "dd": {
+      "name": "Dead dry",
+      "lang": {
+        "name": "dd_slider_label",
+        "checked": "dd_slider_label"
+      },
+      "styles": {
+        "background": "#9D9784",
+        "fontColor": "#000000"
+      },
+      "checked": true,
+      "type": "slider",
+      "data": {
+        "unit": "",
+        "min": 0,
+        "max": 100,
+        "range": [
+          43
+        ]
+      }
+    }
+  },
+  "channels": [
+    {
+      "channel_no": "1",
+      "type": "auto",
+      "dd": [
+        0
+      ]
+    },
+    {
+      "channel_no": "2",
+      "type": "auto",
+      "color": [
+        4
+      ]
+    },
+    {
+      "channel_no": "3",
+      "type": "auto",
+      "dd": [
+        0
+      ],
+      "wt": [
+        0
+      ],
+      "sf": [
+        0
+      ],
+      "color": [
+        1
+      ]
+    },
+    {
+      "channel_no": "4",
+      "type": "auto",
+      "dd": [
+        0
+      ],
+      "wt": [
+        0
+      ],
+      "sf": [
+        1
+      ],
+      "color": [
+        1
+      ]
+    },
+    {
+      "channel_no": "5",
+      "type": "auto",
+      "dd": [
+        0
+      ],
+      "wt": [
+        1
+      ],
+      "sf": [
+        0
+      ],
+      "color": [
+        1
+      ]
+    },
+    {
+      "channel_no": "6",
+      "type": "auto",
+      "dd": [
+        0
+      ],
+      "wt": [
+        1
+      ],
+      "sf": [
+        1
+      ],
+      "color": [
+        1
+      ]
+    },
+    {
+      "channel_no": "7",
+      "type": "auto",
+      "dd": [
+        0
+      ],
+      "wt": [
+        2
+      ],
+      "sf": [
+        0
+      ],
+      "color": [
+        1
+      ]
+    },
+    {
+      "channel_no": "8",
+      "type": "auto",
+      "dd": [
+        0
+      ],
+      "wt": [
+        2
+      ],
+      "sf": [
+        1
+      ],
+      "color": [
+        1
+      ]
+    }
+  ]
+}

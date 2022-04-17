@@ -42,7 +42,7 @@ public class LBWorkerTest
         string JsonFilePath = @"./fixtures/project_pd_rec_start.json";
         string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
         porjectJsonString = File.ReadAllText(path);
-        ProjectParser parser = new ProjectParser(porjectJsonString);
+        ProjectParser parser = new ProjectParser(porjectJsonString,ProjectParser.V2);
         project = parser.getProject();
         
        
