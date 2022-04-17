@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const uuid = uuidv4();
 const nets = networkInterfaces();
 const localAddr = []; // Or just '{}', an empty object
-
+const chalk = require("chalk");
 var udpPort;
 
 for (const name of Object.keys(nets)) {
@@ -26,11 +26,11 @@ server.on('message', (msg, rinfo) => {
   
   foundLocal=false;
 
-  console.log(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
+  console.log(chalk.grey(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`));
   server_info=JSON.parse(msg);
   if(uuid==server_info.Uuid)foundLocal=true;
   if(!foundLocal){
-    console.log("try to start invoke project start with uuid"+uuid)
+    //console.log("try to start invoke project start with uuid"+server_info.Uuid)
     found_server_callback(rinfo.address,server_info.RpcPort,server_info.Uuid)
   }
 });
@@ -46,7 +46,7 @@ function broadcastNew() {
   counter++;
   var message = Buffer.from(JSON.stringify({"ListenPort":udpPort,"Uuid":uuid,"Count":counter,"Type":"BRD","RpcPort":5114}));
   server.send(message, 0, message.length, udpPort, "255.255.255.255", function() {
-      console.log("Sent '" + message + "'");
+     // console.log("Sent '" + message + "'");
   });
 }
 
@@ -62,9 +62,8 @@ var found_server_callback;
 function entrance(callback,port){
   found_server_callback=callback
   udpPort=port ==null?13567:port;
-  console.log("Starting discovery on interfaces on port "+udpPort);
-  
-  console.log(localAddr);
+  //console.log("Starting discovery on interfaces on port "+udpPort);
+  //console.log(`local network address ${localAddr}`);
 
   server.bind(udpPort,function(){
     server.setBroadcast(true);

@@ -13,54 +13,62 @@ var port;
 
 var finish_callback;
 var uuid;
+
+var services={};
+
+var interval_id
+
 function send_bulk(start_triggerid,trigger_id_count_per_batch,arg_batch_count,endpoint_host,endpoint_port,remote_uuid,callback){
-    host= endpoint_host;
-    port = endpoint_port;
-    global_counter = start_triggerid ;
-    count_per_batch=trigger_id_count_per_batch;
-    batch_count=arg_batch_count
-    uuid=remote_uuid
+    services[remote_uuid]={};
+    services[remote_uuid].host= endpoint_host;
+    services[remote_uuid].port = endpoint_port;
+    services[remote_uuid].global_counter = start_triggerid ;
+    services[remote_uuid].count_per_batch=trigger_id_count_per_batch;
+    services[remote_uuid].batch_count=arg_batch_count
+    services[remote_uuid].uuid=remote_uuid
+
     finish_callback=callback
-    console.log({  host: host,
-        port : port,
-        global_counter : global_counter ,
-        count_per_batch:count_per_batch,
-        batch_count:batch_count,
-        uuid:uuid,
-        finish_callback:callback})
-    send_consolidate_bulk()
+    console.log(services[remote_uuid])
+    send_consolidate_bulk(remote_uuid)
+    services[remote_uuid].interval_id=setInterval(function(){
+        processWrite(remote_uuid);
+    },100)
 }
 
-function send_consolidate_bulk(){
+function send_consolidate_bulk(remote_uuid){
 
-    var data = generate_rec_obj(global_counter,count_per_batch);
+    var data = generate_rec_obj(services[remote_uuid].global_counter,services[remote_uuid].count_per_batch,remote_uuid);
     var timestamp = new Date().getTime();
     //console.log("start sending with starting trigger id"+data[0]);
-    axios.post('http://'+host+':'+port+'/sort/consolidate_batch', data, config)
+    axios.post('http://'+services[remote_uuid].host+':'+services[remote_uuid].port+'/sort/consolidate_batch', data, config)
     .then(function(response) {
         
         //console.log(global_counter*1000/(batch_count*count_per_batch));
-        printProgress("Current progress: ",(Math.round(global_counter*1000/(batch_count*count_per_batch))/10)+"%"+" "+(new Date().getTime()-timestamp) ,"ms");
+        var progress=(Math.round(services[remote_uuid].global_counter*1000/(services[remote_uuid].batch_count * services[remote_uuid].count_per_batch))/10);
+        services[remote_uuid].progress=progress;
+        printProgress(services[remote_uuid].host,services[remote_uuid].port,"Current progress: ",progress.toFixed(1)+"%"+" "+(new Date().getTime()-timestamp) ,"ms");
         //global_counter++;
         //console.log("sending data, took "+(new Date().getTime()-timestamp)+" ms");
         //console.log("finished. batch "+ (Math.floor(global_counter/batch_count)+1)+" server response:"+JSON.stringify(response.data))
         //console.log(global_counter,batch_count,count_per_batch)
-        if(global_counter< (batch_count*count_per_batch)){
+        if(services[remote_uuid].global_counter < (services[remote_uuid].batch_count * services[remote_uuid].count_per_batch)){
             //console.log("keep sending ")
-            send_consolidate_bulk();
+            send_consolidate_bulk(remote_uuid);
         }else{
             console.log("End sending")
-            finish_callback(uuid)
+            finish_callback(remote_uuid)
+            
         }
     })
     .catch(function(error) {
         console.log("error catched sending data: "+error.message)
+        console.log(error)
         
     })
     
 }
 
-function generate_rec_obj(start,count){
+function generate_rec_obj(start,count,remote_uuid){
     var template1={
         "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 0},
         "expectedFeatureCount": 2,
@@ -104,7 +112,7 @@ function generate_rec_obj(start,count){
         }
 
     }
-    global_counter=start+count;
+    services[remote_uuid].global_counter=start+count;
     //console.log(JSON.stringify(results));
     //console.log("finish prepare data ready to send request, took "+(new Date().getTime()-timestamp)+" ms");
     //console.log(`trigger: `,global_counter);
@@ -114,12 +122,37 @@ function generate_rec_obj(start,count){
     return results
 }
 
+var progressObj={};
+
 function colorize(color, output) {
     return ['\033[', color, 'm', output, '\033[0m'].join('');
 }
-function printProgress(text1,progress,text2){
+function printProgress(host,port,text1,progress,text2){
+    progressObj[host+":"+port]={};
+    key = host+":"+port;
+    progressObj[key].target=host+":"+port;
+    progressObj[key].text1=text1;
+    progressObj[key].progress=progress;
+    progressObj[key].text2=text2;
+
+}
+
+function processWrite(remote_uuid){
+
     process.stdout.clearLine();
     process.stdout.cursorTo(0);
-    process.stdout.write(text1+colorize(32,progress)+text2);
-}
+    var all_complete = true;
+    for (const [key, value] of Object.entries(progressObj)) {
+        process.stdout.write("  ")
+        process.stdout.write(progressObj[key].target+" "+colorize(32,progressObj[key].progress)+progressObj[key].text2);
+
+    }
+   
+    if(services[remote_uuid].progress==1){
+        clearInterval(services[remote_uuid].interval_id);
+    }
+    
+      
+  }
+
 module.exports.send_consolidate_bulk=send_bulk
