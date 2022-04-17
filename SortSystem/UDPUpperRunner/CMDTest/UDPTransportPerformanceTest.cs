@@ -17,7 +17,7 @@ using Newtonsoft.Json;
 using NLog;
 
 
-namespace LibUnitTest.network;
+namespace CMDTest.UPDUpperRunner;
 
 public class UDPTransportPerformanceTest
 {
