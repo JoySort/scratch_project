@@ -179,7 +179,8 @@ public class ConsolidateWorker
                 if (cacheRecResultDictionary.Count > 0 || incompleteRecResultList.Count > 0 ||
                     incompleteCoordinate.Count>0)
                 {
-                    logger.Warn("Consolidate worker cache is none zero {} processing cache {} {}",cacheStatus[0],cacheStatus[1],cacheStatus[2]);
+                    logger.Error("Consolidate worker cache is none zero {} processing cache {} {}",cacheStatus[0],cacheStatus[1],cacheStatus[2]);
+                    //throw new System.Exception("Colidation result sent is not valid, every batch");
                 }
      
             

@@ -16,18 +16,8 @@ CMDArgumentUtil.parse(args);// use cmd option --config_folder=../config to setup
 ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
 NetworkUtil.UDPDiscoverSetup();
 
-
 //Piple line wireup;
-ConsolidateWorker.getInstance().OnResult+=((sender, args) => SortingWorker.getInstance().processBulk(args.Results));
-SortingWorker.getInstance().OnResult+=((sender, args) => LBWorker.getInstance().processBulk(args.Results));
-LBWorker.getInstance().OnResult+=((sender, args) => EmitWorker.getInstance().processBulk(args.Results));
-EmitWorker.getInstance().OnResult+=((sender, args) => LowerMachineWorker.getInstance().processBulk(args.Results));
-LowerMachineWorker.init();
-
-
-
-
-
+UpperPipelineWireUtil.setup();
 
 //WebInitializer must last line of code, no code beyond this point will be executed
 WebInitializer.init();

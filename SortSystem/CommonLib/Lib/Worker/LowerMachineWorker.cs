@@ -68,11 +68,7 @@ public class LowerMachineWorker
             prepareConfig(statusEventArgs.currentProject);
             
             lowerMachineDriver.applyStateChange( statusEventArgs.State);
-            
-            
-            
-            
-          
+
         }
 
         if (statusEventArgs.State == ProjectState.stop || statusEventArgs.State == ProjectState.reverse || statusEventArgs.State == ProjectState.washing)
