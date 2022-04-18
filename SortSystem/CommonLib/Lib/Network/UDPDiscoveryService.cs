@@ -22,15 +22,22 @@ public class UDPDiscoveryService
     private UdpClient udpClient;
     private string uuid;
 
+    public string Uuid
+    {
+        get => uuid;
+        set => uuid = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
     public UDPDiscoveryService(int rpc_port, int listenPort, string serviceName)
     {
         this.serviceName = serviceName;
         this.ListenPort = listenPort;
-        logger.Info("Discovery Service {} listen at {} reporting rpc {} initialized",serviceName,listenPort,rpc_port);
+        
         
        
         uuid=ConfigUtil.getModuleConfig().Uuid;
         localDiscoverMsg = new DiscoverMSG(uuid,rpc_port, listenPort, DiscoverMSG.MSG_TYPE_BRD, 0);
+        logger.Info("Discovery Service {} listen at {} reporting rpc {} with uuid {}initialized",serviceName,listenPort,rpc_port,uuid);
     }
 
     public bool UnitTestFlag { get; set; } = false;

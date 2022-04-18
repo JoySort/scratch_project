@@ -39,8 +39,8 @@ public class DiscoveryTest
         
         
         UDPDiscoveryService discoverService1 = new UDPDiscoveryService(ConfigUtil.getModuleConfig().NetworkConfig.RpcPort, ConfigUtil.getModuleConfig().NetworkConfig.DiscoveryPorts.First(), "unitTestInstance1");
-        discoverService1.KeepAliveInterval = 10;
-        discoverService1.UnitTestFlag = true;
+        discoverService1.Uuid = Guid.NewGuid().ToString();
+        //discoverService1.UnitTestFlag = true;
         discoverService1.StartListen();
         DiscoverFoundEventArgs eventArgsFromInside1 = null;
         discoverService1.EndPointDiscoverFound += (object sender, DiscoverFoundEventArgs e) =>
@@ -52,7 +52,7 @@ public class DiscoveryTest
         
         UDPDiscoveryService discoverService = new UDPDiscoveryService(ConfigUtil.getModuleConfig().NetworkConfig.RpcPort, ConfigUtil.getModuleConfig().NetworkConfig.DiscoveryPorts.First(), "unitTestInstance2");
         discoverService.KeepAliveInterval = 10;
-        discoverService.UnitTestFlag = true;
+        //discoverService.UnitTestFlag = true;
         discoverService.StartListen();
         DiscoverFoundEventArgs eventArgsFromInside = null;
 
@@ -62,12 +62,12 @@ public class DiscoveryTest
             blocking2 = false;
         };
 
-        var startTime = DateTime.Now.Millisecond;
+        var startTime = DateTimeOffset.Now.ToUnixTimeSeconds();
         while (blocking1 || blocking2)
         {
             Thread.Sleep(10);
         }
-        logger.Info("Blocking took {}",DateTime.Now.Millisecond-startTime);
+        logger.Info("Blocking took {}",DateTimeOffset.Now.ToUnixTimeSeconds()-startTime);
         
         Assert.NotNull(eventArgsFromInside);
         Assert.NotNull(eventArgsFromInside1);
