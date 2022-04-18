@@ -17,5 +17,16 @@ public class RecResult:RawResult
     {
         this.features = features;
     }
-    
+
+    public string toLog()
+    {
+        string result = "  F:";
+        foreach (var feature in features)
+        {
+            result += feature.CriteriaIndex + ":" + feature.Value +" " ;
+        }
+
+        return Coordinate.Key() + result;
+    }
+
 }

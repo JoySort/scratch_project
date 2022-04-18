@@ -21,7 +21,7 @@ public class ConsolidateWorker
     }
 
     private Dictionary<string,List<RecResult>> cacheRecResultDictionary = new Dictionary<string,List<RecResult>>();
-    private Dictionary<string,List<Feature>> incompleteRecResultList = new Dictionary<string,List<Feature>>();
+    private Dictionary<string,List<Feature>> incompleteFeatureList = new Dictionary<string,List<Feature>>();
     private Dictionary<string,Coordinate> incompleteCoordinate = new Dictionary<string,Coordinate>();
     private bool isProjectRunning;
     private int sortingInterval;
@@ -51,7 +51,7 @@ public class ConsolidateWorker
             this.sortingInterval = ConfigUtil.getModuleConfig().SortConfig.SortingInterval;
             
             cacheRecResultDictionary = new Dictionary<string,List<RecResult>>();
-            incompleteRecResultList = new Dictionary<string,List<Feature>>();
+            incompleteFeatureList = new Dictionary<string,List<Feature>>();
             incompleteCoordinate = new Dictionary<string,Coordinate>();
             //processResult();
         }
@@ -89,10 +89,10 @@ public class ConsolidateWorker
         cacheRecResultDictionary[recResult.Coordinate.Key()].Add(recResult);
         
 
-        if (!incompleteRecResultList.ContainsKey(recResult.Coordinate.Key()))
+        if (!incompleteFeatureList.ContainsKey(recResult.Coordinate.Key()))
         {
            
-                 incompleteRecResultList.Add(recResult.Coordinate.Key(),new List<Feature>());
+                 incompleteFeatureList.Add(recResult.Coordinate.Key(),new List<Feature>());
            
         }
 
@@ -139,7 +139,7 @@ public class ConsolidateWorker
                                 var criteriaIndex = criteriaMapping[consolidationPolicy.CriteriaCode[i]].Index;
                                 float consolidatedFeatureValue = consolidateFeature(cacheRecResultDictionary[key],
                                     key,criteriaIndex,i);
-                                incompleteRecResultList[key].Add(new Feature(criteriaIndex,consolidatedFeatureValue));
+                                incompleteFeatureList[key].Add(new Feature(criteriaIndex,consolidatedFeatureValue));
                                 break;
                             }
                         }
@@ -150,7 +150,7 @@ public class ConsolidateWorker
                 }
                 
                 var completeResult = new List<RecResult>();
-                foreach( (var key, var features) in incompleteRecResultList){
+                foreach( (var key, var features) in incompleteFeatureList){
                     if (features.Count == expectedFeatureCount)
                     {
                         completeResult.Add(new RecResult(incompleteCoordinate[key],expectedFeatureCount,features));
@@ -158,31 +158,37 @@ public class ConsolidateWorker
                     }
                 }
                 logger.Debug("Consolidate Worker with count:{}",completeResult.Count);
-                if (completeResult.Count > 0) DispatchResultEvent(new ResultEventArg(completeResult));
-                
+               
                 foreach (var value in completeResult)
                 {
                     cacheRecResultDictionary.Remove(value.Coordinate.Key());
-                    incompleteRecResultList.Remove(value.Coordinate.Key());
+                    incompleteFeatureList.Remove(value.Coordinate.Key());
                     incompleteCoordinate.Remove(value.Coordinate.Key());
                 }
 
                 cacheStatus[0] = cacheRecResultDictionary.Count;
-                cacheStatus[1] = incompleteRecResultList.Count;
+                cacheStatus[1] = incompleteFeatureList.Count;
                 cacheStatus[2] = incompleteCoordinate.Count;
 
                 if (runningCounter * sortingInterval % 30000 == 0)
                 {
                     logger.Info("Consolidate worker cache stats main cache {} processing cache {}",cacheStatus[0],cacheStatus[1]);
                 }
-
-                if (cacheRecResultDictionary.Count > 0 || incompleteRecResultList.Count > 0 ||
+                
+                var lastTrigger = completeResult.Last().Coordinate.TriggerId;
+                if (cacheRecResultDictionary.Count > 0 || incompleteFeatureList.Count > 0 ||
                     incompleteCoordinate.Count>0)
                 {
+                    
+                    if(incompleteCoordinate.First().Value.TriggerId<lastTrigger){
                     logger.Error("Consolidate worker cache is none zero {} processing cache {} {}",cacheStatus[0],cacheStatus[1],cacheStatus[2]);
-                    //throw new System.Exception("Colidation result sent is not valid, every batch");
+                    throw new System.Exception("");
+                    }
                 }
-     
+                
+                
+                if (completeResult.Count > 0) DispatchResultEvent(new ResultEventArg(completeResult));
+
             
             //logger.Info("Consolidation worker stops");
       
