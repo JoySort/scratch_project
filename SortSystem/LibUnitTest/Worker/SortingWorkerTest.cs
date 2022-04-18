@@ -35,7 +35,7 @@ public class SortingWorkerTest
 
     }
 
-    [Test]
+    [Test,Order(1)]
     public void appleConsolidationTest()
     {
         string JsonFilePath = @"./fixtures/project_apple_rec_start.json";
@@ -60,7 +60,7 @@ public class SortingWorkerTest
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
     }
     
-    [Test]
+    [Test,Order(2)]
     public void pdConsolidationTest()
     {
         logger.Info("PD Test begin");
@@ -124,7 +124,7 @@ public class SortingWorkerTest
             }
             
             logger.Info("PD Test stop");
-            ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
+            
             
         }
 
@@ -133,7 +133,12 @@ public class SortingWorkerTest
 
     }
     
-    
+    [TearDown]
+    public void TearDown()
+    {
+        if(ProjectEventDispatcher.getInstance().ProjectState!=ProjectState.stop)
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+    }
     public void appleEventHanlder(Object sender, SortingResultEventArg args)
     {
         try

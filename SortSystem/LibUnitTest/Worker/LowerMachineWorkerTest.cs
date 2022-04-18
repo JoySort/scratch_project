@@ -228,13 +228,21 @@ public class LowerMachineWorkerTest
         performTest();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+    }
+
+    private long startTimestamp;
     public void performTest()
     {
 
 
         
         var start = 0;
-        var count = 14 * 60;
+        var count = 14 * 60*10;
         var columnCount = 24;
         var perTargetPictureCount = 4;
         var columCountPerSection = 6;
@@ -243,19 +251,23 @@ public class LowerMachineWorkerTest
         ConsolidateWorker consolidateWorker = ConsolidateWorker.getInstance();
         LBWorker lbWorker = LBWorker.getInstance();
         lbWorker.OnResult += lbEventHandler;
+        startTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
         List<RecResult> rrs = prepareData(start, count, columnCount, perTargetPictureCount, columCountPerSection);
         var counter = 0;
         foreach (var item in rrs)
         {
-            if(counter++<48)
-            logger.Debug("rec result {}",item.toLog());
+           // if(counter++<48) logger.Debug("rec result {}",item.toLog());
         }
-
+        logger.Info("generate data took  {}", DateTimeOffset.Now.ToUnixTimeSeconds()-startTimestamp);
+        startTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+       
         consolidateWorker.processBulk(rrs);
 
         void lbEventHandler(object sender, LBResultEventArg lbResultEventArg)
         {
-            
+            var finishTimestamp =DateTimeOffset.Now.ToUnixTimeSeconds();
+            var timeTook =finishTimestamp  - startTimestamp;
+            logger.Info("Time took for task :{} stop at {}",timeTook,finishTimestamp);
             var outlets = project.Outlets;
             var consolidatePolicy = ConfigUtil.getModuleConfig().ConsolidatePolicy;
 
@@ -279,12 +291,13 @@ public class LowerMachineWorkerTest
 
                 }
             }
-
-            Task.Run(() =>
-            {
-                Thread.Sleep(1000);
-                ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
-            });
+            lbWorker.OnResult -= lbEventHandler;
+            // EmitWorker.getInstance().OnResult += ((sender, arg) =>
+            // {
+            //     
+            // });
+            //
+         
         }
         
 

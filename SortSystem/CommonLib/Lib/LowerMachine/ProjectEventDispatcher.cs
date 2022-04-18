@@ -11,7 +11,9 @@ public class ProjectEventDispatcher
 
     private Project currentProject;
     private ProjectState projectState = ProjectState.stop;
-    
+
+    public ProjectState ProjectState => projectState;
+
     private static ProjectEventDispatcher gl = new ProjectEventDispatcher();
     public static ProjectEventDispatcher getInstance()
     {
