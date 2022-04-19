@@ -7,7 +7,7 @@ using CommonLib.Lib.vo;
 using Newtonsoft.Json;
 using NLog;
 
-namespace CommonLib.Lib.Sort;
+namespace CommonLib.Lib.Worker.Upper;
 
 public class SortingWorker
 {
@@ -17,10 +17,10 @@ public class SortingWorker
 
     private Project currentProject;
     private Outlet[] currentOutlets;
-    private List<RecResult> incompleteWaitingList = new List<RecResult>();
+
     private bool isProjectRunning;
     private int sortingInterval;
-    private List<RecResult> toBeProcessedResults = new List<RecResult>();
+    private List<ConsolidatedResult> toBeProcessedResults = new List<ConsolidatedResult>();
     private List<SortResult> sortResults;
     private int[] outletLBCount ;
     private SortingWorker()
@@ -68,16 +68,16 @@ public class SortingWorker
         return worker;
     }
 
-    public void processSingle(RecResult result)
+    public void processSingle(ConsolidatedResult result)
     {
         if (!isProjectRunning) throw new ProjectDependencyException("SortingWorker:");
         toBeProcessedResults.Add(result);
     }
 
-    public void processBulk(List<RecResult> recResults)
+    public void processBulk(List<ConsolidatedResult> consolidatedResults)
     {
         if (!isProjectRunning) throw new ProjectDependencyException("SortingWorker:");
-        toBeProcessedResults.AddRange(recResults);
+        toBeProcessedResults.AddRange(consolidatedResults);
         processResult();
     }
 
@@ -94,7 +94,7 @@ public class SortingWorker
                 var processBatch = toBeProcessedResults;
                // if (processBatch.Count == 0) continue;
                 
-                toBeProcessedResults = new List<RecResult>();
+                toBeProcessedResults = new List<ConsolidatedResult>();
                 sortResults = new List<SortResult>();
                 foreach (var item in processBatch)
                 {
@@ -111,7 +111,7 @@ public class SortingWorker
 
    
     
-    private void applySortingRules(RecResult recResult)
+    private void applySortingRules(ConsolidatedResult consolidatedResult)
     {
         var selectedOutlets = new List<Outlet>();
         foreach (var outlet in currentOutlets)
@@ -123,7 +123,7 @@ public class SortingWorker
                 var andResult = true;
                 foreach (var andFilter in OrFilterGroup) //And relationship
                 {
-                    andResult = andResult && andFilter.doFilter(recResult);
+                    andResult = andResult && andFilter.doFilter(consolidatedResult);
                 }
 
                 oRResult = oRResult || andResult;
@@ -140,12 +140,12 @@ public class SortingWorker
 
         if (selectedOutlets.Count > 0)
         {
-            sortResults.Add(new SortResult(recResult.Coordinate, recResult.ExpectedFeatureCount, recResult.Features,
+            sortResults.Add(new SortResult(consolidatedResult.Coordinate, consolidatedResult.ExpectedFeatureCount, consolidatedResult.Features,
                 selectedOutlets.ToArray()));
         }
         else
         {
-            logger.Debug("SortingWorker: No outlet is selected for date {}",JsonConvert.SerializeObject(recResult));
+            logger.Debug("SortingWorker: No outlet is selected for date {}",JsonConvert.SerializeObject(consolidatedResult));
         }
     }
   

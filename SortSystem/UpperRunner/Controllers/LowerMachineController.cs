@@ -1,12 +1,10 @@
-using CommonLib.Lib.ConfigVO;
-using CommonLib.Lib.ConfigVO.Emission;
+using CommonLib.Lib.Controllers;
 using CommonLib.Lib.LowerMachine;
-using CommonLib.Lib.Sort.ResultVO;
-using CommonLib.Lib.Util;
+using CommonLib.Lib.Worker.Upper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace CommonLib.Lib.Controllers;
+namespace CommonLib.Lib.WebAPIs.Upper;
 
 /**
  * <summary>发现服务，用来提供给调用端，作为第一个调用的方法来获得其提供的服务类型。</summary>
@@ -23,7 +21,7 @@ public class LowerMachineController : ControllerBase
     }
 
     [HttpPost]
-    [Route("/lower/switch_machine_status")]
+    [Route("/lower/switch_machine_running_status")]
     public void changeMachineStatus(ProjectState state)
     {
         if (state == ProjectState.reverse || state == ProjectState.washing)

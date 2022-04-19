@@ -114,7 +114,7 @@ public class ComLinkDriver
     
 
 
-    public   event EventHandler<byte[]> OnTriggerCMD;
+    public  event EventHandler<byte[]> OnTriggerCMD;
     public event EventHandler<byte[]> onServoCMD;
     public event EventHandler<byte[]> onStepMotorrCMD;
     public event EventHandler<byte[]> onSwitchCMD;

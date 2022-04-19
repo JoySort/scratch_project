@@ -1,3 +1,4 @@
+using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.LowerMachine.HardwareDriver;
 using CommonLib.Lib.Sort.Exception;
 using CommonLib.Lib.Sort.ResultVO;
@@ -5,7 +6,7 @@ using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
 using NLog;
 
-namespace CommonLib.Lib.LowerMachine;
+namespace CommonLib.Lib.Worker.Upper;
 /**
  * <summary>用来操作下位机，所有二进制指令都应该写在driver类里面</summary>
  */

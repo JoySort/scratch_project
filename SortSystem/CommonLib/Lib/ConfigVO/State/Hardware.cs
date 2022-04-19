@@ -1,7 +1,11 @@
 namespace CommonLib.Lib.ConfigVO;
-
-public class HWBase
+public interface IHardwareconfig
 {
+        
+}
+public class HWBase:IHardwareconfig
+{
+    
     public HWBase(string name, int address, bool enabled, int delay)
     {
         this.name = name;

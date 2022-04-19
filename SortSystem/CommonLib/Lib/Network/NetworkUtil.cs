@@ -7,6 +7,9 @@ public class NetworkUtil
 {
     private static Logger  logger = LogManager.GetCurrentClassLogger();
     private static List<UDPDiscoveryService> _discoveryServices = new List<UDPDiscoveryService>();
+
+    public static List<UDPDiscoveryService> DiscoveryServices => _discoveryServices;
+
     private static Dictionary<string, string> rpcEndPoint = new Dictionary<string, string>(); 
     public static void UDPDiscoverSetup() {
         

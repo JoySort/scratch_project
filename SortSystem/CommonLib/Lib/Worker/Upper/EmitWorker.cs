@@ -5,7 +5,7 @@ using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
 using NLog;
 
-namespace CommonLib.Lib.Sort;
+namespace CommonLib.Lib.Worker.Upper;
 
 public class EmitWorker
 {

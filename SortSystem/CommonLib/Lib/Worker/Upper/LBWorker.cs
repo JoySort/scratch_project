@@ -4,10 +4,9 @@ using CommonLib.Lib.Sort.Exception;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
-using Newtonsoft.Json;
 using NLog;
 
-namespace CommonLib.Lib.Sort;
+namespace CommonLib.Lib.Worker.Upper;
 
 public class LBWorker
 {

@@ -10,6 +10,7 @@ public class ServoDriver:DriverBase
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     public ServoDriver(ComLinkDriver cl) : base(cl)
     {
+        //在串口添加数据事件，以便在串口收到事件的时候进行操作。比如启动确认逻辑，停止确认逻辑等等。
         cl.onServoCMD += onData;
     }
 

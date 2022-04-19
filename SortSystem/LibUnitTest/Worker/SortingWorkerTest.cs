@@ -10,6 +10,7 @@ using CommonLib.Lib.Sort;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
+using CommonLib.Lib.Worker.Upper;
 using Newtonsoft.Json;
 using NLog;
 using NUnit.Framework;
@@ -22,9 +23,10 @@ public class SortingWorkerTest
    
     private string? porjectJsonString;
     private ProjectParser? jparser;
-    private Project project;
-    
-  
+    private Project appleProject;
+    private Project pdProject;
+    private ConsolidatedResult[] appleConsolidatedResults;
+    private ConsolidatedResult[] pdConsolidatedResults;
     private SortingWorker sortingWorker = SortingWorker.getInstance();
     [SetUp]
     public void setup()
@@ -33,35 +35,63 @@ public class SortingWorkerTest
         logger = LogManager.GetCurrentClassLogger();
         logger.Info("setup test ");
 
+       
     }
 
     [Test,Order(1)]
     public void appleConsolidationTest()
     {
+        setupProjectForApple();
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(appleProject,ProjectState.start);
+        setupDataForApple();
+        sortingWorker.OnResult += appleEventHanlder;
+        sortingWorker.processBulk(new List<ConsolidatedResult>(appleConsolidatedResults));
+        
+        logger.Info("APPLE Test stop");
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(appleProject,ProjectState.stop);
+    }
+    [Test,Order(2)]
+    public void pdConsolidationASCTest()
+    {
+        setupProjectForPD();
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.start);
+        setupDataForPD();
+        outletPriorityChange(OutletPriority.DESC,pdConsolidatedResults);
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.stop);
+    }
+    
+    [Test,Order(3)]
+    public void pdConsolidationDESCTest()
+    {
+        setupProjectForPD();
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.start);
+        setupDataForPD();
+        outletPriorityChange(OutletPriority.ASC,pdConsolidatedResults); 
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.stop);
+    }
+    
+    
+    private void setupProjectForApple()
+    {
         string JsonFilePath = @"./fixtures/project_apple_rec_start.json";
         string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
         porjectJsonString = File.ReadAllText(path);
         ProjectParser parser = new ProjectParser(porjectJsonString,ProjectParser.V2);
-        project = parser.getProject();
-        
-        
+        appleProject = parser.getProject();
+    }
+
+    private void setupDataForApple()
+    {
         logger.Info("APPLE Test begin");
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+        
         string recResultJsonFixture = @"./fixtures/apple_sorttest_data.json";
         string _path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,recResultJsonFixture);
         string jsonString = File.ReadAllText(_path);
-        RecResult[] recResults = JsonConvert.DeserializeObject<RecResult[]>(jsonString);
+        appleConsolidatedResults= JsonConvert.DeserializeObject<ConsolidatedResult[]>(jsonString);
 
-        bool blocking = true;
-        sortingWorker.OnResult += appleEventHanlder;
-        sortingWorker.processBulk(new List<RecResult>(recResults));
-
-        logger.Info("APPLE Test stop");
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
     }
-    
-    [Test,Order(2)]
-    public void pdConsolidationTest()
+
+    private void setupProjectForPD()
     {
         logger.Info("PD Test begin");
         
@@ -69,26 +99,51 @@ public class SortingWorkerTest
         string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
         porjectJsonString = File.ReadAllText(path);
         ProjectParser parser = new ProjectParser(porjectJsonString,ProjectParser.V2);
-        project = parser.getProject();
-        
-       
-        
+        pdProject = parser.getProject();
+    }
+
+    private void setupDataForPD()
+    {
         string recResultJsonFixture = @"./fixtures/pd_sorttest_data.json";
         string _path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,recResultJsonFixture);
         string jsonString = File.ReadAllText(_path);
-        RecResult[] recResults = JsonConvert.DeserializeObject<RecResult[]>(jsonString);
+        pdConsolidatedResults = JsonConvert.DeserializeObject<ConsolidatedResult[]>(jsonString);
+    }
 
-       
+ 
 
-        void outletPriorityChange(OutletPriority priority)
+    [TearDown]
+    public void TearDown()
+    {
+        if(ProjectEventDispatcher.getInstance().ProjectState!=ProjectState.stop)
+        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+    }
+    public void appleEventHanlder(Object sender, SortingResultEventArg args)
+    {
+        try
+        {
+            Assert.AreEqual("1", args.Results.First().Outlets.First().ChannelNo);
+            logger.Info("time consumed (ms):{}",
+                (DateTime.Now.ToFileTime() - args.Results.First().ProcessTimestamp) / 100);
+            logger.Info("APPle assert finished {}", JsonConvert.SerializeObject(args.Results));
+        }
+        catch (Exception e)
+        {
+            logger.Error(e.Message);
+        }
+        sortingWorker.OnResult -= appleEventHanlder;
+    }
+
+
+    void outletPriorityChange(OutletPriority priority,ConsolidatedResult[] consolidatedResult)
         {
            
             
             ConfigUtil.getModuleConfig().SortConfig.OutletPriority = priority;
             var currentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
             
-            ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
-            sortingWorker.processBulk(new List<RecResult>(recResults));
+           
+            sortingWorker.processBulk(new List<ConsolidatedResult>(consolidatedResult));
             
             string[] ascExpected  = new string[] {"1", "2", "1", "2", "2","2","2","2"};
             string[] descExpected = new string[] {"1", "3", "1", "3", "5","5","3","3"};
@@ -113,8 +168,7 @@ public class SortingWorkerTest
                     
                     Assert.AreEqual(expected,actual);
                     
-                    if(priority== OutletPriority.ASC) 
-                        outletPriorityChange(OutletPriority.DESC);
+                       
                 }
                 catch (Exception e)
                 {
@@ -127,35 +181,6 @@ public class SortingWorkerTest
             
             
         }
-
-        outletPriorityChange(OutletPriority.ASC); 
-  
-
-    }
-    
-    [TearDown]
-    public void TearDown()
-    {
-        if(ProjectEventDispatcher.getInstance().ProjectState!=ProjectState.stop)
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
-    }
-    public void appleEventHanlder(Object sender, SortingResultEventArg args)
-    {
-        try
-        {
-            Assert.AreEqual("1", args.Results.First().Outlets.First().ChannelNo);
-            logger.Info("time consumed (ms):{}",
-                (DateTime.Now.ToFileTime() - args.Results.First().ProcessTimestamp) / 100);
-            logger.Info("APPle assert finished {}", JsonConvert.SerializeObject(args.Results));
-        }
-        catch (Exception e)
-        {
-            logger.Error(e.Message);
-        }
-        sortingWorker.OnResult -= appleEventHanlder;
-    }
-
-
 
 
 }

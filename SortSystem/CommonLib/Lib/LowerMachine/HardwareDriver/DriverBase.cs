@@ -1,8 +1,9 @@
+using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.Util;
 
 namespace CommonLib.Lib.LowerMachine.HardwareDriver;
 
-public class DriverBase
+public abstract class  DriverBase
 {
     internal ComLinkDriver comlink;
     
@@ -10,5 +11,15 @@ public class DriverBase
     {
         this.comlink = cl;
     }
- 
+
+
+    public virtual  void onData(object sender, byte[] cmd)
+    {
+        throw new NotImplementedException();
+    }
+
+    public virtual void ApplyChange(IHardwareconfig config)
+    {
+        throw new NotImplementedException();
+    }
 }

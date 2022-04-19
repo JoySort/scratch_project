@@ -1,0 +1,101 @@
+{
+  "name": "CameraRunner",
+  "module": "camera",
+  "genre": "palmDate",
+  "lowerMachineSimulationMode": true,
+  "lowerConfig":[
+    {
+      "hardwarePort": "/dev/com1",
+      "baudRate": 115200,
+      "columns": [0,11] ,
+      "isMaster": true
+    },
+    {
+      "hardwarePort": "/dev/com2",
+      "baudRate": 115200,
+      "columns": [12,23],
+      "isMaster": false
+    }
+  ],
+  "networkConfig": {
+    "rpcPort": 5185,
+    "discoveryPorts": [13567],
+    "rpcBindIP": "*",
+    "udpBindIP": "*"
+  },
+  "sortConfig": {
+    "outletPriority": "ASC",
+    "sortingInterval": 10
+  },
+  "consolidatePolicy":
+  {
+    "criteriaCode":           ["width","height","area","color","sf"   ,"bp"       ,"sb"       ,"zl"   ,"dd"   ,"ca"   ,"yc"       ,"wt"   ,"fm"  ],
+    "offSetRowCount":         [4      ,4       ,4     ,4      ,4      ,4          ,4          ,4      ,4      ,4      ,4          ,15      ,4    ],
+    "offSetRowStep":          [1      ,1       ,1     ,1      ,1      ,1          ,1          ,1      ,1      ,1      ,1          ,14       ,1    ],
+    "consolidationOperation": ["avg"  ,"avg"   ,"avg" ,"avg"  ,"avg"  ,"maxNAvg"  ,"maxNAvg"  ,"firstNAvg"  ,"avg"  ,"avg"  ,"maxNAvg"  ,"merge"  ,"avg"],
+    "consolidateArg":         [0      ,0       ,0     ,0      ,0      ,2          ,2          ,2      ,0      ,0      ,2          ,0      ,0    ]
+  },
+  "criteriaMapping":{
+    "existence": {
+      "index": 0,
+      "key": "existence"
+    },
+    "width": {
+      "index": 1,
+      "key": "width"
+    },
+    "height": {
+      "index": 2,
+      "key": "height"
+    },
+    "area": {
+      "index": 3,
+      "key": "area"
+    },
+    "color": {
+      "index": 4,
+      "key": "color"
+    },
+    "sf": {
+      "index": 5,
+      "key": "sf"
+    },
+    "bp": {
+      "index": 6,
+      "key": "bp"
+    },
+    "sb": {
+      "index": 7,
+      "key": "sb"
+    },
+    "zl": {
+      "index": 8,
+      "key": "zl"
+    },
+    "dd": {
+      "index": 9,
+      "key": "dd"
+    },
+    "ca": {
+      "index": 10,
+      "key": "ca"
+    },"yc": {
+      "index": 11,
+      "key": "yc"
+    },
+    "wt": {
+      "index": 12,
+      "key": "wt"
+    },
+    "fm": {
+      "index": 16,
+      "key": "fm"
+    }
+  },
+
+  "description": "模块配置：下位机模块配置",
+  "minimumCoreVersion": "1.1",
+  "title": "下位机模块配置",
+  "version":1,
+  "author": "bill"
+}

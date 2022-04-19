@@ -1,17 +1,12 @@
-using System.Text;
-using CommonLib.Lib.ConfigVO;
-using CommonLib.Lib.Controllers;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort;
 using CommonLib.Lib.Sort.ResultVO;
-using CommonLib.Lib.Util;
-using CommonLib.Lib.vo;
+using CommonLib.Lib.Worker.Upper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using EmptyResult = CommonLib.Lib.Controllers.EmptyResult;
 
-namespace CommonLib.Lib.WebAPIs;
+namespace CommonLib.Lib.WebAPIs.Upper;
 
 /**
  * <summary>sorting server</summary>
@@ -42,7 +37,7 @@ public class SortController: ControllerBase
     
     [Route("/sort/sort_batch")]
     [HttpPost]
-    public void sort(List<RecResult> recResults)
+    public void sort(List<ConsolidatedResult> recResults)
     {
        sortingWorker.processBulk(recResults);
     }

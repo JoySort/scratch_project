@@ -54,12 +54,7 @@ public class LowerMachineDriver
         {
             
             ComLinkDriver comLinkDriver = !ConfigUtil.getModuleConfig().LowerMachineSimulationMode? new ComLinkDriver(lc):new VirtualComLinkDriver(lc);
-            comLinkDriver.onMachineID += ((sender, machineId) =>
-            {
-                ComLinkDriver cl = (ComLinkDriver) sender;
-                if(cl.LowerConfig.IsMaster)
-                    this.machineID = machineId;
-            });
+            comLinkDriver.onMachineID += onMachineIDEventHandler;
             comLinkDriver.init();
             setupHardwares(comLinkDriver);
             comLinks.Add(comLinkDriver);
@@ -67,6 +62,13 @@ public class LowerMachineDriver
     }
 
     public string machineID { get; set; }
+
+    public void onMachineIDEventHandler(object sender, string machineID)
+    {
+        ComLinkDriver cl = (ComLinkDriver) sender;
+        if(cl.LowerConfig.IsMaster)
+            this.machineID = machineID;
+    }
 
     private void setupHardwares(ComLinkDriver comLinkDriver)
     {

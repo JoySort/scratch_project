@@ -10,6 +10,7 @@ using CommonLib.Lib.Sort;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
+using CommonLib.Lib.Worker.Upper;
 using Newtonsoft.Json;
 using NLog;
 using NUnit.Framework;
@@ -50,7 +51,7 @@ public class LBWorkerTest
         string recResultJsonFixture = @"./fixtures/pd_sorttest_data.json";
         string _path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,recResultJsonFixture);
         string jsonString = File.ReadAllText(_path);
-        RecResult[] recResults = JsonConvert.DeserializeObject<RecResult[]>(jsonString);
+        ConsolidatedResult[] consolidatedResults = JsonConvert.DeserializeObject<ConsolidatedResult[]>(jsonString);
 
        
 
@@ -66,7 +67,7 @@ public class LBWorkerTest
             
             ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
             sortingWorker.OnResult += pdEventHanlder;
-            sortingWorker.processBulk(new List<RecResult>(recResults));
+            sortingWorker.processBulk(new List<ConsolidatedResult>(consolidatedResults));
             
 
             void pdEventHanlder(Object sender, SortingResultEventArg args)
