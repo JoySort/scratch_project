@@ -117,6 +117,7 @@ public class SortingWorker
         foreach (var outlet in currentOutlets)
         {   
             var oRResult = false;
+
             foreach (var OrFilterGroup in outlet.Filters)// Or relationship
             {
 
@@ -124,8 +125,12 @@ public class SortingWorker
                 foreach (var andFilter in OrFilterGroup) //And relationship
                 {
                     andResult = andResult && andFilter.doFilter(consolidatedResult);
+                    if (andResult){
+                        var filterBoundaries = andFilter.FilterBoundaries;
+                    }
+                    
                 }
-
+               
                 oRResult = oRResult || andResult;
             }
 

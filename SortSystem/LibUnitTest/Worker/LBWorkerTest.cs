@@ -26,6 +26,8 @@ public class LBWorkerTest
     private Project project;
     
     private SortingWorker sortingWorker = SortingWorker.getInstance();
+
+
     [SetUp]
     public void setup()
     {
@@ -38,7 +40,7 @@ public class LBWorkerTest
     }
 
     [Test]
-    public void LBTest()
+    public void LBTestASC()
     {
         string JsonFilePath = @"./fixtures/project_pd_rec_start.json";
         string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
@@ -53,9 +55,28 @@ public class LBWorkerTest
         string jsonString = File.ReadAllText(_path);
         ConsolidatedResult[] consolidatedResults = JsonConvert.DeserializeObject<ConsolidatedResult[]>(jsonString);
 
+        outletPriorityChange(OutletPriority.ASC,consolidatedResults);
+    }
+    [Test]
+    public void LBTestDESC()
+    {
+        string JsonFilePath = @"./fixtures/project_pd_rec_start.json";
+        string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
+        porjectJsonString = File.ReadAllText(path);
+        ProjectParser parser = new ProjectParser(porjectJsonString,ProjectParser.V2);
+        project = parser.getProject();
+        
        
+        
+        string recResultJsonFixture = @"./fixtures/pd_sorttest_data.json";
+        string _path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,recResultJsonFixture);
+        string jsonString = File.ReadAllText(_path);
+        ConsolidatedResult[] consolidatedResults = JsonConvert.DeserializeObject<ConsolidatedResult[]>(jsonString);
 
-        void outletPriorityChange(OutletPriority priority)
+        outletPriorityChange(OutletPriority.DESC,consolidatedResults);
+    }
+    
+    void outletPriorityChange(OutletPriority priority,ConsolidatedResult[] consolidatedResults)
         {
            
             
@@ -64,41 +85,44 @@ public class LBWorkerTest
 
 
             var currentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
-            
-            ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+            if(ProjectEventDispatcher.getInstance().ProjectState!=ProjectState.start)
+                ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
             sortingWorker.OnResult += pdEventHanlder;
             sortingWorker.processBulk(new List<ConsolidatedResult>(consolidatedResults));
             
 
             void pdEventHanlder(Object sender, SortingResultEventArg args)
             {
+                sortingWorker.OnResult -= pdEventHanlder;
                 try
                 {
                     
                     logger.Info("time consumed (ms):{}",( new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds() - currentTimeStamp));
                    
                     LBWorker.getInstance().OnResult += LBEventHandler;
+                    var serializedSortingResult =
+                        JsonConvert.SerializeObject(args.Results.Select(value =>
+                            value.Outlets.Select(v2 => v2.ChannelNo)));
+                    logger.Info(serializedSortingResult);
                     LBWorker.getInstance().processBulk(args.Results);
 
                     void LBEventHandler(object sender, LBResultEventArg args)
                     {
-
+                        LBWorker.getInstance().OnResult -= LBEventHandler;
                         List<string> lbresults = new List<string>();
-
-                        foreach (var item in args.Results)
+                        var lbres=args.Results.OrderBy(value => value.Coordinate.TriggerId);
+                        foreach (var item in lbres)
                         {
                             lbresults.Add(item.LoadBalancedOutlet.First().ChannelNo);
                         }
 
                         var expected = (priority == OutletPriority.ASC) ? new string[] {"1","2","1","3","3","2","2","3" } : new string[] {"1","3","1","2","5","4","2","3" };
                         var lbresultArray = lbresults.ToArray();
-                        for (var i = 0; i < args.Results.Count; i++)
-                        {
-                           Assert.AreEqual(expected[i], lbresultArray[i]);
-                        }
-                        LBWorker.getInstance().OnResult -= LBEventHandler;
-                      
-                        if(OutletPriority.ASC == priority)outletPriorityChange(OutletPriority.DESC);
+                        Assert.AreEqual(expected.Length,lbresultArray.Length);
+                        Assert.AreEqual(expected, lbresultArray);
+                        logger.Info("Assert finished expect:{} result:{}",JsonConvert.SerializeObject(expected),JsonConvert.SerializeObject(lbresultArray));
+                        blocking=false;
+                        
                     }
 
                    
@@ -109,19 +133,20 @@ public class LBWorkerTest
                 {
                     logger.Info(e.Message);
                 }
-                sortingWorker.OnResult -= pdEventHanlder;
+                
             }
+
+
+            var counter = 0;
+            while (blocking)
+            {
+                if(counter>200)Assert.Fail("Timeout");
+                counter++;
+                Thread.Sleep(100);
+            }
+
             
-            
-        
-            
-            
-            logger.Info("PD Test stop");
+            logger.Info("LB Test stop");
             ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
         }
-
-        outletPriorityChange(OutletPriority.ASC);
-        
-
-    }
 }

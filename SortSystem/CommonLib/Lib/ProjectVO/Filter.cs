@@ -36,7 +36,7 @@ public class Filter
            
             foreach (var boundary in filterBoundaries)
             {
-                if (boundary.First() < feature.Value && boundary.Last() > feature.Value) return true;
+                if (boundary.First() <= feature.Value && boundary.Last() > feature.Value) return true;
             }
         }
 

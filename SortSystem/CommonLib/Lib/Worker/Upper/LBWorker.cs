@@ -92,7 +92,8 @@ public class LBWorker
                 if (found && !loadBalanceCount[outlets[i].ChannelNo].ContainsKey(outlets[i].ChannelNo))
                 {
                     loadBalanceCount[outlets[i].ChannelNo].Add(outlets[i].ChannelNo, 0);
-                    loadBalanceCount[outlets[i].ChannelNo] = priority == OutletPriority.ASC ? loadBalanceCount[outlets[i].ChannelNo].OrderBy(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value):
+                    loadBalanceCount[outlets[i].ChannelNo] = priority == OutletPriority.ASC ? 
+                        loadBalanceCount[outlets[i].ChannelNo].OrderBy(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value): 
                         loadBalanceCount[outlets[i].ChannelNo].OrderByDescending(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
                 }
             }

@@ -1,0 +1,118 @@
+{
+  "id": "PD 001",
+  "time_created": null,
+  "time_last_used": null,
+  "name": "PD Level 1",
+  "category": "apple",
+  "class": null,
+  "hasSampling": true,
+  "criteria": {
+    
+    "width": {
+      "name": "Width",
+      "index":1,
+      "lang": {
+        "name": "width_slider_label",
+        "checked": "width_slider_status"
+      },
+      "checked": true,
+      "type": "slider",
+      "data": {
+        "unit": "mm",
+        "min": 8,
+        "max": 65,
+        "range": [
+          15,34,40
+         
+        ]
+      }
+    },
+    "zl": {
+      "name": "Zebra line",
+      "index":8,
+      "lang": {
+        "name": "zl_slider_label",
+        "checked": "zl_slider_label"
+      },
+      "styles": {
+        "background": "#8C7BE8",
+        "fontColor": "#000000"
+      },
+      "checked": true,
+      "type": "slider",
+      "config": {
+        "step": 0.1
+      },
+      "data": {
+        "range": [5,10,15,20],
+        "unit": "",
+        "min": 0,
+        "max": 30
+      }
+    },
+    "sb": {
+      "name": "Sun burn",
+      "index":7,
+      "lang": {
+        "name": "sb_slider_label",
+        "checked": "sb_slider_label"
+      },
+      "styles": {
+        "background": "#8C7BE8",
+        "fontColor": "#000000"
+      },
+      "checked": true,
+      "type": "slider",
+      "config": {
+        "step": 0.1
+      },
+      "data": {
+        "range": [5,10],
+        "unit": "",
+        "min": 0,
+        "max": 30
+      }
+    }
+  },
+  "channels": [
+    {
+      "channel_no": "1",
+      "type": "auto",
+      "filters":[{"sb": [ 2 ], "width": [0]}]
+    },
+    {
+      "channel_no": "2",
+      "type": "auto",
+      "filters":
+      [{"zl": [ 1 ], "width": [2]},{"zl": [ 0 ], "width": [1]}]
+    },
+    {
+      "channel_no": "3",
+      "type": "auto",
+      "filters":
+      [{"zl": [ 0 ], "width": [0]},{"zl": [ 2 ], "width": [1]}]
+    },
+    {
+      "channel_no": "4",
+      "type": "auto",
+      "filters":[{"sb": [ 2 ], "width": [3],"zl": [ 0 ]}]
+    },
+    {
+      "channel_no": "5",
+      "type": "auto",
+      "filters":[{"sb": [ 1 ], "width": [0],"zl": [ 3 ]}]
+    },
+    {
+      "channel_no": "6",
+      "type": "auto"
+    },
+    {
+      "channel_no": "7",
+      "type": "auto"
+    },
+    {
+      "channel_no": "8",
+      "type": "auto"
+    }
+  ]
+}

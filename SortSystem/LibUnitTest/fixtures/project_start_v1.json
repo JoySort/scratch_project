@@ -96,8 +96,11 @@
       "channel_no": "1",
       "type": "auto",
       "dd": [
-        0
-      ]
+        1
+      ],  
+      "wt": [
+      1
+    ]
     },
     {
       "channel_no": "2",

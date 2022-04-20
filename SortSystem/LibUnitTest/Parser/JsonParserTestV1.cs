@@ -57,7 +57,7 @@ public class JsonParserTestV1 {
          var outletNO = 8;
          Assert.AreEqual(outlets?.Count,outletNO);
 
-         var expectedFilters = new string[][] {new string[]{"dd"},
+         var expectedFilters = new string[][] {new string[]{"dd","wt"},
                                                new string[]{"color"},
                                                new string[]{"dd","wt","sf","color"},
                                                new string[]{"dd","wt","sf","color"},

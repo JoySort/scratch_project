@@ -25,6 +25,9 @@ public class ConsolidateWorkerTest
     private Project project;
     
     private ConsolidateWorker worker = ConsolidateWorker.getInstance();
+    private bool threadBlocking1=true;
+    private bool threadBlocking2=true;
+
     [SetUp]
     public void setup()
     {
@@ -54,7 +57,10 @@ public class ConsolidateWorkerTest
         RecResult[] recResults = JsonConvert.DeserializeObject<RecResult[]>(jsonString);
         worker.OnResult += appleEventHanlder;
         worker.processBulk(new List<RecResult>(recResults));
-        
+        while (threadBlocking1)
+        {
+            Thread.Sleep(100);
+        }
         
         logger.Info("APPLE Test stop");
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
@@ -83,7 +89,10 @@ public class ConsolidateWorkerTest
         worker.processBulk(new List<RecResult>(recResults));
        
 
-        
+        while (threadBlocking2)
+        {
+            Thread.Sleep(100);
+        }
         
         logger.Info("PD Test stop");
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
@@ -97,6 +106,7 @@ public class ConsolidateWorkerTest
         Assert.AreEqual(args.Results.Last().Features.First().Value,20);
         Assert.AreEqual(args.Results.Last().Features.Last().Value,24);
         logger.Info("APPLE assert finished");
+        threadBlocking1 = false;
         worker.OnResult -= appleEventHanlder;
     }
     
@@ -110,6 +120,7 @@ public class ConsolidateWorkerTest
         Assert.AreEqual(args.Results.Last().Features[1].Value,22.5);
         Assert.AreEqual(args.Results.Last().Features.Last().Value,12.5);
         logger.Info("PD assert finished process time {} ms",(DateTime.Now.ToFileTime()-args.Results.Last().ProcessTimestamp)/10000);
+        threadBlocking2 = false;
         worker.OnResult -= pdEventHanlder;
     }
 

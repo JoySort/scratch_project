@@ -28,6 +28,10 @@ public class SortingWorkerTest
     private ConsolidatedResult[] appleConsolidatedResults;
     private ConsolidatedResult[] pdConsolidatedResults;
     private SortingWorker sortingWorker = SortingWorker.getInstance();
+    private bool threadBlocking1=true;
+    private bool threadBlocking2=true;
+    private bool threadBlocking3=true;
+
     [SetUp]
     public void setup()
     {
@@ -46,27 +50,41 @@ public class SortingWorkerTest
         setupDataForApple();
         sortingWorker.OnResult += appleEventHanlder;
         sortingWorker.processBulk(new List<ConsolidatedResult>(appleConsolidatedResults));
-        
+        while (threadBlocking1)
+        {
+            Thread.Sleep(100);
+        }
         logger.Info("APPLE Test stop");
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(appleProject,ProjectState.stop);
     }
     [Test,Order(2)]
-    public void pdConsolidationASCTest()
+    public void pdConsolidationDESCTest()
     {
         setupProjectForPD();
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.start);
+       
         setupDataForPD();
         outletPriorityChange(OutletPriority.DESC,pdConsolidatedResults);
+        
+        while (threadBlocking2)
+        {
+            Thread.Sleep(100);
+        }
+        
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.stop);
     }
     
     [Test,Order(3)]
-    public void pdConsolidationDESCTest()
+    public void pdConsolidationASCTest()
     {
         setupProjectForPD();
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.start);
+        
         setupDataForPD();
         outletPriorityChange(OutletPriority.ASC,pdConsolidatedResults); 
+        
+        while (threadBlocking3)
+        {
+            Thread.Sleep(100);
+        }
         ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.stop);
     }
     
@@ -131,6 +149,8 @@ public class SortingWorkerTest
         {
             logger.Error(e.Message);
         }
+
+        threadBlocking1 = false;
         sortingWorker.OnResult -= appleEventHanlder;
     }
 
@@ -140,14 +160,16 @@ public class SortingWorkerTest
            
             
             ConfigUtil.getModuleConfig().SortConfig.OutletPriority = priority;
+            //必须在改变优先级后再启动，否则无法生效。
+            ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.start);
             var currentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
-            
-           
-            sortingWorker.processBulk(new List<ConsolidatedResult>(consolidatedResult));
-            
             string[] ascExpected  = new string[] {"1", "2", "1", "2", "2","2","2","2"};
             string[] descExpected = new string[] {"1", "3", "1", "3", "5","5","3","3"};
+
             sortingWorker.OnResult += pdEventHanlder;
+            sortingWorker.processBulk(new List<ConsolidatedResult>(consolidatedResult));
+            
+          
             void pdEventHanlder(Object sender, SortingResultEventArg args)
             {
                 try
@@ -175,7 +197,11 @@ public class SortingWorkerTest
                     logger.Info(e.Message);
                 }
                 sortingWorker.OnResult -= pdEventHanlder;
+                if (priority == OutletPriority.DESC) threadBlocking2 = false;
+                if (priority == OutletPriority.ASC) threadBlocking3 = false;
+
             }
+            
             
             logger.Info("PD Test stop");
             
