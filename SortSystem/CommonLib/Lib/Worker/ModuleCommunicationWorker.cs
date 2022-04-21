@@ -1,3 +1,6 @@
+using System.Reflection;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.JoyHTTPClient;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Network;
 using NLog;
@@ -21,23 +24,44 @@ public class ModuleCommunicationWorker
     private void init()
     {
         ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnProjectStatusChange;
-        foreach (var service in NetworkUtil.DiscoveryServices)
+        foreach (var service in NetworkUtil.getInstance().DiscoveryServices)
         {
             service.EndPointDiscoverFound += onDiscoverEndPoint;
         }
     }
+    
+    private async Task registerRPCEndPoint(string ipAddr,int port,string uuid)
+    {
+        var url = buildUri(ipAddr, port, "/config/module");
+        var result = await (new HTTPClientWorker()).GetFromRemote<ModuleConfig>(url);
+        remoteConfig.Add(result.Module,result);
+        var rpcEndpoint = new RpcEndPoint(port, ipAddr, uuid);
+        rpcEndPoints.Add(uuid,rpcEndpoint);
+        OnDiscovery?.Invoke(this,rpcEndpoint);
+    }
 
-    private List<RpcEndPoint> rpcEndPoints = new List<RpcEndPoint>();
+    private  string buildUri(string ipAddr, int port,string endPoint)
+    {
+        return "http://" + ipAddr + ":" + port + "" + endPoint;
+    }
+    
+    private Dictionary<string,RpcEndPoint> rpcEndPoints = new Dictionary<string,RpcEndPoint>();
+    private Dictionary<JoyModule, ModuleConfig> remoteConfig = new Dictionary<JoyModule, ModuleConfig>();
+
+    public Dictionary<string, RpcEndPoint> RpcEndPoints => rpcEndPoints;
+
+    public Dictionary<JoyModule, ModuleConfig> RemoteConfig => remoteConfig;
+
     private void onDiscoverEndPoint(object sender, DiscoverFoundEventArgs arg)
     {
-        
+        registerRPCEndPoint(arg.ipAddr, arg.rpcPort,arg.uuid);
     }
 
     private void OnProjectStatusChange(object? sender, ProjectStatusEventArgs e)
     {
         throw new NotImplementedException();
     }
-    
+    public   event EventHandler<RpcEndPoint> OnDiscovery;
 }
 
 public class RpcEndPoint
@@ -56,9 +80,10 @@ public class RpcEndPoint
 
     public string Address => address;
 
-    public RpcEndPoint(int port, string address)
+    public RpcEndPoint(int port, string address,string uuid)
     {
         this.port = port;
         this.address = address;
+        this.uuid = uuid;
     }
 }

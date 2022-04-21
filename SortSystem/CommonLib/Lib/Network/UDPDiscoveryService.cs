@@ -91,7 +91,7 @@ public class UDPDiscoveryService
                     sendResponds(fromIP, fromPort, peerDiscoverMsg.Count);
 
 
-                    dispatchDiscovery(peerDiscoverMsg.RpcPort, fromIP);
+                    dispatchDiscovery(peerDiscoverMsg.RpcPort, fromIP,peerDiscoverMsg.Uuid);
 
                     logger.Debug("[" + serviceName + "]" + "BROADCAST From : " + fromIP + ":" + from.Port +
                                  " msg count: " +
@@ -99,7 +99,7 @@ public class UDPDiscoveryService
                 }
                 else
                 {
-                    dispatchDiscovery(peerDiscoverMsg.RpcPort, fromIP);
+                    dispatchDiscovery(peerDiscoverMsg.RpcPort, fromIP,peerDiscoverMsg.Uuid);
                     logger.Debug("[" + serviceName + "]" + "ACK From : " + fromIP + ":" + from.Port +
                                  "  content: " +
                                  peerDiscoverMsg.ToString());
@@ -126,12 +126,13 @@ public class UDPDiscoveryService
         });
     }
 
-    private void dispatchDiscovery(int rpcPort, string ip)
+    private void dispatchDiscovery(int rpcPort, string ip,string UUID)
     {
         var discoverEventArgs = new DiscoverFoundEventArgs
         {
             ipAddr = ip,
-            rpcPort = rpcPort
+            rpcPort = rpcPort,
+            uuid = UUID
         };
         OnEndPointDiscoverFound(discoverEventArgs);
     }

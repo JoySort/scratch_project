@@ -15,7 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Lib\JoyHTTPClient" />
       <Folder Include="Lib\Worker\Camera" />
     </ItemGroup>
 

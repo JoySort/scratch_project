@@ -1,30 +1,45 @@
 using System;
+using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.Network;
+using CommonLib.Lib.Worker;
+using NLog;
 using NUnit.Framework;
 
 namespace LibUnitTest.network;
 
 public class HTTPClientTest
 {
-    private HttpClient client = new HttpClient();
-    //[SetUp]
-    public async Task  setup()
+    private Logger? logger;
+    [SetUp]
+    public  void  setup()
     {
-        var url = "http://code-server.lan:5133/Discover";
-        Console.WriteLine("started");
-        //var response = await client.GetAsync(url);
-        //response.EnsureSuccessStatusCode();
-        //string responseBody = await response.Content.ReadAsStringAsync();
-        // Above three lines can be replaced with new helper method below
-        string responseBody = await client.GetStringAsync(url);
+        LogManager.LoadConfiguration("config/logger.config");
+        logger = LogManager.GetCurrentClassLogger();    
 
-        Console.WriteLine(responseBody);
+        
     }
 
-    //[Test]
+    private bool blocking = true;
+    [Test]
     public void test1()
     {
-     
+        NetworkUtil.getInstance().UDPDiscoverSetup();
+        ModuleCommunicationWorker.getInstance().OnDiscovery += ((Object sender,RpcEndPoint args) =>
+        {
+            blocking = false;
+        });
+        
+
+        while (blocking)
+        {
+            
+            Thread.Sleep(500);
+            ModuleConfig value = ModuleCommunicationWorker.getInstance().RemoteConfig.First().Value;
+            Assert.IsNotNull(value);
+        }
     }
 }

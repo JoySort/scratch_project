@@ -10,7 +10,7 @@ logger.Info("init main");
 //处理命令行参数
 CMDArgumentUtil.parse(args);// use cmd option --config_folder=../config to setup a config folder outside the program folder to avoid lose config when upgrade 
 ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
-NetworkUtil.UDPDiscoverSetup();
+NetworkUtil.getInstance().UDPDiscoverSetup();
 
 
 WebInitializer.init();
