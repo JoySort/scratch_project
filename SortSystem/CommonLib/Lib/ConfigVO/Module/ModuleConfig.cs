@@ -11,6 +11,7 @@ public class ModuleConfig
     private string description;
     private GenreName genre;
     private LowerConfig[] lowerConfig;
+    private CameraConfig[] cameraConfigs;
     private string minimumCoreVersion;
     private JoyModule module;
     private string name;
@@ -27,7 +28,7 @@ public class ModuleConfig
         set => lowerMachineSimulationMode = value;
     }
 
-    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, string title, int version)
+    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, string title, int version)
     {
         this.author = author;
         this.consolidatePolicy = consolidatePolicy;
@@ -35,6 +36,7 @@ public class ModuleConfig
         this.description = description;
         this.genre = genre;
         this.lowerConfig = lowerConfig;
+        this.cameraConfigs = cameraConfigs;
         this.minimumCoreVersion = minimumCoreVersion;
         this.module = module;
         this.name = name;
@@ -44,6 +46,8 @@ public class ModuleConfig
         this.title = title;
         this.version = version;
     }
+
+    public CameraConfig[] CameraConfigs => cameraConfigs;
 
     private string title;
     private int version;
@@ -109,5 +113,6 @@ public enum JoyModule
     Camera,
     Lower,
     Recognizer,
+    Upper,
     UI
 }

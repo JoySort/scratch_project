@@ -17,6 +17,28 @@
       "isMaster": false
     }
   ],
+  "cameraConfig":[
+    {
+      "ipAddress": "192.168.66.1",
+      "columns": [0,5] ,
+      "cameraPosition": "middle"
+    },
+    {
+      "ipAddress": "192.168.66.1",
+      "columns": [6,11],
+      "cameraPosition": "middle"
+    },
+    {
+      "ipAddress": "192.168.66.1",
+      "columns": [12,17],
+      "cameraPosition": "middle"
+    },
+    {
+      "ipAddress": "192.168.66.1",
+      "columns": [18,23],
+      "cameraPosition": "middle"
+    }
+  ],
   "networkConfig": {
     "rpcPort": 5113,
     "discoveryPorts": [13567],

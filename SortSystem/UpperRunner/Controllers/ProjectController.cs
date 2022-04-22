@@ -40,10 +40,12 @@ public class ProjectController: ControllerBase
         {
 
             Project project = ProjectParser.ParseHttpRequest(Request,"v1");
+            
             ProjectManager.getInstance().dispatchProjectStatusStartEvent( project,ProjectState.start);
         }
         catch (Exception e)
         {
+            
             errorObj.e = e.Message;
         }
         

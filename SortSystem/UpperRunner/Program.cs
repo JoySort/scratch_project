@@ -1,6 +1,7 @@
 using CommonLib.Lib.Network;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.Worker;
+using CommonLib.Lib.Worker.Upper;
 using Initializer;
 using NLog;
 using NLog.Web;
@@ -14,6 +15,7 @@ ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
 
 //initiate network http client 
 ModuleCommunicationWorker.getInstance();
+UpperToCameraHTTPClientWorker.getInstance();
 
 //Piple line wireup;
 UpperPipelineWireUtil.setup();
