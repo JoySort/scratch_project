@@ -52,7 +52,7 @@ public class VirtualComLinkDriver:ComLinkDriver
                 //dispatchTriggerEvent(new TriggerEventArg(count));
                 OnTriggerCMDFired(intBytes);
                 count++;
-                Thread.Sleep(count < interval ? (int)count:interval);
+                Thread.Sleep(count < 14 ? (int)(1000/count):interval);
             }
         });
 

@@ -18,6 +18,7 @@ public class ModuleConfig
     private NetworkConfig networkConfig;
     private SortConfig sortConfig;
     private bool lowerMachineSimulationMode = false;
+    private bool cameraSimulationMode = false;
     private string uuid = Guid.NewGuid().ToString();
 
     public string Uuid => uuid;
@@ -28,7 +29,13 @@ public class ModuleConfig
         set => lowerMachineSimulationMode = value;
     }
 
-    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, string title, int version)
+    public bool CameraSimulationMode
+    {
+        get => cameraSimulationMode;
+        set => cameraSimulationMode = value;
+    }
+
+    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, bool cameraSimulationMode, string title, int version)
     {
         this.author = author;
         this.consolidatePolicy = consolidatePolicy;
@@ -43,6 +50,7 @@ public class ModuleConfig
         this.networkConfig = networkConfig;
         this.sortConfig = sortConfig;
         this.lowerMachineSimulationMode = lowerMachineSimulationMode;
+        this.cameraSimulationMode = cameraSimulationMode;
         this.title = title;
         this.version = version;
     }

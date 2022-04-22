@@ -17,7 +17,7 @@ public class JoyHTTPClient
     private readonly HttpClient httpClient = new HttpClient();
     public  async Task<T?> GetFromRemote<T>(string uri)
     {
-        logger.Info("getFromRemoteAssync {}",uri );
+        logger.Debug("getFromRemoteAssync {}",uri );
         T? result = default;
         try
         {
@@ -43,7 +43,7 @@ public class JoyHTTPClient
 
     public async Task<T?> PostToRemote<T>(string uri,T msg)
     {
-        logger.Info("PostAsJsonAsync at {}",uri);
+        logger.Debug("PostAsJsonAsync at {}",uri);
         T? result = default;
         try
         {

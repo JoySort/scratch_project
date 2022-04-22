@@ -3,7 +3,7 @@
   "profiles": {
     "CameraRunner": {
       "commandName": "Project",
-      "commandLineArgs": "--config_folder=..\\..\\..\\..\\..\\..\\cameraConfig\\config",
+      "commandLineArgs": "--config_folder=../../../../../../cameraConfig/config",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {

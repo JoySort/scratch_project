@@ -2,18 +2,27 @@ namespace CommonLib.Lib.ConfigVO;
 
 public class CameraConfig
 {
-    private string ipAddress;
+    private string address;
     private int[] columns;
     private CameraPosition cameraPosition;
+    private bool saveRawImage;
+    private string savePath;
 
-    public CameraConfig(string ipAddress, int[] columns, CameraPosition cameraPosition)
+
+    public CameraConfig(string address, int[] columns, CameraPosition cameraPosition, bool saveRawImage, string savePath)
     {
-        this.ipAddress = ipAddress;
+        this.address = address;
         this.columns = columns;
         this.cameraPosition = cameraPosition;
+        this.saveRawImage = saveRawImage;
+        this.savePath = savePath;
     }
 
-    public string IpAddress => ipAddress;
+    public string SavePath => savePath;
+
+    public string Address => address;
+
+    public bool SaveRawImage => saveRawImage;
 
     public int[] Columns => columns;
 

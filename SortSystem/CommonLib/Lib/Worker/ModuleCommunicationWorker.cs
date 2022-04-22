@@ -61,7 +61,7 @@ public class ModuleCommunicationWorker
             rpcEndPoints[result.Module].TryAdd(rpcEndpoint.Key(),rpcEndpoint);
         }
 
-
+        logger.Info($"Registering remote endpoint {rpcEndpoint.ModuleConfig.Name} with address info {rpcEndpoint.Address}:{rpcEndpoint.Port} on Module {Enum.GetName(rpcEndpoint.ModuleConfig.Module)}");
 
 
 

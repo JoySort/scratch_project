@@ -18,9 +18,6 @@
       <None Update="Properties\launchSettings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Include="config\module.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Remove="config\Production_config_refer_toLibUnitTest.config_folder" />
     </ItemGroup>
 

@@ -1,6 +1,8 @@
 using CommonLib.Lib.Network;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.Worker;
+using CommonLib.Lib.Worker.Camera;
+using CommonLib.Lib.Worker.Recognizer;
 using Initializer;
 using NLog;
 using NLog.Web;
@@ -14,7 +16,8 @@ ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
 
 //initiate network http client 
 ModuleCommunicationWorker.getInstance();
-
+CameraWorker.getInstance();
+RecognizerWorker.getInstance();
 
 WebInitializer.init();
 //Do not put code below, won't run.

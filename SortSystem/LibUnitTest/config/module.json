@@ -3,6 +3,7 @@
   "module": "Upper",
   "genre": "palmDate",
   "lowerMachineSimulationMode": true,
+  "cameraSimulationMode": true,
   "lowerConfig":[
     {
       "hardwarePort": "/dev/com1",
@@ -19,26 +20,34 @@
   ],
   "cameraConfigs":[
     {
-      "ipAddress": "192.168.66.1",
+      "address": "192.168.66.1",
       "_comment_columns": "相机覆盖的列范围，数组只能有2个元素，起和截止，注意，范围包含起也包含止的值，所以，【0，5】的意思是0，1，2，3，4，5 一共六列",
       "columns": [0,5] ,
       "_comment_cameraPosition": "可以使用的值: left,middle,right",
-      "cameraPosition": "middle"
+      "cameraPosition": "middle",
+      "saveRawImage": true,
+      "savePath": "../cam1"
     },
     {
-      "ipAddress": "192.168.66.1",
+      "address": "192.168.66.2",
       "columns": [6,11],
-      "cameraPosition": "middle"
+      "cameraPosition": "middle",
+      "saveRawImage": true,
+      "savePath": "../cam2"
     },
     {
-      "ipAddress": "192.168.66.1",
+      "address": "192.168.66.3",
       "columns": [12,17],
-      "cameraPosition": "middle"
+      "cameraPosition": "middle",
+      "saveRawImage": true,
+      "savePath": "../cam3"
     },
     {
-      "ipAddress": "192.168.66.1",
+      "address": "192.168.66.4",
       "columns": [18,23],
-      "cameraPosition": "middle"
+      "cameraPosition": "middle",
+      "saveRawImage": true,
+      "savePath": "../cam3"
     }
   ],
   "networkConfig": {

@@ -28,4 +28,8 @@
       <_ContentIncludedByDefault Remove="config\state.json" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="assets" />
+    </ItemGroup>
+
 </Project>
