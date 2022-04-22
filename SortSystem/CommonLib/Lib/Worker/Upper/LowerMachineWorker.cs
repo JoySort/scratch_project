@@ -74,7 +74,7 @@ public class LowerMachineWorker
 
         if (statusEventArgs.State == ProjectState.stop || statusEventArgs.State == ProjectState.reverse || statusEventArgs.State == ProjectState.washing)
         {
-            logger.Info("Lower Machine start to switch to none start state");
+            logger.Info("Lower Machine start to switch to none-start state");
             lowerMachineDriver.applyStateChange( statusEventArgs.State);
             isProjectRunning = false;
             toBeProcessedResults = new List<EmitResult>();

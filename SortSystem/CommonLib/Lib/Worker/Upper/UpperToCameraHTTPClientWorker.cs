@@ -48,7 +48,7 @@ public class UpperToCameraHTTPClientWorker
                 switch (e.State)
                 {
                     case ProjectState.start:
-                        joyHttpClient.PostToRemote<WebControllerResult>(remoteCallProtocal+item.Address+":"+item.Port+startProjectEndpointURI,e.currentProject);
+                        joyHttpClient.PostToRemote<Object>(remoteCallProtocal+item.Address+":"+item.Port+startProjectEndpointURI,e.currentProject);
                         break;
                     case ProjectState.stop :
                         joyHttpClient.GetFromRemote<WebControllerResult>(remoteCallProtocal + item.Address + ":" + item.Port +

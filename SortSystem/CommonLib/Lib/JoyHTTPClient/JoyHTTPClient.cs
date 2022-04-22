@@ -41,26 +41,22 @@ public class JoyHTTPClient
         return result;
     }
 
-    public async Task<T?> PostToRemote<T>(string uri,Object msg)
+    public async Task<T?> PostToRemote<T>(string uri,T msg)
     {
         logger.Info("PostAsJsonAsync at {}",uri);
         T? result = default;
         try
         {
-            var postRequest = new HttpRequestMessage(HttpMethod.Post, uri)
-            {
-                Content = JsonContent.Create(msg)
-            };
-
+            
             var postResponse = await httpClient.PostAsJsonAsync<T>(uri, (T)msg);
 
             postResponse.EnsureSuccessStatusCode();
 
-            
+
         }
         catch (HttpRequestException exception) // Non success
         {
-            logger.Error("{} An error occurred.{}",uri,exception.Message);
+            logger.Error("{} An error occurred.{}", uri, exception.Message);
         }
         catch (NotSupportedException) // When content type is not valid
         {
@@ -68,7 +64,11 @@ public class JoyHTTPClient
         }
         catch (JsonException e) // Invalid JSON
         {
-            logger.Error("Invalid JSON. {}",e.Message);
+            logger.Error("Invalid JSON. {}", e.Message);
+        }
+        catch (Exception e)
+        {
+            logger.Error("uncaught error {}",e.Message);
         }
 
         return result;
