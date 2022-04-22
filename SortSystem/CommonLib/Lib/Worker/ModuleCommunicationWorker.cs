@@ -43,8 +43,9 @@ public class ModuleCommunicationWorker
     {
         var url = buildUri(ipAddr, port, "/config/module");
         var result = await (new JoyHTTPClient.JoyHTTPClient()).GetFromRemote<ModuleConfig>(url);
+        if (result == null) return;
+        
         var rpcEndpoint = new RpcEndPoint(port, ipAddr, uuid);
-
         rpcEndpoint.ModuleConfig = result;
         if(!rpcEndPoints.ContainsKey(result.Module))rpcEndPoints.Add(result.Module,new List<RpcEndPoint>());
         rpcEndPoints[result.Module].Add(rpcEndpoint);

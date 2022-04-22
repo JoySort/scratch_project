@@ -117,6 +117,7 @@ public class ProjectController: ControllerBase
         var errorObj = new JoyError();
         try
         {
+            Thread.Sleep(1000);
             ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
         }
         catch (Exception e)

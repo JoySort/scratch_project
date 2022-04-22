@@ -28,7 +28,7 @@ public class Coordinate
         return result;
     }
 
-    private int Section => section;
+    public int Section => section;
 
     public int Column => column;
 

@@ -22,11 +22,11 @@ public class JoyHTTPClient
         {
            result =  await httpClient.GetFromJsonAsync<T>(uri);
            
-           logger.Info(result);
+           logger.Info("getFromRemoteAssync {}",uri );
         }
-        catch (HttpRequestException) // Non success
+        catch (HttpRequestException exception) // Non success
         {
-            logger.Error("An error occurred.");
+            logger.Error("An error occurred while making http get request from {},{}.",uri,exception.ToString());
         }
         catch (NotSupportedException) // When content type is not valid
         {
@@ -50,15 +50,15 @@ public class JoyHTTPClient
                 Content = JsonContent.Create(msg)
             };
 
-            var postResponse = await httpClient.PostAsJsonAsync(uri, postRequest);
+            var postResponse = await httpClient.PostAsJsonAsync<T>(uri, (T)msg);
 
             postResponse.EnsureSuccessStatusCode();
 
-            logger.Info(result);
+            logger.Info("PostAsJsonAsync at {}",uri);
         }
-        catch (HttpRequestException) // Non success
+        catch (HttpRequestException exception) // Non success
         {
-            logger.Error("An error occurred.");
+            logger.Error("{} An error occurred.{}",uri,exception.Message);
         }
         catch (NotSupportedException) // When content type is not valid
         {

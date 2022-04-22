@@ -56,7 +56,9 @@ function send_consolidate_bulk(remote_uuid){
             send_consolidate_bulk(remote_uuid);
         }else{
             console.log("End sending")
-            finish_callback(remote_uuid)
+            setTimeout(()=>{
+                finish_callback(remote_uuid);
+            },5000)
             
         }
     })
