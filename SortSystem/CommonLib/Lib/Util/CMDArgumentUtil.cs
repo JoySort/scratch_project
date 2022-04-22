@@ -6,7 +6,8 @@ namespace CommonLib.Lib.Util;
 public class CMDArgumentUtil
 {
     public static Logger logger = LogManager.GetCurrentClassLogger();
-    public static string  configRoot   = "../../../config";
+    private const string devConfigRoot = "../../../../LibUnitTest/config";
+    public static string  configRoot   =devConfigRoot;
     public static void parse(string[] args)
     {
         
@@ -23,6 +24,12 @@ public class CMDArgumentUtil
         try
         {
             p.Parse (args);
+            var devEnvString = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var isDevEnv = "Development"==devEnvString;
+            if (configRoot == devConfigRoot && !isDevEnv)
+            {
+                throw new Exception("命令行参数config_folder在生产环境下必须提供！如果这不是生产环境，检查你的环境变量设置 ASPNETCORE_ENVIRONMENT=Production是否设置");
+            }
         }
         catch (OptionException e)
         {
