@@ -22,4 +22,10 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="config\emitters.json" />
+      <_ContentIncludedByDefault Remove="config\module.json" />
+      <_ContentIncludedByDefault Remove="config\state.json" />
+    </ItemGroup>
+
 </Project>
