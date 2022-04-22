@@ -23,7 +23,7 @@ public class ConfigLoaderTest
 
         ModuleConfig cfg = ConfigUtil.getModuleConfig();
 
-        Assert.AreEqual(cfg.Module, JoyModule.Lower);
+        Assert.AreEqual(cfg.Module, JoyModule.Upper);
         Assert.AreEqual(cfg.LowerConfig.Length, 2);
         Assert.AreEqual(cfg.LowerConfig.First().HardwarePort, "/dev/com1");
         Assert.True(cfg.LowerConfig.First().Columns.SequenceEqual(new[]{0, 11 }));

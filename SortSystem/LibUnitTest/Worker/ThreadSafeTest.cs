@@ -56,7 +56,7 @@ public class ThreadSafeTest
         var count = 14 * 1;
         var columnCount = 24;
 
-        var testRound = 100;
+        var testRound = 10;
         for (int loopCycle = 0; loopCycle < testRound; loopCycle++)
         {
             Task.Run(() => issueRequest(count, columnCount));
@@ -135,6 +135,7 @@ public class ThreadSafeTest
     {
         if(ProjectManager.getInstance().ProjectState != ProjectState.stop)
         ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+        UpperPipelineWireUtil.tearDown();
     }
 
 

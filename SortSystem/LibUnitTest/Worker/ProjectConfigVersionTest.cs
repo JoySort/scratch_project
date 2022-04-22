@@ -104,8 +104,10 @@ public class ProjectConfigVersionTest
     [TearDown]
     public void TearDown()
     {
-        
+        if(ProjectManager.getInstance().ProjectState!=ProjectState.stop)
         ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+        
+        UpperPipelineWireUtil.tearDown();
     }
 
 
