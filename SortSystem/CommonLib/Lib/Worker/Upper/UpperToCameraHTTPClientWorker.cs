@@ -1,4 +1,6 @@
+using System.Collections.Concurrent;
 using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.Controllers;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
@@ -31,7 +33,7 @@ public class UpperToCameraHTTPClientWorker
     {
         var remoteEndPoints = ModuleCommunicationWorker.getInstance().RpcEndPoints;
         
-        foreach ((JoyModule module,List<RpcEndPoint> rdps )in remoteEndPoints)
+        foreach ((JoyModule module,ConcurrentDictionary<string,RpcEndPoint> rdps )in remoteEndPoints)
         {
             if (module == ConfigUtil.getModuleConfig().Module)
             {
@@ -39,18 +41,18 @@ public class UpperToCameraHTTPClientWorker
                 continue;
             }
 
-            foreach (var item in rdps)
+            foreach ((var Key,var item) in rdps)
             {
                 var joyHttpClient = new JoyHTTPClient.JoyHTTPClient();
                 
                 switch (e.State)
                 {
                     case ProjectState.start:
-                        joyHttpClient.PostToRemote<Object>(remoteCallProtocal+item.Address+":"+item.Port+startProjectEndpointURI,e.currentProject);
+                        joyHttpClient.PostToRemote<WebControllerResult>(remoteCallProtocal+item.Address+":"+item.Port+startProjectEndpointURI,e.currentProject);
                         break;
                     case ProjectState.stop :
-                        joyHttpClient.GetFromRemote<Object>(remoteCallProtocal + item.Address + ":" + item.Port +
-                                                            stopProjectEndpointURI);
+                        joyHttpClient.GetFromRemote<WebControllerResult>(remoteCallProtocal + item.Address + ":" + item.Port +
+                                                                         stopProjectEndpointURI);
                         break;
                 }
                 

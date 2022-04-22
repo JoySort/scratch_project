@@ -17,7 +17,7 @@ public class DiscoverController : ControllerBase
     public DiscoverController(ILogger<DiscoverController> logger)
     {
         _logger = logger;
-        _logger.LogInformation(1, "NLog injected into Discover");
+       // _logger.LogInformation(1, "NLog injected into Discover");
     }
     
     [HttpGet]

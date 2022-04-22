@@ -27,7 +27,7 @@ udp_service.start(on_discover_server,13567);
 var services={};
 
 function on_discover_server(address,rpc_port,uuid){
-    
+    console.log("running on_discover_server callback",address,rpc_port,uuid);
     services[uuid]={host:address,port:rpc_port};
     //console.log(services)
     if(start_with_stop_flag){
@@ -42,7 +42,7 @@ function on_discover_server(address,rpc_port,uuid){
             services[uuid].host,
             services[uuid].port,
             ()=>{
-                console.log("[index] start only")
+                console.log("[index] start only",services[uuid].host,services[uuid].port)
             },
             uuid);
         return;

@@ -90,7 +90,7 @@ public class UDPDiscoveryService
                 {
                     sendResponds(fromIP, fromPort, peerDiscoverMsg.Count);
 
-
+                    
                     dispatchDiscovery(peerDiscoverMsg.RpcPort, fromIP,peerDiscoverMsg.Uuid);
 
                     logger.Debug("[" + serviceName + "]" + "BROADCAST From : " + fromIP + ":" + from.Port +
@@ -128,6 +128,9 @@ public class UDPDiscoveryService
 
     private void dispatchDiscovery(int rpcPort, string ip,string UUID)
     {
+
+        //simulator use rpcPort =-1 to avoid being found.
+        if (rpcPort == -1) return;
         var discoverEventArgs = new DiscoverFoundEventArgs
         {
             ipAddr = ip,

@@ -30,7 +30,7 @@ server.on('message', (msg, rinfo) => {
   server_info=JSON.parse(msg);
   if(uuid==server_info.Uuid)foundLocal=true;
   if(!foundLocal){
-    //console.log("try to start invoke project start with uuid"+server_info.Uuid)
+    console.log("try to start invoke project start with uuid"+server_info.Uuid)
     found_server_callback(rinfo.address,server_info.RpcPort,server_info.Uuid)
   }
 });
@@ -44,7 +44,7 @@ server.on('listening', () => {
 counter=0
 function broadcastNew() {
   counter++;
-  var message = Buffer.from(JSON.stringify({"ListenPort":udpPort,"Uuid":uuid,"Count":counter,"Type":"BRD","RpcPort":5114}));
+  var message = Buffer.from(JSON.stringify({"ListenPort":udpPort,"Uuid":uuid,"Count":counter,"Type":"BRD","RpcPort":-1}));
   server.send(message, 0, message.length, udpPort, "255.255.255.255", function() {
      // console.log("Sent '" + message + "'");
   });
@@ -52,7 +52,7 @@ function broadcastNew() {
 
 function sendAck(address,port) {
   counter++;
-  var message = Buffer.from(JSON.stringify({"ListenPort":udpPort,"Uuid":uuid,"Count":counter,"Type":"ACK","RpcPort":5114}));
+  var message = Buffer.from(JSON.stringify({"ListenPort":udpPort,"Uuid":uuid,"Count":counter,"Type":"ACK","RpcPort":-1}));
   server.send(message, 0, message.length, udpPort, "255.255.255.255", function() {
       console.log("Sent '" + message + "'");
   });

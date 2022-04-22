@@ -1,4 +1,5 @@
 
+using System.Collections.Concurrent;
 using CommonLib.Lib.ConfigVO;
 
 using CommonLib.Lib.Network;
@@ -29,7 +30,7 @@ public class ModuleCommunicationWorker
         
         var rpc_port = ConfigUtil.getModuleConfig().NetworkConfig.RpcPort;
         var proxyRpcPort = ConfigUtil.getModuleConfig().NetworkConfig.RpcProxyPort;
-        
+        if (proxyRpcPort == 0) proxyRpcPort = rpc_port;
         var udp_ports =  ConfigUtil.getModuleConfig().NetworkConfig.DiscoveryPorts;
         var moduleName = ConfigUtil.getModuleConfig().Name;
         
@@ -49,8 +50,21 @@ public class ModuleCommunicationWorker
         
         var rpcEndpoint = new RpcEndPoint(port, ipAddr, uuid);
         rpcEndpoint.ModuleConfig = result;
-        if(!rpcEndPoints.ContainsKey(result.Module))rpcEndPoints.Add(result.Module,new List<RpcEndPoint>());
-        rpcEndPoints[result.Module].Add(rpcEndpoint);
+        if(!rpcEndPoints.ContainsKey(result.Module))rpcEndPoints.TryAdd(result.Module,new ConcurrentDictionary<string,RpcEndPoint>());
+
+        if (rpcEndPoints[result.Module].ContainsKey(rpcEndpoint.Key()))
+        {
+            rpcEndPoints[result.Module][rpcEndpoint.Key()] = rpcEndpoint;
+        }
+        else
+        {
+            rpcEndPoints[result.Module].TryAdd(rpcEndpoint.Key(),rpcEndpoint);
+        }
+
+
+
+
+
         OnDiscovery?.Invoke(this,rpcEndpoint);
     }
 
@@ -59,9 +73,9 @@ public class ModuleCommunicationWorker
         return "http://" + ipAddr + ":" + port + "" + endPoint;
     }
     
-    private Dictionary<JoyModule,List<RpcEndPoint>> rpcEndPoints = new Dictionary<JoyModule,List<RpcEndPoint>>();
+    private ConcurrentDictionary<JoyModule,ConcurrentDictionary<string,RpcEndPoint>> rpcEndPoints = new ConcurrentDictionary<JoyModule,ConcurrentDictionary<string,RpcEndPoint>>();
   
-    public Dictionary<JoyModule, List<RpcEndPoint>> RpcEndPoints => rpcEndPoints;
+    public ConcurrentDictionary<JoyModule, ConcurrentDictionary<string,RpcEndPoint>> RpcEndPoints => rpcEndPoints;
 
   
     private void onDiscoverEndPoint(object sender, DiscoverFoundEventArgs arg)
@@ -101,5 +115,10 @@ public class RpcEndPoint
         this.port = port;
         this.address = address;
         this.uuid = uuid;
+    }
+
+    public string Key()
+    {
+        return this.Address +":"+ this.Port;
     }
 }

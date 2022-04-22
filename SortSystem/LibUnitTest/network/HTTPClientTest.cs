@@ -40,7 +40,7 @@ public class HTTPClientTest
             Thread.Sleep(500);
             
         }
-        ModuleConfig value = ModuleCommunicationWorker.getInstance().RpcEndPoints.First().Value.First().ModuleConfig;
+        ModuleConfig value = ModuleCommunicationWorker.getInstance().RpcEndPoints.First().Value.First().Value.ModuleConfig;
         Assert.IsNotNull(value);
         Assert.False(blocking);
     }

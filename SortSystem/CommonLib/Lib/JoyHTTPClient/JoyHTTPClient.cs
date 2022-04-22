@@ -17,12 +17,13 @@ public class JoyHTTPClient
     private readonly HttpClient httpClient = new HttpClient();
     public  async Task<T?> GetFromRemote<T>(string uri)
     {
+        logger.Info("getFromRemoteAssync {}",uri );
         T? result = default;
         try
         {
            result =  await httpClient.GetFromJsonAsync<T>(uri);
            
-           logger.Info("getFromRemoteAssync {}",uri );
+          
         }
         catch (HttpRequestException exception) // Non success
         {
@@ -32,9 +33,9 @@ public class JoyHTTPClient
         {
             logger.Error("The content type is not supported.");
         }
-        catch (JsonException) // Invalid JSON
+        catch (JsonException exception) // Invalid JSON
         {
-            logger.Error("Invalid JSON.");
+            logger.Error("Invalid JSON.{}",exception.Message);
         }
 
         return result;
@@ -42,6 +43,7 @@ public class JoyHTTPClient
 
     public async Task<T?> PostToRemote<T>(string uri,Object msg)
     {
+        logger.Info("PostAsJsonAsync at {}",uri);
         T? result = default;
         try
         {
@@ -54,7 +56,7 @@ public class JoyHTTPClient
 
             postResponse.EnsureSuccessStatusCode();
 
-            logger.Info("PostAsJsonAsync at {}",uri);
+            
         }
         catch (HttpRequestException exception) // Non success
         {
@@ -64,9 +66,9 @@ public class JoyHTTPClient
         {
             logger.Error("The content type is not supported.");
         }
-        catch (JsonException) // Invalid JSON
+        catch (JsonException e) // Invalid JSON
         {
-            logger.Error("Invalid JSON.");
+            logger.Error("Invalid JSON. {}",e.Message);
         }
 
         return result;
