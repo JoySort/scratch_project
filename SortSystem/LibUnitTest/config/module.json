@@ -17,7 +17,7 @@
       "isMaster": false
     }
   ],
-  "cameraConfig":[
+  "cameraConfigs":[
     {
       "ipAddress": "192.168.66.1",
       "columns": [0,5] ,
