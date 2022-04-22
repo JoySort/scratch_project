@@ -6,9 +6,16 @@ const project_stop_service = require("./lib/stop_project");
 const send_data_service = require("./lib/send_data");
 
 var start_with_stop_flag=false;
+var start_only_flag = false;
+console.log(process.argv)
 if(process.argv[2]!=null){
     if(process.argv[2]=="stop"){
         start_with_stop_flag=true
+    }
+    if(process.argv[2]=="start_only"){
+        start_only_flag=true
+        
+        console.log("start only flat true "+process.argv[2])
     }
 }
 
@@ -28,6 +35,16 @@ function on_discover_server(address,rpc_port,uuid){
             services[uuid].host,
             services[uuid].port,
             on_project_stop,uuid)
+        return;
+    }
+    if(start_only_flag){
+        project_start_service.start(
+            services[uuid].host,
+            services[uuid].port,
+            ()=>{
+                console.log("[index] start only")
+            },
+            uuid);
         return;
     }
     project_start_service.start(
