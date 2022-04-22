@@ -20,13 +20,7 @@ public class NetworkConfig
 
     public int RpcProxyPort => rpcProxyPort;
 
-    public NetworkConfig(int rpcPort, int[] discoveryPorts, string rpcBindIp, string udpBindIp)
-    {
-        this.rpcPort = rpcPort;
-        this.discoveryPorts = discoveryPorts;
-        rpcBindIP = rpcBindIp;
-        udpBindIP = udpBindIp;
-    }
+
 
     public int RpcPort => rpcPort;
 
