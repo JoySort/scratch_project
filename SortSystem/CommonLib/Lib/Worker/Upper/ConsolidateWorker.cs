@@ -35,7 +35,7 @@ public class ConsolidateWorker
     private ConsolidateWorker()
     {
 
-        ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnProjectStatusChange;
+        ProjectManager.getInstance().ProjectStatusChanged += OnProjectStatusChange;
     }
 
     public void OnProjectStatusChange(object sender, ProjectStatusEventArgs statusEventArgs)

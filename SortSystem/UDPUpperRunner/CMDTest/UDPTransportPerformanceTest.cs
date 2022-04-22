@@ -55,7 +55,7 @@ public class UDPTransportPerformanceTest
         }
 
         logger.Info("APPLE Test begin");
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
     }
 
   

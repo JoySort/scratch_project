@@ -26,7 +26,7 @@ public class LowerMachineController : ControllerBase
     {
         if (state == ProjectState.reverse || state == ProjectState.washing)
         {
-            ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(state);
+            ProjectManager.getInstance().dispatchProjectStatusChangeEvent(state);
            
         }
         else

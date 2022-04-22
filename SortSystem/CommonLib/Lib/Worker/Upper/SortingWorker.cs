@@ -25,7 +25,7 @@ public class SortingWorker
     private int[] outletLBCount ;
     private SortingWorker()
     {
-        ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnProjectStatusChange;
+        ProjectManager.getInstance().ProjectStatusChanged += OnProjectStatusChange;
     }
 
     public void OnProjectStatusChange(object sender,ProjectStatusEventArgs statusEventArgs)

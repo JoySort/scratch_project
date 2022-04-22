@@ -46,7 +46,7 @@ public class SortingWorkerTest
     public void appleConsolidationTest()
     {
         setupProjectForApple();
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(appleProject,ProjectState.start);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(appleProject,ProjectState.start);
         setupDataForApple();
         sortingWorker.OnResult += appleEventHanlder;
         sortingWorker.processBulk(new List<ConsolidatedResult>(appleConsolidatedResults));
@@ -55,7 +55,7 @@ public class SortingWorkerTest
             Thread.Sleep(100);
         }
         logger.Info("APPLE Test stop");
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(appleProject,ProjectState.stop);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(appleProject,ProjectState.stop);
     }
     [Test,Order(2)]
     public void pdConsolidationDESCTest()
@@ -70,7 +70,7 @@ public class SortingWorkerTest
             Thread.Sleep(100);
         }
         
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.stop);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.stop);
     }
     
     [Test,Order(3)]
@@ -85,7 +85,7 @@ public class SortingWorkerTest
         {
             Thread.Sleep(100);
         }
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.stop);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.stop);
     }
     
     
@@ -133,8 +133,8 @@ public class SortingWorkerTest
     [TearDown]
     public void TearDown()
     {
-        if(ProjectEventDispatcher.getInstance().ProjectState!=ProjectState.stop)
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+        if(ProjectManager.getInstance().ProjectState!=ProjectState.stop)
+        ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
     }
     public void appleEventHanlder(Object sender, SortingResultEventArg args)
     {
@@ -161,7 +161,7 @@ public class SortingWorkerTest
             
             ConfigUtil.getModuleConfig().SortConfig.OutletPriority = priority;
             //必须在改变优先级后再启动，否则无法生效。
-            ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.start);
+            ProjectManager.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.start);
             var currentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
             string[] ascExpected  = new string[] {"1", "2", "1", "2", "2","2","2","2"};
             string[] descExpected = new string[] {"1", "3", "1", "3", "5","5","3","3"};

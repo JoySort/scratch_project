@@ -5,18 +5,11 @@ using NLog;
 
 namespace CommonLib.Lib.JoyHTTPClient;
 
-public class HTTPClientWorker
+public class JoyHTTPClient
 {
     private static Logger  logger = LogManager.GetCurrentClassLogger();
-
-    private static HTTPClientWorker instance = new HTTPClientWorker();
-
-    public static HTTPClientWorker getInstance()
-    {
-        return instance;
-    }
-
-    public HTTPClientWorker()
+    
+    public JoyHTTPClient()
     {
         
     }

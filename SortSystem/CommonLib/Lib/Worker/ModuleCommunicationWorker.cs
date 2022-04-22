@@ -1,8 +1,8 @@
-using System.Reflection;
+
 using CommonLib.Lib.ConfigVO;
-using CommonLib.Lib.JoyHTTPClient;
-using CommonLib.Lib.LowerMachine;
+
 using CommonLib.Lib.Network;
+using CommonLib.Lib.Util;
 using NLog;
 
 namespace CommonLib.Lib.Worker;
@@ -11,6 +11,9 @@ public class ModuleCommunicationWorker
 {
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private static ModuleCommunicationWorker me = new ModuleCommunicationWorker();
+    private  List<UDPDiscoveryService> _discoveryServices = new List<UDPDiscoveryService>();
+    private  Dictionary<string, string> rpcEndPoint = new Dictionary<string, string>();
+    
     public static ModuleCommunicationWorker getInstance()
     {
         return me;
@@ -21,22 +24,30 @@ public class ModuleCommunicationWorker
 
     }
 
-    private void init()
-    {
-        ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnProjectStatusChange;
-        foreach (var service in NetworkUtil.getInstance().DiscoveryServices)
+
+    private void init() {
+        
+        var rpc_port = ConfigUtil.getModuleConfig().NetworkConfig.RpcPort;
+        var udp_ports =  ConfigUtil.getModuleConfig().NetworkConfig.DiscoveryPorts;
+        var moduleName = ConfigUtil.getModuleConfig().Name;
+        
+        foreach (var port in udp_ports)
         {
-            service.EndPointDiscoverFound += onDiscoverEndPoint;
+            var uppDiscoverService = new UDPDiscoveryService(rpc_port,port,moduleName);
+            uppDiscoverService.EndPointDiscoverFound += onDiscoverEndPoint;
+            _discoveryServices.Add(uppDiscoverService);
+            uppDiscoverService.StartListen();
         }
     }
-    
     private async Task registerRPCEndPoint(string ipAddr,int port,string uuid)
     {
         var url = buildUri(ipAddr, port, "/config/module");
-        var result = await (new HTTPClientWorker()).GetFromRemote<ModuleConfig>(url);
-        remoteConfig.Add(result.Module,result);
+        var result = await (new JoyHTTPClient.JoyHTTPClient()).GetFromRemote<ModuleConfig>(url);
         var rpcEndpoint = new RpcEndPoint(port, ipAddr, uuid);
-        rpcEndPoints.Add(uuid,rpcEndpoint);
+
+        rpcEndpoint.ModuleConfig = result;
+        if(!rpcEndPoints.ContainsKey(result.Module))rpcEndPoints.Add(result.Module,new List<RpcEndPoint>());
+        rpcEndPoints[result.Module].Add(rpcEndpoint);
         OnDiscovery?.Invoke(this,rpcEndpoint);
     }
 
@@ -45,22 +56,17 @@ public class ModuleCommunicationWorker
         return "http://" + ipAddr + ":" + port + "" + endPoint;
     }
     
-    private Dictionary<string,RpcEndPoint> rpcEndPoints = new Dictionary<string,RpcEndPoint>();
-    private Dictionary<JoyModule, ModuleConfig> remoteConfig = new Dictionary<JoyModule, ModuleConfig>();
+    private Dictionary<JoyModule,List<RpcEndPoint>> rpcEndPoints = new Dictionary<JoyModule,List<RpcEndPoint>>();
+  
+    public Dictionary<JoyModule, List<RpcEndPoint>> RpcEndPoints => rpcEndPoints;
 
-    public Dictionary<string, RpcEndPoint> RpcEndPoints => rpcEndPoints;
-
-    public Dictionary<JoyModule, ModuleConfig> RemoteConfig => remoteConfig;
-
+  
     private void onDiscoverEndPoint(object sender, DiscoverFoundEventArgs arg)
     {
         registerRPCEndPoint(arg.ipAddr, arg.rpcPort,arg.uuid);
     }
 
-    private void OnProjectStatusChange(object? sender, ProjectStatusEventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+
     public   event EventHandler<RpcEndPoint> OnDiscovery;
 }
 
@@ -69,6 +75,13 @@ public class RpcEndPoint
     private int port;
     private string address;
     private string uuid;
+    private ModuleConfig moduleConfig;
+
+    public ModuleConfig ModuleConfig
+    {
+        get => moduleConfig;
+        set => moduleConfig = value ?? throw new ArgumentNullException(nameof(value));
+    }
 
     public int Port => port;
 

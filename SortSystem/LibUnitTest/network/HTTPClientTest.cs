@@ -27,7 +27,7 @@ public class HTTPClientTest
     [Test]
     public void test1()
     {
-        NetworkUtil.getInstance().UDPDiscoverSetup();
+        
         ModuleCommunicationWorker.getInstance().OnDiscovery += ((Object sender,RpcEndPoint args) =>
         {
             blocking = false;
@@ -38,8 +38,10 @@ public class HTTPClientTest
         {
             
             Thread.Sleep(500);
-            ModuleConfig value = ModuleCommunicationWorker.getInstance().RemoteConfig.First().Value;
-            Assert.IsNotNull(value);
+            
         }
+        ModuleConfig value = ModuleCommunicationWorker.getInstance().RpcEndPoints.First().Value.First().ModuleConfig;
+        Assert.IsNotNull(value);
+        Assert.False(blocking);
     }
 }

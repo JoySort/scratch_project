@@ -50,7 +50,7 @@ public class ConsolidateWorkerTest
         
         
         logger.Info("APPLE Test begin");
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
         string recResultJsonFixture = @"./fixtures/apple_rec_result.json";
         string _path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,recResultJsonFixture);
         string jsonString = File.ReadAllText(_path);
@@ -63,7 +63,7 @@ public class ConsolidateWorkerTest
         }
         
         logger.Info("APPLE Test stop");
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
     }
     
     [Test]
@@ -77,7 +77,7 @@ public class ConsolidateWorkerTest
         ProjectParser parser = new ProjectParser(porjectJsonString,ProjectParser.V2);
         project = parser.getProject();
         
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
         
         string recResultJsonFixture = @"./fixtures/pd_rec_result.json";
         string _path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,recResultJsonFixture);
@@ -95,7 +95,7 @@ public class ConsolidateWorkerTest
         }
         
         logger.Info("PD Test stop");
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
     }
     
     public void appleEventHanlder(Object sender, ResultEventArg args)

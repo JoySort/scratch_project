@@ -40,7 +40,7 @@ public class ProjectController: ControllerBase
         {
 
             Project project = ProjectParser.ParseHttpRequest(Request,"v1");
-            ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent( project,ProjectState.start);
+            ProjectManager.getInstance().dispatchProjectStatusStartEvent( project,ProjectState.start);
         }
         catch (Exception e)
         {
@@ -67,7 +67,7 @@ public class ProjectController: ControllerBase
         {
 
             Project project = ProjectParser.ParseHttpRequest(Request,"v2");
-            ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent( project,ProjectState.start);
+            ProjectManager.getInstance().dispatchProjectStatusStartEvent( project,ProjectState.start);
         }
         catch (Exception e)
         {
@@ -92,7 +92,7 @@ public class ProjectController: ControllerBase
         try
         {
             
-            ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent( project,ProjectState.start);
+            ProjectManager.getInstance().dispatchProjectStatusStartEvent( project,ProjectState.start);
         }
         catch (Exception e)
         {
@@ -115,7 +115,7 @@ public class ProjectController: ControllerBase
         var errorObj = new JoyError();
         try
         {
-            ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+            ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
         }
         catch (Exception e)
         {

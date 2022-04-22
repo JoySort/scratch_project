@@ -32,43 +32,43 @@ public class ProjectStatusChangeTest {
     [Test, Order(4)]
     public void ProjectStart()
     {
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+        ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
         
     }
 
     [Test, Order(3)]
     public void ProjectPause()
     {
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.pause);
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+        ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.pause);
+        ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
         
     }
     [Test, Order(0)]
     public void ProjectStatusStopDuplicated()
     {
         //ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
-        Assert.Throws<Exception>(()=>ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop));
+        Assert.Throws<Exception>(()=>ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop));
 
    }
     
     [Test, Order(1)]
     public void ProjectStatusPauseDuplicated()
     {
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.pause);
-        Assert.Throws<Exception>(()=>ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.pause));
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+        ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.pause);
+        Assert.Throws<Exception>(()=>ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.pause));
+        ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
          }
     
     [Test, Order(2)]
     public void ProjectStatusDuplicated2()
     {
                
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
-        Assert.Throws<Exception>(()=>ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start));
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+        Assert.Throws<Exception>(()=>ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start));
+        ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
     }
     
     

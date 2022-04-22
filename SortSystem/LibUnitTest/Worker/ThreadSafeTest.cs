@@ -47,7 +47,7 @@ public class ThreadSafeTest
         porjectJsonString = File.ReadAllText(path);
         ProjectParser parser = new ProjectParser(porjectJsonString,ProjectParser.V1);
         project = parser.getProject();
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
         long startTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
         
         LBWorker lbWorker = LBWorker.getInstance();
@@ -133,8 +133,8 @@ public class ThreadSafeTest
     [TearDown]
     public void TearDown()
     {
-        if(ProjectEventDispatcher.getInstance().ProjectState != ProjectState.stop)
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+        if(ProjectManager.getInstance().ProjectState != ProjectState.stop)
+        ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
     }
 
 

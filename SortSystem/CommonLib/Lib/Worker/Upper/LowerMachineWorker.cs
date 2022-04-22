@@ -34,7 +34,7 @@ public class LowerMachineWorker
     private LowerMachineWorker()
     {
         lowerMachineDriver =  LowerMachineDriver.getInstance();
-        ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnSwitchProjectState;
+        ProjectManager.getInstance().ProjectStatusChanged += OnSwitchProjectState;
     }
 
    

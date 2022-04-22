@@ -105,14 +105,14 @@ public class ProjectConfigVersionTest
     public void TearDown()
     {
         
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+        ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
     }
 
 
     public void performTest(int index,int start,int count,int columnCount,int perTargetPictureCount,int columCountPerSection)
     {
         long startTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();;
-        ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
         ConsolidateWorker consolidateWorker = ConsolidateWorker.getInstance();
         List<Object> ppdResult = Utilizer.prepareData(project,start, count, columnCount, perTargetPictureCount, columCountPerSection);
         var expectedTriggerOutletMapping = (Dictionary<long, int>) ppdResult.First();

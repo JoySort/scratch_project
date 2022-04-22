@@ -85,8 +85,8 @@ public class LBWorkerTest
 
 
             var currentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
-            if(ProjectEventDispatcher.getInstance().ProjectState!=ProjectState.start)
-                ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+            if(ProjectManager.getInstance().ProjectState!=ProjectState.start)
+                ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
             sortingWorker.OnResult += pdEventHanlder;
             sortingWorker.processBulk(new List<ConsolidatedResult>(consolidatedResults));
             
@@ -147,6 +147,6 @@ public class LBWorkerTest
 
             
             logger.Info("LB Test stop");
-            ProjectEventDispatcher.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
+            ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
         }
 }

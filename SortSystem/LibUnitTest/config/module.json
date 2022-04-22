@@ -1,6 +1,6 @@
 {
-  "name": "lowerRunner1",
-  "module": "Lower",
+  "name": "UpperRunner",
+  "module": "Upper",
   "genre": "palmDate",
   "lowerMachineSimulationMode": true,
   "lowerConfig":[
@@ -93,9 +93,9 @@
     }
   },
 
-  "description": "模块配置：下位机模块配置",
+  "description": "模块配置：上位机模块配置",
   "minimumCoreVersion": "1.1",
-  "title": "下位机模块配置",
+  "title": "上位机模块配置",
   "version":1,
   "author": "bill"
 }

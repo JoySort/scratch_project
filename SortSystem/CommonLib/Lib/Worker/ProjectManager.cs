@@ -2,20 +2,21 @@ using CommonLib.Lib.vo;
 
 namespace CommonLib.Lib.LowerMachine;
 
-public class ProjectEventDispatcher
+public class ProjectManager
 {
  
-    private ProjectEventDispatcher()
+    private ProjectManager()
     {
     }
 
     private Project currentProject;
     private ProjectState projectState = ProjectState.stop;
-
+    
+    
     public ProjectState ProjectState => projectState;
 
-    private static ProjectEventDispatcher gl = new ProjectEventDispatcher();
-    public static ProjectEventDispatcher getInstance()
+    private static ProjectManager gl = new ProjectManager();
+    public static ProjectManager getInstance()
     {
         return gl;
     }

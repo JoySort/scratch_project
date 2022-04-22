@@ -19,7 +19,7 @@ public class EmitWorker
 
     private EmitWorker()
     {
-        ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnProjectStatusChange;
+        ProjectManager.getInstance().ProjectStatusChanged += OnProjectStatusChange;
     }
 
     public static EmitWorker getInstance()

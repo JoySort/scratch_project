@@ -22,7 +22,7 @@ public class LBWorker
     private OutletPriority priority;
     private LBWorker()
     {
-        ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnProjectStatusChange;
+        ProjectManager.getInstance().ProjectStatusChanged += OnProjectStatusChange;
     }
 
     public void OnProjectStatusChange(object sender,ProjectStatusEventArgs statusEventArgs)

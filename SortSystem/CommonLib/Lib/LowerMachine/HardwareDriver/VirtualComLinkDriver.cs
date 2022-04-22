@@ -17,7 +17,7 @@ public class VirtualComLinkDriver:ComLinkDriver
     {
         
         machineID = "";
-        ProjectEventDispatcher.getInstance().ProjectStatusChanged += OnProjectStatusChange;
+        ProjectManager.getInstance().ProjectStatusChanged += OnProjectStatusChange;
     }
 
   
