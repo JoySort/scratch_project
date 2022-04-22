@@ -28,12 +28,14 @@ public class ModuleCommunicationWorker
     private void init() {
         
         var rpc_port = ConfigUtil.getModuleConfig().NetworkConfig.RpcPort;
+        var proxyRpcPort = ConfigUtil.getModuleConfig().NetworkConfig.RpcProxyPort;
+        
         var udp_ports =  ConfigUtil.getModuleConfig().NetworkConfig.DiscoveryPorts;
         var moduleName = ConfigUtil.getModuleConfig().Name;
         
         foreach (var port in udp_ports)
         {
-            var uppDiscoverService = new UDPDiscoveryService(rpc_port,port,moduleName);
+            var uppDiscoverService = new UDPDiscoveryService(rpc_port==proxyRpcPort?rpc_port:proxyRpcPort,port,moduleName);
             uppDiscoverService.EndPointDiscoverFound += onDiscoverEndPoint;
             _discoveryServices.Add(uppDiscoverService);
             uppDiscoverService.StartListen();

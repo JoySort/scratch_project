@@ -11,6 +11,8 @@ public class WebInitializer
     public static string[] rpcSetup() {
         
         var rpcPort = ConfigUtil.getModuleConfig().NetworkConfig.RpcPort;
+        
+        
         string rpcListenKey = "--urls";
         string rpcUrl = "http://0.0.0.0:" + rpcPort;
         string[] joyArgs = new[] {rpcListenKey, rpcUrl};
@@ -19,8 +21,9 @@ public class WebInitializer
     }
     public static void init()
     {
-        
-        var builder = WebApplication.CreateBuilder(rpcSetup());
+        var rpcPort = rpcSetup();
+     
+        var builder = WebApplication.CreateBuilder(rpcPort);
 
 // Add services to the container.
 

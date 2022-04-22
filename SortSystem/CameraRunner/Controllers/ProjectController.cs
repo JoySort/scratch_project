@@ -16,7 +16,7 @@ public class ProjectController
     }
     
     [Route("/project/stop")]
-    [HttpPost]
+    [HttpGet]
     public void stop()
     {
         ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
