@@ -1,6 +1,6 @@
 {
-  "name": "CameraRunner",
-  "module": "Camera",
+  "name": "UpperRunner",
+  "module": "Upper",
   "genre": "palmDate",
   "lowerMachineSimulationMode": true,
   "cameraSimulationMode": true,

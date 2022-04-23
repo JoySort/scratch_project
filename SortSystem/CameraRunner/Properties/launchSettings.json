@@ -4,7 +4,7 @@
     "CameraRunner": {
       "commandName": "Project",
       "commandLineArgs":"--config_folder=../../../../runner_config/camera_config",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

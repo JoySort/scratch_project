@@ -3,7 +3,7 @@
   "profiles": {
     "LowerRunner": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
+      "dotnetRunMessages": false,
       "launchBrowser": true,
       "commandLineArgs":"--config_folder=../../../../runner_config//upper_config",
       "launchUrl": "swagger",
