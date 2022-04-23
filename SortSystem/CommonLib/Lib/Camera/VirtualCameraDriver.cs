@@ -24,10 +24,10 @@ public class VirtualCameraDriver:CameraDriverBase
             Thread.Sleep(5000);
             while (isProjectRunning)
             {
-                Thread.Sleep(filenameCounter < 14 ? (int)(1000/filenameCounter==0?1:filenameCounter):interval);
+                Thread.Sleep(filenameCounter < 14 ? (int)(1000/(filenameCounter==0?1:filenameCounter)):interval);
                 //Thread.Sleep(70);
                 var filename = filenameCounter++ % 4+1;
-                byte[] picture = File.ReadAllBytes("assets"+filename+".bmp");
+                byte[] picture = File.ReadAllBytes("assets/"+filename+".bmp");
                 OnRecivingPicture(picture);
             }
         });

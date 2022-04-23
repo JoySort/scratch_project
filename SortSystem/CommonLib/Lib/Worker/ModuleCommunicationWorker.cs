@@ -21,6 +21,7 @@ public class ModuleCommunicationWorker
     }
     private ModuleCommunicationWorker()
     {
+     
         init();
 
     }
@@ -40,6 +41,7 @@ public class ModuleCommunicationWorker
             uppDiscoverService.EndPointDiscoverFound += onDiscoverEndPoint;
             _discoveryServices.Add(uppDiscoverService);
             uppDiscoverService.StartListen();
+           
         }
     }
     private async Task registerRPCEndPoint(string ipAddr,int port,string uuid)
@@ -80,7 +82,13 @@ public class ModuleCommunicationWorker
   
     private void onDiscoverEndPoint(object sender, DiscoverFoundEventArgs arg)
     {
-        registerRPCEndPoint(arg.ipAddr, arg.rpcPort,arg.uuid);
+        Task.Run(() =>
+        {
+            //delay discovery for 2 seconds for web api to properly startup
+            Thread.Sleep(3000);
+            registerRPCEndPoint(arg.ipAddr, arg.rpcPort,arg.uuid);   
+        });
+       
     }
 
 

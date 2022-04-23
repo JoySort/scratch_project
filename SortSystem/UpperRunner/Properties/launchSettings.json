@@ -1,19 +1,11 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:2782",
-      "sslPort": 44359
-    }
-  },
   "profiles": {
     "LowerRunner": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "commandLineArgs":"--config_folder=../../../../LibUnitTest/config",
+      "commandLineArgs":"--config_folder=../../../../runner_config//upper_config",
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5113",
       "environmentVariables": {

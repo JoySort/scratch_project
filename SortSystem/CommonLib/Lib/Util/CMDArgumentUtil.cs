@@ -12,12 +12,13 @@ public class CMDArgumentUtil
     {
         
         var show_help = false;
-        
-      
-     
+
+
+        var configFolderSet = false;
         var p = new OptionSet ()
         {  
-            { "config_folder=", "Specify config folder RELATIVE to app i.e. ../config ../../config,you need to put config out of program path to avoid overwrite from upgrade", v => { if (v != null) {configRoot = v; logger.Info("Using cmd parameter {}:{}","config_folder",v);} } },
+            { "config_folder=", "Specify config folder RELATIVE to app i.e. ../config ../../config,you need to put config out of program path to avoid overwrite from upgrade", v => { if (v != null) {configRoot = v;
+                configFolderSet = true;logger.Info("Using cmd parameter {}:{}","config_folder",v);} } },
             { "help",  "show this message and exit", v => show_help = v != null }
         };
 
@@ -26,9 +27,9 @@ public class CMDArgumentUtil
             p.Parse (args);
             var devEnvString = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var isDevEnv = "Development"==devEnvString;
-            if (configRoot == devConfigRoot && !isDevEnv)
+            if (!configFolderSet && !isDevEnv)
             {
-                throw new Exception("命令行参数config_folder在生产环境下必须提供！如果这不是生产环境，检查你的环境变量设置 ASPNETCORE_ENVIRONMENT=Production是否设置");
+                throw new Exception("命令行参数config_folder在生产环境下必须提供！如果这不是生产环境，检查你的环境变量设置 ASPNETCORE_ENVIRONMENT=Development");
             }
         }
         catch (OptionException e)
