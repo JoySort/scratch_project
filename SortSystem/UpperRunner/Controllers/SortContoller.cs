@@ -1,3 +1,4 @@
+using CommonLib.Lib.Controllers;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort;
 using CommonLib.Lib.Sort.ResultVO;
@@ -27,9 +28,12 @@ public class SortController: ControllerBase
     
     [Route("/sort/consolidate_batch")]
     [HttpPost]
-    public void consolidate(List<RecResult> recResults)
+    public WebControllerResult consolidate(List<RecResult> recResults)
     {
+       
+       
         consolidateWorker.processBulk(recResults);
+        return new WebControllerResult("OK");//如果有异常，则会抛出，因此运行到这里就意味着没问题。
        
     }
     
@@ -37,27 +41,29 @@ public class SortController: ControllerBase
     
     [Route("/sort/sort_batch")]
     [HttpPost]
-    public void sort(List<ConsolidatedResult> recResults)
+    public WebControllerResult sort(List<ConsolidatedResult> recResults)
     {
        sortingWorker.processBulk(recResults);
+       return new WebControllerResult("OK");
     }
     
    
     
     [Route("/sort/lb_batch")]
     [HttpPost]
-    public void sort(List<SortResult> results)
+    public WebControllerResult sort(List<SortResult> results)
     {
         lbWorker.processBulk(results);
+        return new WebControllerResult("OK");
     }
     
    
     
     [HttpPost]
     [Route("/sort/emit_batch")]
-    public void emitSingle(List<EmitResult> results)
+    public WebControllerResult emitSingle(List<EmitResult> results)
     {
         LowerMachineWorker.getInstance().processBulk(results);
-        return ;
+        return new WebControllerResult("OK");
     }
 }

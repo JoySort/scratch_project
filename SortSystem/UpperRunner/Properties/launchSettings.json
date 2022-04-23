@@ -4,8 +4,8 @@
     "LowerRunner": {
       "commandName": "Project",
       "dotnetRunMessages": false,
-      "launchBrowser": true,
-      "commandLineArgs":"--config_folder=../../../../runner_config//upper_config",
+      "launchBrowser": false,
+      "commandLineArgs":"--config_folder=../../../../runner_config/upper_config",
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5113",
       "environmentVariables": {

@@ -21,6 +21,9 @@ public class ModuleConfig
     private bool cameraSimulationMode = false;
     private bool recognizerSimulationMode = false;
     private RecognizerConfig recognizerConfig;
+
+    public RecognizerConfig RecognizerConfig => recognizerConfig;
+
     private string uuid = Guid.NewGuid().ToString();
 
     public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, bool cameraSimulationMode, bool recognizerSimulationMode, RecognizerConfig recognizerConfig, string title, int version)
@@ -136,6 +139,10 @@ public class RecognizerConfig
 {
     private string dllPaht;
     private string initializationImagePath;
+
+    public string DllPaht => dllPaht;
+
+    public string InitializationImagePath => initializationImagePath;
 
     public RecognizerConfig(string dllPaht, string initializationImagePath)
     {

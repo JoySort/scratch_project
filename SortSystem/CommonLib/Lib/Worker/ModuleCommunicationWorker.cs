@@ -13,8 +13,7 @@ public class ModuleCommunicationWorker
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private static ModuleCommunicationWorker me = new ModuleCommunicationWorker();
     private  List<UDPDiscoveryService> _discoveryServices = new List<UDPDiscoveryService>();
-    private  Dictionary<string, string> rpcEndPoint = new Dictionary<string, string>();
-    
+     
     public static ModuleCommunicationWorker getInstance()
     {
         return me;
@@ -39,8 +38,13 @@ public class ModuleCommunicationWorker
         {
             var uppDiscoverService = new UDPDiscoveryService(rpc_port==proxyRpcPort?rpc_port:proxyRpcPort,port,moduleName);
             uppDiscoverService.EndPointDiscoverFound += onDiscoverEndPoint;
+            
             _discoveryServices.Add(uppDiscoverService);
-            uppDiscoverService.StartListen();
+            Task.Run(() =>
+            {
+                Thread.Sleep(5000);
+                uppDiscoverService.StartListen();
+            });
            
         }
     }

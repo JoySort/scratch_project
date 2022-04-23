@@ -11,9 +11,9 @@ public class CameraWorker
 { 
     
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-    private List<CameraDriverBase> ipCameras = new List<CameraDriverBase>();
+    private List<ICameraDriver> cameraDrivers = new List<ICameraDriver>();
 
-    public List<CameraDriverBase> IpCameras => ipCameras;
+    public List<ICameraDriver> CameraDrivers => cameraDrivers;
 
     private CameraWorker()
     {
@@ -44,7 +44,7 @@ public class CameraWorker
                 toBeSavedPictures.Enqueue(cameraPayLoad);
                 
             });
-            ipCameras.Add(cameraDriver);
+            cameraDrivers.Add(cameraDriver);
         }
 
         savePicture();
@@ -67,6 +67,7 @@ public class CameraWorker
                 CameraPayLoad cameraPayLoad;
                 if (toBeSavedPictures.TryDequeue(out cameraPayLoad))
                 {
+                    if (!cameraPayLoad.CamConfig.SaveRawImage) continue;//如果设置为不存图，则直接返回。
                     var path = Path.Combine(
                         Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
                         cameraPayLoad.CamConfig.SavePath)+"/"+timestamp;
@@ -84,6 +85,8 @@ public class CameraWorker
             }
         });
     }
+    
+    
 
     public static String GetTimestamp(DateTime value)
     {

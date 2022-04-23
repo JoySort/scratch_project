@@ -1,10 +1,13 @@
+using System.Reflection;
 using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.LowerMachine;
+using NLog;
 
 namespace CommonLib.Lib.Camera;
 
 public class VirtualCameraDriver:CameraDriverBase
 {
+    private static Logger  logger = LogManager.GetCurrentClassLogger();
     public VirtualCameraDriver(CameraConfig camConfig) : base(camConfig)
     {
     }
@@ -14,7 +17,10 @@ public class VirtualCameraDriver:CameraDriverBase
         for (var i = 0; i < 4; i++)
         {
             var filename = i+1;
-            byte[] picture = File.ReadAllBytes("assets/"+filename+".bmp");
+            var path = Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
+                "assets/" + filename + ".bmp");
+            byte[] picture = File.ReadAllBytes(path);
             pictures[i] = picture;
         }
     }
@@ -30,8 +36,9 @@ public class VirtualCameraDriver:CameraDriverBase
             while (isProjectRunning)
             {
                 Thread.Sleep(filenameCounter < 14 ? (int)(1000/(filenameCounter==0?1:filenameCounter)):interval);
+                if(filenameCounter == 0) logger.Debug($"Camera {CamConfig.Address}-{CamConfig.CameraPosition}-{CamConfig.Columns[0]}-{CamConfig.Columns[1]} starts to trigger");
                 //Thread.Sleep(70);
-                var fileIndex = filenameCounter++ % 4+1;
+                var fileIndex = filenameCounter++ % 4;
                
                 OnRecivingPicture(pictures[fileIndex]);
             }

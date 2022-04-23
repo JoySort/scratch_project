@@ -1,27 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
 
-namespace LibUnitTest.Worker;
+namespace CommonLib.Lib.Worker.Recognizer;
 
-public class Utilizer
+
+public class RecResultGenerator
 {
     /**
      * <summary>Return list first element is Dictionary<long, long> triggerid->selectedOutletIndex, second element is the List<RecResult> object list</summary>
      */
-    public static List<Object> prepareData(Project project,long startTriggerID, long count,int columnCount,int perTargetPictureCount,int columCountPerSection )
+    public static List<RecResult> prepareData(Project project,long startTriggerID, long count,int[] columnRange,CameraPosition cameraPosition,int perTargetPictureCount )
     {
 
-        
-        
+
+        var moduleConfig = ModuleCommunicationWorker.getInstance().RpcEndPoints[JoyModule.Upper].First().Value.ModuleConfig;
         var result = new List<RecResult>();
         var critieraList = project.Criterias;
         var outlets = project.Outlets;
-        var consolidatePolicy = ConfigUtil.getModuleConfig().ConsolidatePolicy;
+        var consolidatePolicy = moduleConfig.ConsolidatePolicy;
         Random rdn = new Random();
         var selectedOutletIndex = 0;
         var currentOutletIndex = 0;
@@ -47,7 +45,7 @@ public class Utilizer
             }
            // logger.Debug("outlet index {}",selectedOutletIndex);
            triggerIDWithSelectedChannelNO.Add(triggerIdIndex,selectedOutletIndex);
-            for(var col=0; col<columnCount;col++)
+            for(var col=columnRange[0]; col<=columnRange[1];col++)
             {
                 var expectedFeatureCount = critieraList.Length;
                 int NotNormalOffsetRowCount = -1;
@@ -71,7 +69,7 @@ public class Utilizer
                                 else
                                 {
                                     NotNormalOffsetRowCount = consolidatePolicy.OffSetRowCount[i];
-                                    NotNormalOffsetRowCountIndex = ConfigUtil.getModuleConfig().CriteriaMapping[consolidatePolicy.CriteriaCode[i]].Index;
+                                    NotNormalOffsetRowCountIndex = moduleConfig.CriteriaMapping[consolidatePolicy.CriteriaCode[i]].Index;
                                 }
                             }
 
@@ -126,12 +124,12 @@ public class Utilizer
 
                 }
                     
-                float section = col / columCountPerSection;
+               
                 Coordinate coordinate = null;
                 for (var row = 0; row < perTargetPictureCount; row++)
                 {
                     
-                    coordinate = new Coordinate(col, row, CameraPosition.middle,triggerIdIndex);
+                    coordinate = new Coordinate(col, row,cameraPosition, triggerIdIndex);
                     var featureList = new List<Feature>();
                     foreach ((var key,var value) in features)
                     {
@@ -153,7 +151,7 @@ public class Utilizer
                 
                 
                 
-                 coordinate = new Coordinate( col, NotNormalOffsetRowCount-1,CameraPosition.middle, triggerIdIndex);
+                 coordinate = new Coordinate( col, NotNormalOffsetRowCount-1, cameraPosition,triggerIdIndex);
                  var featureList1 = new List<Feature>();
                 if (offsetRowNotNormalFeature != null)
                 {
@@ -177,9 +175,7 @@ public class Utilizer
             }
         }
 
-        var returnObj = new List<Object>();
-        returnObj.Add(triggerIDWithSelectedChannelNO);
-        returnObj.Add(result);
-        return returnObj;
+     
+        return result;
     }
 }

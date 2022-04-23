@@ -53,7 +53,7 @@
   "networkConfig": {
     "rpcPort": 5185,
     "_comment_rpcProxyProt": "如果和rpcPort相同，则发现服务 如果希望使用 mitmweb --mode upstream:http://localhost:5185 --listen-port 8082 --web-port 8083 其中，5185是rpcPort, 8082是rpcProxyPort , 8083是WEBUI浏览器查看debug信息的端口。 工具来进行http的debug,则可以设置这个参数 rpcProxyport ，让mitmweb 可以监听这个rpcProxyPort,并且转给upstream的rpcPort {port value} . 这里的设置，是让自动发现服务给对端广播这个代理端口，以让我们可以进行调试。. ",
-    "rpcProxyPort": 5185,
+    "rpcProxyPort": 8082,
     "discoveryPorts": [13567],
     "rpcBindIP": "*",
     "udpBindIP": "*"
