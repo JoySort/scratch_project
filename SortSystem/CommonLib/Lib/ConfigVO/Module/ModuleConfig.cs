@@ -19,23 +19,11 @@ public class ModuleConfig
     private SortConfig sortConfig;
     private bool lowerMachineSimulationMode = false;
     private bool cameraSimulationMode = false;
+    private bool recognizerSimulationMode = false;
+    private RecognizerConfig recognizerConfig;
     private string uuid = Guid.NewGuid().ToString();
 
-    public string Uuid => uuid;
-
-    public bool LowerMachineSimulationMode
-    {
-        get => lowerMachineSimulationMode;
-        set => lowerMachineSimulationMode = value;
-    }
-
-    public bool CameraSimulationMode
-    {
-        get => cameraSimulationMode;
-        set => cameraSimulationMode = value;
-    }
-
-    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, bool cameraSimulationMode, string title, int version)
+    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, bool cameraSimulationMode, bool recognizerSimulationMode, RecognizerConfig recognizerConfig, string title, int version)
     {
         this.author = author;
         this.consolidatePolicy = consolidatePolicy;
@@ -51,9 +39,28 @@ public class ModuleConfig
         this.sortConfig = sortConfig;
         this.lowerMachineSimulationMode = lowerMachineSimulationMode;
         this.cameraSimulationMode = cameraSimulationMode;
+        this.recognizerSimulationMode = recognizerSimulationMode;
+        this.recognizerConfig = recognizerConfig;
         this.title = title;
         this.version = version;
     }
+
+    public string Uuid => uuid;
+
+    public bool LowerMachineSimulationMode
+    {
+        get => lowerMachineSimulationMode;
+        set => lowerMachineSimulationMode = value;
+    }
+
+    public bool CameraSimulationMode
+    {
+        get => cameraSimulationMode;
+        set => cameraSimulationMode = value;
+    }
+
+    
+    public bool RecognizerSimulationMode => recognizerSimulationMode;
 
     public CameraConfig[] CameraConfigs => cameraConfigs;
 
@@ -123,4 +130,16 @@ public enum JoyModule
     Recognizer,
     Upper,
     UI
+}
+
+public class RecognizerConfig
+{
+    private string dllPaht;
+    private string initializationImagePath;
+
+    public RecognizerConfig(string dllPaht, string initializationImagePath)
+    {
+        this.dllPaht = dllPaht;
+        this.initializationImagePath = initializationImagePath;
+    }
 }

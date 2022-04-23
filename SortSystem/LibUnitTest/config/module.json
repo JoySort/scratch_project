@@ -4,6 +4,11 @@
   "genre": "palmDate",
   "lowerMachineSimulationMode": true,
   "cameraSimulationMode": true,
+  "recognizerSimulationMode": true,
+  "recognizerConfig": {
+    "dllPaht": "./recognizer.dll",
+    "initializationImagePath": "./assets/1.bmp"
+  },
   "lowerConfig":[
     {
       "hardwarePort": "/dev/com1",
