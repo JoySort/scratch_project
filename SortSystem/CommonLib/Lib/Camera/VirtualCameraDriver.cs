@@ -11,10 +11,15 @@ public class VirtualCameraDriver:CameraDriverBase
 
     public override  void initCam()
     {
-        
+        for (var i = 0; i < 4; i++)
+        {
+            var filename = i+1;
+            byte[] picture = File.ReadAllBytes("assets/"+filename+".bmp");
+            pictures[i] = picture;
+        }
     }
 
-   
+    private byte[][] pictures = new byte[4][] ;
     public override void processCameraData()
     {
         Task.Run(() =>
@@ -26,9 +31,9 @@ public class VirtualCameraDriver:CameraDriverBase
             {
                 Thread.Sleep(filenameCounter < 14 ? (int)(1000/(filenameCounter==0?1:filenameCounter)):interval);
                 //Thread.Sleep(70);
-                var filename = filenameCounter++ % 4+1;
-                byte[] picture = File.ReadAllBytes("assets/"+filename+".bmp");
-                OnRecivingPicture(picture);
+                var fileIndex = filenameCounter++ % 4+1;
+               
+                OnRecivingPicture(pictures[fileIndex]);
             }
         });
     }
