@@ -8,6 +8,7 @@ const send_data_service = require("./lib/send_data");
 var start_with_stop_flag=false;
 var start_only_flag = false;
 var start_trigger_id=0;
+var stop_after_time = 1000*10;
 console.log(process.argv)
 if(process.argv[2]!=null){
     if(process.argv[2]=="stop"){
@@ -15,6 +16,9 @@ if(process.argv[2]!=null){
     }
     if(process.argv[2]=="start_only"){
         start_only_flag=true
+        if(process.argv[3]!=null){
+            stop_after_time =  Number(process.argv[3]);
+        }
         
         console.log("start only flat true "+process.argv[2])
     }
@@ -50,6 +54,13 @@ function on_discover_server(address,rpc_port,uuid){
                 console.log("[index] start only",services[uuid].host,services[uuid].port)
             },
             uuid);
+
+        setTimeout(()=>{
+            project_stop_service.stop_project(
+                services[uuid].host,
+                services[uuid].port,
+                on_project_stop,uuid)
+        },stop_after_time)
         return;
     }
     project_start_service.start(
