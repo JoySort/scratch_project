@@ -19,7 +19,7 @@ public class Coordinate
         triggerID = triggerId;
     }
 
-    public string Key() =>  "-t"+ triggerID+"-c" + column +"-cmp"+cameraPosition;
+    public string Key() =>  "t"+ triggerID+"-c" + column +"-p_"+cameraPosition;
 
     public bool isSame(Coordinate cd)
     {
