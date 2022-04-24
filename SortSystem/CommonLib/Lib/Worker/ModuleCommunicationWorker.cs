@@ -43,7 +43,7 @@ public class ModuleCommunicationWorker
             _discoveryServices.Add(uppDiscoverService);
             Task.Run(() =>
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(1000);
                 uppDiscoverService.StartListen();
             });
            
@@ -52,6 +52,8 @@ public class ModuleCommunicationWorker
         checkAlive();
     }
 
+
+    private int checkAliveCounter = 0;
     private  void checkAlive()
     {
 
@@ -59,7 +61,7 @@ public class ModuleCommunicationWorker
         {
             while (true)
             {
-                Thread.Sleep(10000);
+                Thread.Sleep(10000* (int)(Math.Sqrt(checkAliveCounter+++1)));
                 foreach ((var module, var rdps) in rpcEndPoints)
                 {
 
@@ -71,6 +73,7 @@ public class ModuleCommunicationWorker
                         if (result == null)
                         {
                             expiredEndpoints.Add(Key,item);
+                            checkAliveCounter = 0;
                             //logger.Info($"Endpoint {Key} expired, removing it from Registry");
                         }
                     }

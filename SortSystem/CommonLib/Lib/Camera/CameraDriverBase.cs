@@ -23,11 +23,12 @@ public abstract class CameraDriverBase:ICameraDriver
         if (args.State == ProjectState.stop)
         {
             isProjectRunning = false;
-            counter = 0;
+            
             
         }
         if (args.State == ProjectState.start)
         {
+            counter = 0;
             isProjectRunning = true;
             processCameraData();
         }

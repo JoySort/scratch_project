@@ -35,6 +35,11 @@ public class RecognizerWorker
         {
             cameraDriver.OnPictureArrive+=((sender,cameraPayLoad)=>
             {
+                if (cameraPayLoad.TriggerId == 0)
+                {
+                    logger.Debug("Recognizer trigger ID 0");
+                }
+
                 //这里使用队列来暂存对象，目的是把所有相机的照片顺序处理，确保只有一个线程调用dll，因为如果直接用相机进程调用，则会导致多个相机同时用不同线程调用识别，从而导致识别多线程运行。
                 toBeRecognized.Enqueue(cameraPayLoad);
                 //process(cameraPayLoad);
@@ -97,6 +102,11 @@ public class RecognizerWorker
         {
             //这个模拟器并不生成这一张照片的一个识别结果，而是生成4张照片的结果一次性。因此不是一个严格的模拟器。
             var result =  RecResultGenerator.prepareData(currentProject, payload.TriggerId, 1, payload.CamConfig.Columns, payload.CamConfig.CameraPosition,4);
+            if (result.Last().Coordinate.TriggerId == 0)
+            {
+                logger.Debug($"TriggerID 0 triggerred");
+            }
+
             dispatchResult(result);
 
         }
