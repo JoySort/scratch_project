@@ -61,13 +61,7 @@ public class EmitWorker
 
     private void processResult()
     {
-       // Task.Run(() =>
-       // {
-            //logger.Info("EmiitWorker starts process project id {} project name {} ", currentProject.Id,currentProject.Name);
-
-           // while (isProjectRunning)
-           // {
-               // Thread.Sleep(sortingInterval);
+     
                 var processBatch = toBeProcessedResults;
                 //if (processBatch.Count == 0) continue;
                 toBeProcessedResults = new List<LBResult>();
@@ -78,10 +72,7 @@ public class EmitWorker
                 DispatchResultEvent(new EmitResultEventArg(emitResults));
 
                 
-           // }
-
-            //logger.Info("EmiitWorker stops process project id {} project name {} ", currentProject.Id,currentProject.Name);
-       // });
+        
     }
 
     public event EventHandler<EmitResultEventArg> OnResult;

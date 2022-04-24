@@ -12,23 +12,23 @@ namespace CommonLib.Lib.WebAPIs.Upper;
  * <summary>项目启动，停止，暂停等相关API</summary>
  */
 [ApiController]
-public class ProjectController: ControllerBase
+public class ProjectController : ControllerBase
 {
     private readonly ILogger<ProjectController> logger;
-    
+
     public ProjectController(ILogger<ProjectController> logger)
     {
         this.logger = logger;
         //this.logger.LogInformation(1, "NLog injected into ProjectControllers");
     }
-    
+
     [Route("/apis/project_start")]
     [HttpPost]
     public UIAPIResult project_start()
     {
         return project_startv1();
     }
-    
+
     //compatible with old UI
     [Route("/apis/project_start_v1")]
     [HttpPost]
@@ -38,24 +38,88 @@ public class ProjectController: ControllerBase
 
         try
         {
+            Project project = ProjectParser.ParseHttpRequest(Request, "v1");
 
-            Project project = ProjectParser.ParseHttpRequest(Request,"v1");
-            
-            ProjectManager.getInstance().dispatchProjectStatusStartEvent( project,ProjectState.start);
+            ProjectManager.getInstance().dispatchProjectStatusStartEvent(project, ProjectState.start);
         }
         catch (Exception e)
         {
-            
             errorObj.e = e.Message;
         }
-        
 
-        var errorCode = errorObj.e != null ? "2" : "1";
-        var errorMessage = (errorObj.e ??"");
-        var status =  (errorObj.e != null ? "error" : "ok");
+
         var resultData = new EmptyResult();
-        
-        return new UIAPIResult(errorCode,errorMessage,errorObj,status,resultData);
+
+        return new UIAPIResult(errorObj, resultData);
+    }
+
+    [Route("/apis/project_update")]
+    [HttpPost]
+    public UIAPIResult projectUpdate()
+    {
+        var errorObj = new JoyError();
+
+        try
+        {
+            Project project = ProjectParser.ParseHttpRequest(Request, "v1");
+
+            ProjectManager.getInstance().dispatchProjectStatusStartEvent(project, ProjectState.update);
+        }
+        catch (Exception e)
+        {
+            errorObj.e = e.Message;
+        }
+
+
+        var resultData = new EmptyResult();
+
+        return new UIAPIResult(errorObj, resultData);
+    }
+
+
+    [Route("/apis/apis/startwashing")]
+    [HttpGet]
+    public UIAPIResult projectWashing()
+    {
+        var errorObj = new JoyError();
+
+        try
+        {
+            //Project project = ProjectParser.ParseHttpRequest(Request,"v1");
+
+            ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.washing);
+        }
+        catch (Exception e)
+        {
+            errorObj.e = e.Message;
+        }
+
+
+        var resultData = new EmptyResult();
+
+        return new UIAPIResult(errorObj, resultData);
+    }
+    
+    
+    [Route("/apis/stopwashing")]
+    [HttpGet]
+    public UIAPIResult projectStopWashing()
+    {
+        var errorObj = new JoyError();
+
+        try
+        {
+            ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+        }
+        catch (Exception e)
+        {
+            errorObj.e = e.Message;
+        }
+
+
+        var resultData = new EmptyResult();
+
+        return new UIAPIResult(errorObj, resultData);
     }
 
     //Support and or filter
@@ -67,24 +131,21 @@ public class ProjectController: ControllerBase
 
         try
         {
-
-            Project project = ProjectParser.ParseHttpRequest(Request,"v2");
-            ProjectManager.getInstance().dispatchProjectStatusStartEvent( project,ProjectState.start);
+            Project project = ProjectParser.ParseHttpRequest(Request, "v2");
+            ProjectManager.getInstance().dispatchProjectStatusStartEvent(project, ProjectState.start);
         }
         catch (Exception e)
         {
             errorObj.e = e.Message;
         }
-        
 
-        var errorCode = errorObj.e != null ? "2" : "1";
-        var errorMessage = (errorObj.e ??"");
-        var status =  (errorObj.e != null ? "error" : "ok");
+
         var resultData = new EmptyResult();
-        
-        return new UIAPIResult(errorCode,errorMessage,errorObj,status,resultData);
+
+        return new UIAPIResult(errorObj, resultData);
     }
-    
+
+
     [Route("/apis/project_start_v3")]
     [HttpPost]
     public UIAPIResult project_start_v3(Project project)
@@ -93,31 +154,27 @@ public class ProjectController: ControllerBase
 
         try
         {
-            
-            ProjectManager.getInstance().dispatchProjectStatusStartEvent( project,ProjectState.start);
+            ProjectManager.getInstance().dispatchProjectStatusStartEvent(project, ProjectState.start);
         }
         catch (Exception e)
         {
             errorObj.e = e.Message;
         }
-        
 
-        var errorCode = errorObj.e != null ? "2" : "1";
-        var errorMessage = (errorObj.e ??"");
-        var status =  (errorObj.e != null ? "error" : "ok");
+
         var resultData = new EmptyResult();
-        
-        return new UIAPIResult(errorCode,errorMessage,errorObj,status,resultData);
+
+        return new UIAPIResult(errorObj, resultData);
     }
 
     [Route("/apis/project_stop")]
     [HttpGet]
     public UIAPIResult project_stop()
-    { 
+    {
         var errorObj = new JoyError();
         try
         {
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
             ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
         }
         catch (Exception e)
@@ -125,11 +182,15 @@ public class ProjectController: ControllerBase
             errorObj.e = e.Message;
         }
 
-        var errorCode = errorObj.e != null ? "2" : "1";
-        var errorMessage = (errorObj.e ??"");
-        var status =  (errorObj.e != null ? "error" : "ok");
+
         var resultData = new EmptyResult();
-        
-        return new UIAPIResult(errorCode,errorMessage,errorObj,status,resultData);
+
+        return new UIAPIResult(errorObj, resultData);
+    }
+    [Route("/apis/get_project")]
+    [HttpGet]
+    public Project getProject()
+    {
+        return  ProjectManager.getInstance().CurrentProject;
     }
 }

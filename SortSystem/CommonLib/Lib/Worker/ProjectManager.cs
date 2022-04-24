@@ -9,6 +9,10 @@ public class ProjectManager
     {
     }
 
+    private  long startTimestamp;
+
+    public  long StartTimestamp => startTimestamp;
+
     private Project currentProject;
     private ProjectState projectState = ProjectState.stop;
     
@@ -68,10 +72,16 @@ public class ProjectManager
         {
             State =s
         };
-        
+        if (s == ProjectState.start)
+        {
+           this.startTimestamp= DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        }
+
         projectState = s;
         OnProjectStatusChange(discoverEventArgs);
     }
+
+    public Project CurrentProject => currentProject;
 }
 
 public class ProjectStatusEventArgs : EventArgs
@@ -97,5 +107,6 @@ public enum ProjectState
     resume,
     washing,
     reverse,
+    update,
     invalid
 }

@@ -65,6 +65,7 @@ public class LowerMachineWorker
         
         if (statusEventArgs.State == ProjectState.start && statusEventArgs.currentProject != null)
         {
+            toBeProcessedResults = new List<EmitResult>();
             logger.Info("Lower Machine start to switch to start state");
             prepareConfig(statusEventArgs.currentProject);
             
@@ -77,7 +78,7 @@ public class LowerMachineWorker
             logger.Info("Lower Machine start to switch to none-start state");
             lowerMachineDriver.applyStateChange( statusEventArgs.State);
             isProjectRunning = false;
-            toBeProcessedResults = new List<EmitResult>();
+            //toBeProcessedResults = new List<EmitResult>();
         }
         
         lowerMachineDriver.setupTriggerEventListener(statusEventArgs.State,onTrigger);

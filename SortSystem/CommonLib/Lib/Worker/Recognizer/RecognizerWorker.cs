@@ -71,7 +71,7 @@ public class RecognizerWorker
 
     private void ProjectStatusChangeHandler(object? sender, ProjectStatusEventArgs e)
     {
-        if (e.State == ProjectState.start)
+        if (e.State == ProjectState.start || e.State == ProjectState.update)
         {
             isProjectRunning = true;
             currentProject = e.currentProject;

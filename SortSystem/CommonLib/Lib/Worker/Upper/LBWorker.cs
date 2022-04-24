@@ -32,6 +32,7 @@ public class LBWorker
             this.currentProject = statusEventArgs.currentProject;
             prepareConfig();
             this.isProjectRunning = true;
+            channelStat = new Dictionary<string, long>();
             //processResult();
         }
 
@@ -118,7 +119,7 @@ public class LBWorker
                     var signiture = "";
                     foreach (var andFilters in tmpFilters)
                     {
-                        signiture += andFilters.Criteria.Code + String.Join(",", andFilters.FilterBoundrryIndices);
+                        signiture += andFilters.Criteria.Code + String.Join(",", andFilters.FilterBoundryIndices);
 
                     }
 
@@ -189,18 +190,28 @@ public class LBWorker
                   }
                 
                   logger.Debug("LB result with count:{}",lbResults.Count);
+                  updateChannelStats(lbResults);
                   DispatchResultEvent(new LBResultEventArg(lbResults));
-
+                  
                  
               //}
               //logger.Info("LBWorker stops process project id {} project name {} ", currentProject.Id, currentProject.Name);
          // });
     }
 
-   
-    
-   
-  
+    private void updateChannelStats(List<LBResult> results)
+    {
+        foreach (var result in results)
+        {
+            if(!channelStat.ContainsKey(result.LoadBalancedOutlet.First().ChannelNo))channelStat.Add(result.LoadBalancedOutlet.First().ChannelNo,0);
+            channelStat[result.LoadBalancedOutlet.First().ChannelNo]++;
+        }
+    }
+
+    private Dictionary<string, long> channelStat = new Dictionary<string, long>();
+
+    public Dictionary<string, long> ChannelStat => channelStat;
+
     public event EventHandler<LBResultEventArg> OnResult;
     protected virtual void DispatchResultEvent(LBResultEventArg e)
     {
