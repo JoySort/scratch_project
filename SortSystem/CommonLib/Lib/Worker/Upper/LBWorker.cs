@@ -201,14 +201,21 @@ public class LBWorker
 
     private void updateChannelStats(List<LBResult> results)
     {
+        long tmpCount = 0;
         foreach (var result in results)
         {
             if(!channelStat.ContainsKey(result.LoadBalancedOutlet.First().ChannelNo))channelStat.Add(result.LoadBalancedOutlet.First().ChannelNo,0);
             channelStat[result.LoadBalancedOutlet.First().ChannelNo]++;
+            tmpCount += channelStat[result.LoadBalancedOutlet.First().ChannelNo];
         }
+
+        count = tmpCount;
     }
 
     private Dictionary<string, long> channelStat = new Dictionary<string, long>();
+    private long count = 0;
+
+    public long Count => count;
 
     public Dictionary<string, long> ChannelStat => channelStat;
 

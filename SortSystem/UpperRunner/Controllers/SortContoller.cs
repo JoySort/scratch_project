@@ -88,8 +88,8 @@ public class SortController: ControllerBase
         var cstat = LBWorker.getInstance().ChannelStat;
         var project = ProjectManager.getInstance().CurrentProject;
         var result = new List<UIResultChannelCounter>();
+        var total = LBWorker.getInstance().Count;
         
-        long totalCount = 0;
         
         if (project != null)
         {
@@ -97,16 +97,12 @@ public class SortController: ControllerBase
             foreach (var outlet in project.Outlets)
             {
                 var count = cstat.ContainsKey(outlet.ChannelNo) ? cstat[outlet.ChannelNo] : 0;
-                result.Add( new UIResultChannelCounter(outlet.ChannelNo, count, 0));;
-                totalCount = totalCount + count;
+                result.Add( new UIResultChannelCounter(outlet.ChannelNo, count, Math.Round((double)count/total,3)));;
+               
             }
         }
 
-        foreach (var item in result)
-        {
-            item.Percent = item.Count / totalCount;
-        }
-
+     
 
         return new UIAPIResult(errorObj,result);
     }
@@ -121,9 +117,9 @@ public class UIResultChannelCounter:IJoyResult
 {
     private string id;
     private long count;
-    private float percent;
+    private double percent;
 
-    public UIResultChannelCounter(string id, long count, float percent)
+    public UIResultChannelCounter(string id, long count, double percent)
     {
         this.id = id;
         this.count = count;
@@ -136,7 +132,7 @@ public class UIResultChannelCounter:IJoyResult
         set => count = value;
     }
 
-    public float Percent
+    public double Percent
     {
         get => percent;
         set => percent = value;
