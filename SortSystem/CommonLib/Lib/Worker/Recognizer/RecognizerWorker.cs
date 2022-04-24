@@ -46,8 +46,23 @@ public class RecognizerWorker
                 //process(cameraPayLoad);
             });
         }
-        
-        
+
+        if (!ConfigUtil.getModuleConfig().RecognizerSimulationMode)
+        {
+            var dllPath = ConfigUtil.getModuleConfig().RecognizerConfig.DllPaht;
+            var initPicturePath = ConfigUtil.getModuleConfig().RecognizerConfig.InitializationImagePath;
+            
+            var dllRelativeToRunnerPath = Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
+                dllPath);
+            var initPicRelativeToRunnerPath = Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
+                initPicturePath);
+            
+            // load Dll with dllRelativeToRunnerPath
+            //byte[] picture = File.ReadAllBytes(initPicRelativeToRunnerPath);
+        }
+
     }
     
 
@@ -113,18 +128,7 @@ public class RecognizerWorker
         }
         else
         {
-            var dllPath = ConfigUtil.getModuleConfig().RecognizerConfig.DllPaht;
-            var initPicturePath = ConfigUtil.getModuleConfig().RecognizerConfig.InitializationImagePath;
-            
-            var dllRelativeToRunnerPath = Path.Combine(
-                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
-                dllPath);
-            var initPicRelativeToRunnerPath = Path.Combine(
-                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
-                initPicturePath);
-            
-            // load Dll with dllRelativeToRunnerPath
-            //byte[] picture = File.ReadAllBytes(initPicRelativeToRunnerPath);
+ 
 
         }
 

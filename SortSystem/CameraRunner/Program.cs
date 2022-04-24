@@ -19,7 +19,7 @@ ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
 ModuleCommunicationWorker.getInstance();
 
 CameraWorker.getInstance();//用于处理照片存储等任务
-RecognizerWorker.getInstance().RecResultGenerated += CameraToUpperHTTPClientWorker.getInstance().onRecResultGenerated; //将识别结果通过HttpClient发出去。
+RecognizerWorker.getInstance().RecResultGenerated += CameraToUpperHttpClientWorker.getInstance().onRecResultGenerated; //将识别结果通过HttpClient发出去。
 
 WebInitializer.init();
 //Do not put code below, won't run.

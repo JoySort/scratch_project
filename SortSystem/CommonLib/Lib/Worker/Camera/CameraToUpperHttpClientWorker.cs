@@ -10,14 +10,14 @@ using NLog;
 
 namespace CommonLib.Lib.Worker.Upper;
 
-public class CameraToUpperHTTPClientWorker
+public class CameraToUpperHttpClientWorker
 {
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private bool isProjectRunning = false;
     private Project currentProject;
   
-    private static CameraToUpperHTTPClientWorker me = new CameraToUpperHTTPClientWorker();
-    public static CameraToUpperHTTPClientWorker getInstance()
+    private static CameraToUpperHttpClientWorker me = new CameraToUpperHttpClientWorker();
+    public static CameraToUpperHttpClientWorker getInstance()
     {
         return me;
     }
@@ -45,7 +45,7 @@ public class CameraToUpperHTTPClientWorker
         }
     }
 
-    private CameraToUpperHTTPClientWorker()
+    private CameraToUpperHttpClientWorker()
     {
         init();
 

@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using System.Text;
 using CommonLib.Lib.Camera;
+using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Util;
 using NLog;
 
@@ -29,6 +30,9 @@ public class CameraWorker
 
     private void init()
     {
+        
+        ProjectManager.getInstance().ProjectStatusChanged += ProjectStatusChangeHandler;
+        
         var cameraConfigs = ConfigUtil.getModuleConfig().CameraConfigs;
         var isSimulation = ConfigUtil.getModuleConfig().CameraSimulationMode;
         timestamp =  GetTimestamp(DateTime.Now);//每次项目启动的时候，设置一个启动时间戳，照片存储的时候，每个项目的照片名是 {triggerID}-{项目启动时间戳} .bmp 存储于 配置的存储目录下的项目启动时间戳文件夹 {项目启动时间戳} 可以方便区分每批照片,以后就算拷贝到一起也不会重名。
@@ -50,6 +54,11 @@ public class CameraWorker
         savePicture();
 
 
+    }
+
+    private void ProjectStatusChangeHandler(object? sender, ProjectStatusEventArgs e)
+    {
+        throw new NotImplementedException();
     }
 
     private string timestamp = null;
