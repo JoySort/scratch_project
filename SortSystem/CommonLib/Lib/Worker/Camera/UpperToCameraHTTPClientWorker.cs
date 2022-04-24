@@ -36,9 +36,11 @@ public class CameraToUpperHTTPClientWorker
             if (module == JoyModule.Upper)
                 foreach ((var Key, var item) in rdps)
                 {
+                    var remoteURI = remoteCallProtocal + item.Address + ":" + item.Port + consolidateURL;
                     joyHttpClient.PostToRemote<Object>(
-                        remoteCallProtocal + item.Address + ":" + item.Port + consolidateURL,
+                        remoteURI,
                         results);
+                    logger.Debug($"Sending RecResult count {results.Count} of lastTriggerID {results.Last().Coordinate.Key()} to {remoteURI}");
                 }
         }
     }

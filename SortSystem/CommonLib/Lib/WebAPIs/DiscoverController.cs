@@ -40,4 +40,11 @@ public class DiscoverController : ControllerBase
     {
         return ConfigUtil.getEmitters();
     }
+    
+    [HttpGet]
+    [Route("/isAlive")]
+    public WebControllerResult isAlive()
+    {
+        return new WebControllerResult("OK");
+    }
 }

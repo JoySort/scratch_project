@@ -1,7 +1,8 @@
 
 using System.Collections.Concurrent;
+using System.Reflection;
 using CommonLib.Lib.ConfigVO;
-
+using CommonLib.Lib.Controllers;
 using CommonLib.Lib.Network;
 using CommonLib.Lib.Util;
 using NLog;
@@ -47,7 +48,48 @@ public class ModuleCommunicationWorker
             });
            
         }
+
+        checkAlive();
     }
+
+    private  void checkAlive()
+    {
+
+        Task.Run(async () =>
+        {
+            while (true)
+            {
+                Thread.Sleep(10000);
+                foreach ((var module, var rdps) in rpcEndPoints)
+                {
+
+                    Dictionary<string,RpcEndPoint> expiredEndpoints = new Dictionary<string,RpcEndPoint>();
+                    foreach ((var Key, var item) in rdps)
+                    {
+                        var remoteURI =buildUri( item.Address ,item.Port,"/isAlive") ;
+                        var result = await (new JoyHTTPClient.JoyHTTPClient()).GetFromRemote<WebControllerResult>(remoteURI);
+                        if (result == null)
+                        {
+                            expiredEndpoints.Add(Key,item);
+                            //logger.Info($"Endpoint {Key} expired, removing it from Registry");
+                        }
+                    }
+
+                    foreach ((var key,var value) in expiredEndpoints)
+                    {
+                        RpcEndPoint tmp = null;
+                        if (rdps.Remove(key, out tmp))
+                        {
+                            logger.Info($"Invalid Enpoint has been removed from Registry {tmp.Key()}");
+                        }
+                    }
+                }
+            }
+        });
+
+        
+    }
+
     private async Task registerRPCEndPoint(string ipAddr,int port,string uuid)
     {
         var url = buildUri(ipAddr, port, "/config/module");

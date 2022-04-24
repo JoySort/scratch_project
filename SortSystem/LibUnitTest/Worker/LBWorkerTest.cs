@@ -84,7 +84,7 @@ public class LBWorkerTest
             ConfigUtil.getModuleConfig().SortConfig.OutletPriority = priority;
 
 
-            var currentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+            var currentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
             if(ProjectManager.getInstance().ProjectState!=ProjectState.start)
                 ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
             sortingWorker.OnResult += pdEventHanlder;
@@ -97,7 +97,7 @@ public class LBWorkerTest
                 try
                 {
                     
-                    logger.Info("time consumed (ms):{}",( new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds() - currentTimeStamp));
+                    logger.Info("time consumed (ms):{}",( new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() - currentTimeStamp));
                    
                     LBWorker.getInstance().OnResult += LBEventHandler;
                     var serializedSortingResult =

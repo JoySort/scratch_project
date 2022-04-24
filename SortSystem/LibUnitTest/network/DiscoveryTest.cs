@@ -62,12 +62,12 @@ public class DiscoveryTest
             blocking2 = false;
         };
 
-        var startTime = DateTimeOffset.Now.ToUnixTimeSeconds();
+        var startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         while (blocking1 || blocking2)
         {
             Thread.Sleep(10);
         }
-        logger.Info("Blocking took {}",DateTimeOffset.Now.ToUnixTimeSeconds()-startTime);
+        logger.Info("Blocking took {}",DateTimeOffset.Now.ToUnixTimeMilliseconds()-startTime);
         
         Assert.NotNull(eventArgsFromInside);
         Assert.NotNull(eventArgsFromInside1);

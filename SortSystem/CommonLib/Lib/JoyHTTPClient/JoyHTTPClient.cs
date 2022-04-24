@@ -43,7 +43,7 @@ public class JoyHTTPClient
 
     public async Task<T?> PostToRemote<T>(string uri,T msg)
     {
-        logger.Debug("PostAsJsonAsync at {}",uri);
+        //logger.Debug("PostAsJsonAsync at {}",uri);
         T? result = default;
         try
         {

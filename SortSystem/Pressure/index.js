@@ -7,6 +7,7 @@ const send_data_service = require("./lib/send_data");
 
 var start_with_stop_flag=false;
 var start_only_flag = false;
+var start_trigger_id=0;
 console.log(process.argv)
 if(process.argv[2]!=null){
     if(process.argv[2]=="stop"){
@@ -18,6 +19,10 @@ if(process.argv[2]!=null){
         console.log("start only flat true "+process.argv[2])
     }
 }
+if(process.argv[3]!=null && process.argv[2]=="start"){
+    start_trigger_id = Number(process.argv[3]);
+}
+
 
 udp_service.start(on_discover_server,13567);
 
@@ -58,7 +63,7 @@ function on_discover_server(address,rpc_port,uuid){
     console.log(chalk.blue("[index]"),"project",chalk.green(remote_uuid),chalk.bgBlue("started"))
     services[remote_uuid].start_time=new Date().getTime();
     //send_data_service.send_consolidate_bulk(start_triggerid ,trigger_id_count_per_batch ,batch_count  ,endpoint_host                      ,endpoint_port                      ,remote_uuid ,callback)
-      send_data_service.send_consolidate_bulk(0               ,14                         ,60*10        ,services[remote_uuid].host        ,services[remote_uuid].port         ,remote_uuid ,on_send_data_complete)
+      send_data_service.send_consolidate_bulk(start_trigger_id               ,14                         ,60*10        ,services[remote_uuid].host        ,services[remote_uuid].port         ,remote_uuid ,on_send_data_complete)
   }
 
   function on_send_data_complete(uuid){

@@ -162,7 +162,7 @@ public class SortingWorkerTest
             ConfigUtil.getModuleConfig().SortConfig.OutletPriority = priority;
             //必须在改变优先级后再启动，否则无法生效。
             ProjectManager.getInstance().dispatchProjectStatusStartEvent(pdProject,ProjectState.start);
-            var currentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+            var currentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
             string[] ascExpected  = new string[] {"1", "2", "1", "2", "2","2","2","2"};
             string[] descExpected = new string[] {"1", "3", "1", "3", "5","5","3","3"};
 
@@ -174,7 +174,7 @@ public class SortingWorkerTest
             {
                 try
                 {
-                    logger.Info("time consumed (ms):{}",( new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds() - currentTimeStamp));
+                    logger.Info("time consumed (ms):{}",( new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds() - currentTimeStamp));
                     var expected = (priority == OutletPriority.ASC) ? ascExpected : descExpected;
                     
 

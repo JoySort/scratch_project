@@ -113,7 +113,7 @@ public class ProjectConfigVersionTest
 
     public void performTest(int index,int start,int count,int columnCount,int perTargetPictureCount,int columCountPerSection)
     {
-        long startTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();;
+        long startTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();;
         ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
         ConsolidateWorker consolidateWorker = ConsolidateWorker.getInstance();
         List<Object> ppdResult = Utilizer.prepareData(project,start, count, columnCount, perTargetPictureCount, columCountPerSection);
@@ -128,14 +128,14 @@ public class ProjectConfigVersionTest
         {
            // if(counter++<48) logger.Debug("rec result {}",item.toLog());
         }
-        logger.Info("generate data took  {}", DateTimeOffset.Now.ToUnixTimeSeconds()-startTimestamp);
-        startTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+        logger.Info("generate data took  {}", DateTimeOffset.Now.ToUnixTimeMilliseconds()-startTimestamp);
+        startTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
        
         consolidateWorker.processBulk(rrs);
         void lbEventHandler(object sender, LBResultEventArg lbResultEventArg)
         {
             //ConsolidateWorker consolidateWorker = ConsolidateWorker.getInstance();
-            var finishTimestamp =DateTimeOffset.Now.ToUnixTimeSeconds();
+            var finishTimestamp =DateTimeOffset.Now.ToUnixTimeMilliseconds();
             var timeTook =finishTimestamp  - startTimestamp;
             logger.Info("Time took for task :{} stop at {}",timeTook,finishTimestamp);
             var outlets = project.Outlets;

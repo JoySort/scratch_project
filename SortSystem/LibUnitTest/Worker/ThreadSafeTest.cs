@@ -48,7 +48,7 @@ public class ThreadSafeTest
         ProjectParser parser = new ProjectParser(porjectJsonString,ProjectParser.V1);
         project = parser.getProject();
         ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
-        long startTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+        long startTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         
         LBWorker lbWorker = LBWorker.getInstance();
         lbWorker.OnResult += lbEventHandler;
@@ -105,7 +105,7 @@ public class ThreadSafeTest
             }
         }
 
-        var finishTimestamp =DateTimeOffset.Now.ToUnixTimeSeconds();
+        var finishTimestamp =DateTimeOffset.Now.ToUnixTimeMilliseconds();
             var timeTook =finishTimestamp  - startTimestamp;
             logger.Info("Time took for task :{} stop at {}",timeTook,finishTimestamp);
         
