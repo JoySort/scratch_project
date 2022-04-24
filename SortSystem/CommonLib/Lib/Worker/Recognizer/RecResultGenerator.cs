@@ -8,6 +8,9 @@ namespace CommonLib.Lib.Worker.Recognizer;
 
 public class RecResultGenerator
 {
+    
+    private static int selectedOutletIndex = 0;
+    private static int currentOutletIndex = 0;
     /**
      * <summary>Return list first element is Dictionary<long, long> triggerid->selectedOutletIndex, second element is the List<RecResult> object list</summary>
      */
@@ -21,8 +24,7 @@ public class RecResultGenerator
         var outlets = project.Outlets;
         var consolidatePolicy = moduleConfig.ConsolidatePolicy;
         Random rdn = new Random();
-        var selectedOutletIndex = 0;
-        var currentOutletIndex = 0;
+
         var triggerIDWithSelectedChannelNO = new Dictionary<long, int>();
         for(var triggerIdIndex=startTriggerID; triggerIdIndex< (startTriggerID+count) ; triggerIdIndex++){
             
