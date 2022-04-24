@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Reflection;
 using CommonLib.Lib.Camera;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort.ResultVO;
@@ -96,7 +97,7 @@ public class RecognizerWorker
         });
     }
 
-    public void process(CameraPayLoad payload)
+    private  void process(CameraPayLoad payload)
     {
         if (ConfigUtil.getModuleConfig().RecognizerSimulationMode)
         {
@@ -112,7 +113,19 @@ public class RecognizerWorker
         }
         else
         {
+            var dllPath = ConfigUtil.getModuleConfig().RecognizerConfig.DllPaht;
+            var initPicturePath = ConfigUtil.getModuleConfig().RecognizerConfig.InitializationImagePath;
             
+            var dllRelativeToRunnerPath = Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
+                dllPath);
+            var initPicRelativeToRunnerPath = Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
+                initPicturePath);
+            
+            // load Dll with dllRelativeToRunnerPath
+            //byte[] picture = File.ReadAllBytes(initPicRelativeToRunnerPath);
+
         }
 
         return ;
