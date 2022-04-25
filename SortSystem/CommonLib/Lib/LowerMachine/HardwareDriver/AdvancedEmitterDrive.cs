@@ -12,7 +12,7 @@ public class AdvancedEmitterDrive:DriverBase
 
     public void EmitBulk(List<EmitResult> results)
     {
-        logger.Debug("Advanced debugger emitting count:{},last triggerId of batch {}",results.Count,results.Last().TriggerId);
+        logger.Debug("Advanced debugger emitting count:{},last triggerId of batch {}",results.Count,results.Count==0?-1:results.Last().TriggerId);
         foreach (var item in results)
         {
             var column = item.Column;

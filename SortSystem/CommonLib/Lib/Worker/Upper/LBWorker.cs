@@ -30,8 +30,11 @@ public class LBWorker
         if (statusEventArgs.State == ProjectState.start && statusEventArgs.currentProject != null)
         {
             this.currentProject = statusEventArgs.currentProject;
+            resultTotalCount = 0;
             prepareConfig();
             this.isProjectRunning = true;
+            channelStat = new Dictionary<string, long>();
+            lbcounter = 0;
             //processResult();
         }
 
@@ -118,7 +121,7 @@ public class LBWorker
                     var signiture = "";
                     foreach (var andFilters in tmpFilters)
                     {
-                        signiture += andFilters.Criteria.Code + String.Join(",", andFilters.FilterBoundrryIndices);
+                        signiture += andFilters.Criteria.Code + String.Join(",", andFilters.FilterBoundryIndices);
 
                     }
 
@@ -154,18 +157,11 @@ public class LBWorker
         processResult();
     }
 
-
+    private long lbcounter = 0;
     private void processResult()
     {
-         //Task.Run(() =>
-         // {
-            //  logger.Info("LBWorker starts process project id {} project name {} ", currentProject.Id, currentProject.Name);
-             
-           //   while (isProjectRunning)
-          //    {
-                //  Thread.Sleep(sortingInterval);
+
                   var processBatch = toBeProcessedResults;
-              //    if (processBatch.Count <= 0) continue;
                   toBeProcessedResults = new List<SortResult>();
                 //Load and Balancing
                 var lbResults = new List<LBResult>();
@@ -185,28 +181,52 @@ public class LBWorker
                           sortResult.Outlets,
                           new Outlet[] { new Outlet(lbChannelNO, sortResult.Outlets.First().Type, sortResult.Outlets.First().Filters) });
                       lbResults.Add(lbResult);
+                      
                       //logger.Debug("loadBalanceCount obj status when outletNO:{} outletNO {} loadBalanceCount {} ", outletNO, lbChannelNO, JsonConvert.SerializeObject(loadBalanceCount,Formatting.Indented));
                   }
                 
                   logger.Debug("LB result with count:{}",lbResults.Count);
+                  lbcounter++;
+                  updateChannelStats(lbResults);
                   DispatchResultEvent(new LBResultEventArg(lbResults));
-
+                  
                  
-              //}
-              //logger.Info("LBWorker stops process project id {} project name {} ", currentProject.Id, currentProject.Name);
-         // });
+
     }
 
-   
-    
-   
-  
+    private void updateChannelStats(List<LBResult> results)
+    {
+        
+        foreach (var result in results)
+        {
+            if(!channelStat.ContainsKey(result.LoadBalancedOutlet.First().ChannelNo))channelStat.Add(result.LoadBalancedOutlet.First().ChannelNo,0);
+            channelStat[result.LoadBalancedOutlet.First().ChannelNo]++;
+            resultTotalCount++;
+        }
+
+        if (lbcounter % (14*3) == 0)
+        {
+            channelStatCopy = new Dictionary<string, long>(channelStat);
+        }
+
+    }
+
+    private Dictionary<string, long> channelStat = new Dictionary<string, long>();
+    private Dictionary<string, long> channelStatCopy = new Dictionary<string, long>();
+    private long resultTotalCount = 0;
+
+    public long ResultTotalCount => resultTotalCount;
+
+    public Dictionary<string, long> ChannelStat => channelStatCopy;
+
     public event EventHandler<LBResultEventArg> OnResult;
     protected virtual void DispatchResultEvent(LBResultEventArg e)
     {
         var handler = OnResult;
         handler?.Invoke(this, e);
     }
+    
+
 }
 
 public class LBResultEventArg

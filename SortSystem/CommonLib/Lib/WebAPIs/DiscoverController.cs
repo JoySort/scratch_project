@@ -1,5 +1,6 @@
 using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.ConfigVO.Emission;
+using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -47,4 +48,8 @@ public class DiscoverController : ControllerBase
     {
         return new WebControllerResult("OK");
     }
+    
+    
+    
+
 }

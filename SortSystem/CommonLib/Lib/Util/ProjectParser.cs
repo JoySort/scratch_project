@@ -172,7 +172,7 @@ public class ProjectParser
                         var criteria_key = prop.Name;
                         var criteria = findCriteria(criteria_key);
                         var boundrryIndeces = ((JArray) prop.Value).Select(jv => (int) jv).ToArray();
-                        var filter = new Filter(boundrryIndeces, criteria);
+                        var filter = new Filter(boundrryIndeces, criteria,Filter.fillBoundries(criteria,boundrryIndeces).ToArray());
                         firstLevelFilter.Add( filter);
                 }
             }
@@ -196,7 +196,7 @@ public class ProjectParser
                     var criteria_key = prop.Name;
                     var criteria = findCriteria(criteria_key);
                     var boundrryIndeces = ((JArray) prop.Value).Select(jv => (int) jv).ToArray();
-                    var filter = new Filter(boundrryIndeces, criteria);
+                    var filter = new Filter(boundrryIndeces, criteria,Filter.fillBoundries(criteria,boundrryIndeces).ToArray());
                     _filters[count++] = filter;
                 }
 

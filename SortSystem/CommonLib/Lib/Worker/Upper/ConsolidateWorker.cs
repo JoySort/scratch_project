@@ -85,7 +85,7 @@ public class ConsolidateWorker
         {
             while (isProjectRunning)
             {
-                Thread.Sleep(5);
+                Thread.Sleep(1);
                 if (! (recResultQueue.Count > 0))
                 {
                     continue;
@@ -97,6 +97,7 @@ public class ConsolidateWorker
                        var deQueueResult =  recResultQueue.TryDequeue(out tmpRecResult);
                        foreach(var item in tmpRecResult){
                         if(deQueueResult)processSingle(item);
+                        //Thread.Sleep(1);
                        }
                 }
                 processResult();

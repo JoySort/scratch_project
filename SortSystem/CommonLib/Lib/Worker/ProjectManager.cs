@@ -1,13 +1,23 @@
+using System.Runtime.Serialization.Formatters.Binary;
 using CommonLib.Lib.vo;
+using NLog;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace CommonLib.Lib.LowerMachine;
 
 public class ProjectManager
 {
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
  
     private ProjectManager()
     {
     }
+
+    private  long startTimestamp;
+
+    public  long StartTimestamp => startTimestamp;
 
     private Project currentProject;
     private ProjectState projectState = ProjectState.stop;
@@ -24,6 +34,7 @@ public class ProjectManager
     public event EventHandler<ProjectStatusEventArgs> ProjectStatusChanged;
     protected virtual void OnProjectStatusChange(ProjectStatusEventArgs e)
     {
+        logger.Info($"Dispatching project status change from ProjectManager {Enum.GetName(e.State)}");
         var handler = ProjectStatusChanged;
         handler?.Invoke(this, e);
     }
@@ -45,11 +56,11 @@ public class ProjectManager
             currentProject = p ,
             State =s
         };
-        currentProject = p;
+        currentProject = JsonConvert.DeserializeObject<Project>(JsonConvert.SerializeObject(p));
         projectState = s;
         OnProjectStatusChange(discoverEventArgs);
     }
-
+   
     public void dispatchProjectStatusChangeEvent(ProjectState s)
     {
 
@@ -68,10 +79,16 @@ public class ProjectManager
         {
             State =s
         };
-        
+        if (s == ProjectState.start)
+        {
+           this.startTimestamp= DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        }
+
         projectState = s;
         OnProjectStatusChange(discoverEventArgs);
     }
+
+    public Project CurrentProject => currentProject;
 }
 
 public class ProjectStatusEventArgs : EventArgs
@@ -97,5 +114,6 @@ public enum ProjectState
     resume,
     washing,
     reverse,
+    update,
     invalid
 }

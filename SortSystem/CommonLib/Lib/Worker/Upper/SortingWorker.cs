@@ -22,7 +22,7 @@ public class SortingWorker
     private int sortingInterval;
     private List<ConsolidatedResult> toBeProcessedResults = new List<ConsolidatedResult>();
     private List<SortResult> sortResults;
-    private int[] outletLBCount ;
+
     private SortingWorker()
     {
         ProjectManager.getInstance().ProjectStatusChanged += OnProjectStatusChange;
@@ -30,13 +30,14 @@ public class SortingWorker
 
     public void OnProjectStatusChange(object sender,ProjectStatusEventArgs statusEventArgs)
     {
-        if (statusEventArgs.State == ProjectState.start && statusEventArgs.currentProject != null)
+        if ((statusEventArgs.State == ProjectState.start || statusEventArgs.State == ProjectState.update ) && statusEventArgs.currentProject != null)
         {
             this.currentProject = statusEventArgs.currentProject;
             prepareConfig();
             this.isProjectRunning = true;
             //processResult();
         }
+        
 
         if (statusEventArgs.State == ProjectState.stop || statusEventArgs.State == ProjectState.reverse || statusEventArgs.State == ProjectState.washing)
         {
@@ -60,7 +61,6 @@ public class SortingWorker
 
         this.sortingInterval = ConfigUtil.getModuleConfig().SortConfig.SortingInterval;
         this.currentOutlets = outlets;
-        this.outletLBCount = new int[outlets.Length+1];
     }
 
     public static SortingWorker getInstance()
