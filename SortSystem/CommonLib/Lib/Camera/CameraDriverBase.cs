@@ -1,11 +1,13 @@
 using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.LowerMachine;
-
+using NLog;
 namespace CommonLib.Lib.Camera;
 
 public abstract class CameraDriverBase:ICameraDriver
 {
-    private CameraConfig camConfig;
+    protected static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+    protected CameraConfig camConfig;
     
     public CameraConfig CamConfig => camConfig;
     
@@ -13,9 +15,10 @@ public abstract class CameraDriverBase:ICameraDriver
     {
         this.camConfig = camConfig;
         ProjectManager.getInstance().ProjectStatusChanged += ProjectStatusChangeHandler;
-        initCam();
+        InitCam();
     }
 
+    //也许没用
     internal bool isProjectRunning = false;
 
     public virtual void ProjectStatusChangeHandler(object sender, ProjectStatusEventArgs args)
@@ -35,7 +38,7 @@ public abstract class CameraDriverBase:ICameraDriver
         
     }
 
-    public virtual void initCam()
+    public virtual void InitCam()
     {
         //TODO: code to init the camera
         throw new NotImplementedException();
@@ -50,13 +53,13 @@ public abstract class CameraDriverBase:ICameraDriver
 
     internal long counter = 0;
 
-    public void OnRecivingPicture(byte[] picture)
+    public void onRecivingPicture(byte[] picture)
     {
         OnPictureArrive?.Invoke(this,new CameraPayLoad(counter++,camConfig,picture));
     }
 
 
-    public  event EventHandler<CameraPayLoad> OnPictureArrive;
+    public  event EventHandler<CameraPayLoad>? OnPictureArrive;
 }
 
 public class CameraPayLoad
@@ -68,6 +71,7 @@ public class CameraPayLoad
 
     public CameraPayLoad(long triggerId, CameraConfig camConfig, byte[] pictureData)
     {
+        
         triggerID = triggerId;
         this.camConfig = camConfig;
         this.pictureData = pictureData;

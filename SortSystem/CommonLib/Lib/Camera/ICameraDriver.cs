@@ -4,11 +4,11 @@ namespace CommonLib.Lib.Camera;
 
 public interface ICameraDriver
 {
-    public abstract void ProjectStatusChangeHandler(object sender, ProjectStatusEventArgs args);
-    public abstract void initCam();
-    public abstract void processCameraData();
+    void ProjectStatusChangeHandler(object sender, ProjectStatusEventArgs args);
+    void InitCam();
+    void processCameraData();
 
-    public abstract void OnRecivingPicture(byte[] picture);
+    void onRecivingPicture(byte[] picture);
     
-    public  event EventHandler<CameraPayLoad> OnPictureArrive;
+    event EventHandler<CameraPayLoad> OnPictureArrive;
 }

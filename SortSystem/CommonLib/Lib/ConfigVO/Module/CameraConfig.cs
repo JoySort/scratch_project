@@ -8,14 +8,18 @@ public class CameraConfig
     private bool saveRawImage;
     private string savePath;
 
+    private int width;
+    private int height;
 
-    public CameraConfig(string address, int[] columns, CameraPosition cameraPosition, bool saveRawImage, string savePath)
+    public CameraConfig(string address, int[] columns, CameraPosition cameraPosition, bool saveRawImage, string savePath,int width,int height)
     {
         this.address = address;
         this.columns = columns;
         this.cameraPosition = cameraPosition;
         this.saveRawImage = saveRawImage;
         this.savePath = savePath;
+        this.width = width;
+        this.height = height;
     }
 
     public string SavePath => savePath;
@@ -27,6 +31,9 @@ public class CameraConfig
     public int[] Columns => columns;
 
     public CameraPosition CameraPosition => cameraPosition;
+
+    public int Width => width;
+    public int Height => height;
 }
 
 public enum CameraPosition

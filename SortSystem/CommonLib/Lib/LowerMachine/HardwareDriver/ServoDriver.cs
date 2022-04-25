@@ -27,32 +27,52 @@ public class ServoDriver:DriverBase
                 }
                 else
                 {
-                    sendStopCMDAgin();
+                    sendStopCMD();
                 }
             }
         });
     }
 
-    private void sendStopCMDAgin()
+    private void sendStopCMD()
     {
-        throw new NotImplementedException();
+        byte[] addr= new byte[2] { 0x00, 0x94 };
+        byte[] data = new byte[2] { 0x00, 0x00 };
+        comlink.writeSingleReg(addr, data, 0, 200);        
+    }
+
+    private void sendStartCMD()
+    {
+        byte[] addr = new byte[2] { 0x00, 0x94 };
+        byte[] data = new byte[2] { 0x00, 0x01 };
+        comlink.writeSingleReg(addr, data, 0, 200);
+
     }
 
     public void ApplyChange(Servo config)
     {
         keepWatching = true;
         //logger.Info(" {} is applying parameters{}",config.Name,JsonConvert.SerializeObject(config));
-
-        //comlink.send();
-        //TODO: link to com communication
+        if (config.Enabled)
+        {
+            sendStartCMD();
+        }
+        else
+        {
+            isStopped = false;
+            sendStopCMD();
+            Thread thread = new Thread(watcher);
+            thread.Start();
+                
+        }        
     }
 
-    public void onData(object sender,byte[] cmd)
+    public override void onData(object sender,byte[] cmd)
     {
         //解析代码
         // if (cmd)
         // {
-        //     isStopped = true;
+        if(cmd[3]==0)
+            isStopped = true;
         // }
     }
     

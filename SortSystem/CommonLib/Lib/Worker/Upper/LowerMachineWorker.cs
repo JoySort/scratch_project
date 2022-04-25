@@ -103,7 +103,7 @@ public class LowerMachineWorker
                // if (tmpBatch.Count <= 0) continue;
                 toBeProcessedResults = new List<EmitResult>();
                 logger.Debug("LowerMachine AdvancedEmitter count{}",tmpBatch.Count);
-                lowerMachineDriver.advancedEmitter.EmitBulk(tmpBatch);
+                //lowerMachineDriver.advancedEmitter.EmitBulk(tmpBatch);
 
                 // }
 

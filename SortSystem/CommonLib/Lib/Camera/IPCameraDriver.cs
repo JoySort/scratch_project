@@ -7,13 +7,13 @@ public class IPCameraDriver:CameraDriverBase
     public IPCameraDriver(CameraConfig camConfig) : base(camConfig)
     {
     }
-    public virtual void initCam()
+    public override void InitCam()
     {
         //TODO: code to init the camera
         throw new NotImplementedException();
     }
 
-    public virtual void processCameraData()
+    public override void processCameraData()
     {
         //TODO: code to init the camera
         //OnRecivingPicture(byte[] picture)

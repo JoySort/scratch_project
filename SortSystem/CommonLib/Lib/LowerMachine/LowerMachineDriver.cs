@@ -15,7 +15,7 @@ public class LowerMachineDriver
     private List<SwitchDriver> switches = new List<SwitchDriver>();
     private List<TriggerDriver> triggers = new List<TriggerDriver>();
     private EmitterDriver[][] emitters;
-    public AdvancedEmitterDrive advancedEmitter;
+    public List<AdvancedEmitterDrive> advancedEmitter=new List<AdvancedEmitterDrive>();
     
     
      private LowerMachineDriver()
@@ -96,7 +96,7 @@ public class LowerMachineDriver
             }
         }
 
-        advancedEmitter = new AdvancedEmitterDrive(comLinkDriver);
+        advancedEmitter.Add(new AdvancedEmitterDrive(comLinkDriver));
     }
 
    
@@ -108,7 +108,8 @@ public class LowerMachineDriver
         var totalColumnCount = 0;
         foreach (var lc in lcs)
         {
-            if (totalColumnCount < lc.Columns.Last()) totalColumnCount = lc.Columns.Last();
+            if (totalColumnCount < lc.Columns.Last())
+                totalColumnCount = lc.Columns.Last();
         }
         
         totalColumnCount = totalColumnCount + 1;
