@@ -88,19 +88,21 @@ public class SortController: ControllerBase
         var cstat = LBWorker.getInstance().ChannelStat;
         var project = ProjectManager.getInstance().CurrentProject;
         var result = new List<UIResultChannelCounter>();
-        var total = LBWorker.getInstance().Count;
-        
-        
+        var total = LBWorker.getInstance().ResultTotalCount;
+
+        total = total == 0 ? -1 : total;
         if (project != null)
         {
-           
+            long totalCount = 0;
             foreach (var outlet in project.Outlets)
             {
                 var count = cstat.ContainsKey(outlet.ChannelNo) ? cstat[outlet.ChannelNo] : 0;
                 result.Add( new UIResultChannelCounter(outlet.ChannelNo, count, Math.Round((double)count/total,3)));;
-               
+                totalCount += count;
+                logger.LogDebug($" totalCount {totalCount},total {total},percent {Math.Round((double)count/total,3)}");
             }
         }
+       
 
      
 

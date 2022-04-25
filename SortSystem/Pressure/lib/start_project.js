@@ -43,8 +43,10 @@ function getModuleConfig(remote_uuid){
         .then(function(response) {
            // console.log(response.data)
             if(response.data.module==3){
-                console.log("upper found issue start ",services[remote_uuid].host+':'+services[remote_uuid].port)
-                start_project(remote_uuid);
+                console.log("upper found issue start in 5 sec ",services[remote_uuid].host+':'+services[remote_uuid].port)
+               setTimeout(()=>{
+                   start_project(remote_uuid)
+               },5000);
             }
         })
         .catch(function(error) {

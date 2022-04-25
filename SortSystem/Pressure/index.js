@@ -34,6 +34,8 @@ udp_service.start(on_discover_server,13567);
 
 
 var services={};
+var upper={};
+
 
 function on_discover_server(address,rpc_port,uuid){
     console.log("running on_discover_server callback",address,rpc_port,uuid);
