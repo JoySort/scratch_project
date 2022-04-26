@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using CommonLib.Lib.Camera;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort.ResultVO;
@@ -12,6 +13,20 @@ namespace CommonLib.Lib.Worker.Recognizer;
 
 public class RecognizerWorker
 {
+    const string strDllName = "datedll.dll";
+    [DllImport(strDllName, EntryPoint = "ApplicationRecognize")]
+    private static extern int ApplicationRecognize(byte[] buf, int height, int width, int[] outdata,
+        int per_len = 20, int rows = 4, int cols = 6);
+    [DllImport(strDllName, EntryPoint = "ApplicationRecognize")]
+    private static extern int ApplicationRecognize(IntPtr buf, int height, int width, int[] outdata,
+        int per_len = 20, int rows = 4, int cols = 6);
+
+    [DllImport(strDllName, EntryPoint = "set_category")]
+    public static extern void set_category(int ct, int func);
+
+    [DllImport(strDllName, EntryPoint = "init_date_Algorithm")]
+    public static extern int init_date_Algorithm();
+
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private RecognizerWorker()
     {
@@ -49,25 +64,53 @@ public class RecognizerWorker
 
         if (!ConfigUtil.getModuleConfig().RecognizerSimulationMode)
         {
-            var dllPath = ConfigUtil.getModuleConfig().RecognizerConfig.DllPaht;
-            var initPicturePath = ConfigUtil.getModuleConfig().RecognizerConfig.InitializationImagePath;
+            //var dllPath = ConfigUtil.getModuleConfig().RecognizerConfig.DllPaht;
             
-            var dllRelativeToRunnerPath = Path.Combine(
-                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
-                dllPath);
-            var initPicRelativeToRunnerPath = Path.Combine(
-                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
-                initPicturePath);
+
+            //var dllRelativeToRunnerPath = Path.Combine(
+            //    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
+            //    dllPath);
             
-            // load Dll with dllRelativeToRunnerPath
-            //byte[] picture = File.ReadAllBytes(initPicRelativeToRunnerPath);
+
+            Task.Run(() =>
+            {
+                init_date_Algorithm();
+                var initPicturePath = ConfigUtil.getModuleConfig().RecognizerConfig.InitializationImagePath;
+                var initPicRelativeToRunnerPath = Path.Combine(
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
+                    initPicturePath);
+
+                // load Dll with dllRelativeToRunnerPath
+
+                byte[] picture = File.ReadAllBytes(initPicRelativeToRunnerPath); 
+                int dataOffset = picture[10] 
+                    + 256 * picture[11] 
+                    + 256 * 256 * picture[12] 
+                    + 256 * 256 * 256 * picture[13];
+                int width = picture[18]
+                    + 256 * picture[19]
+                    + 256 * 256 * picture[20]
+                    + 256 * 256 * 256 * picture[21];
+
+                int height = picture[22]
+                    + 256 * picture[23]
+                    + 256 * 256 * picture[24]
+                    + 256 * 256 * 256 * picture[25];
+
+
+                IntPtr dataPtr = Marshal.UnsafeAddrOfPinnedArrayElement(picture, dataOffset);
+                int[] outdata = new int[20*width*height];
+                ApplicationRecognize(dataPtr, height, width, outdata, 4, 6);
+
+
+            });
         }
 
     }
     
 
     private bool isProjectRunning = false;
-    private Project currentProject;
+    private Project? currentProject;
 
     private void ProjectStatusChangeHandler(object? sender, ProjectStatusEventArgs e)
     {
@@ -98,7 +141,7 @@ public class RecognizerWorker
         {
             while (isProjectRunning)
             {
-                if (!(toBeRecognized.Count > 0))
+                if ((toBeRecognized.Count <= 0))
                 {
                     Thread.Sleep(1);//当没有照片时，释放一下线程，有照片的时候，不停歇的进行识别。
                     continue;
@@ -114,24 +157,51 @@ public class RecognizerWorker
 
     private  void process(CameraPayLoad payload)
     {
+        List<RecResult>? results=null;
         if (ConfigUtil.getModuleConfig().RecognizerSimulationMode)
         {
             //这个模拟器并不生成这一张照片的一个识别结果，而是生成4张照片的结果一次性。因此不是一个严格的模拟器。
-            var result =  RecResultGenerator.prepareData(currentProject, payload.TriggerId, 1, payload.CamConfig.Columns, payload.CamConfig.CameraPosition,4);
-            if (result.Last().Coordinate.TriggerId == 0)
+            results =  RecResultGenerator.prepareData(currentProject, payload.TriggerId, 1, payload.CamConfig.Columns, payload.CamConfig.CameraPosition,4);
+            if (results.Last().Coordinate.TriggerId == 0)
             {
                 logger.Debug($"TriggerID 0 triggerred");
-            }
-
-            dispatchResult(result);
+            }         
 
         }
         else
         {
- 
+            results=new List<RecResult>();
+            int width = payload.CamConfig.Width; ;
+            int height = payload.CamConfig.Height;
+            int cols = payload.CamConfig.Columns.Last() - payload.CamConfig.Columns.First() + 1;
+            int rows = payload.CamConfig.Offsets.Last() - payload.CamConfig.Offsets.First() + 1;
+            int[] outdata = new int[cols * rows * 20];
 
+            if (currentProject != null)
+            {
+                ApplicationRecognize(payload.PictureData, height, width, outdata, 20, rows, cols);
+
+                Criteria[] criterias = currentProject.Criterias;
+                for (int i = 0; i < rows; i++)
+                {
+                    for (int j = 0; j < cols; j++)
+                    {
+                        List<Feature> features = new List<Feature>();
+                        for (int k = 0; k < criterias.Length; k++)
+                        {
+                            int index = criterias[k].Index;
+                            features.Add(new Feature(index, outdata[index]));
+                        }
+                        RecResult result = new RecResult(new Coordinate(j, i, ConfigVO.CameraPosition.middle, payload.TriggerId),
+                            5, features);
+                        results.Add(result);
+
+                    }
+                }
+            }
         }
-
+        if(results!=null)
+            dispatchResult(results);
         return ;
     }
 
@@ -145,5 +215,5 @@ public class RecognizerWorker
     }
 
 
-    public  event EventHandler<List<RecResult>> RecResultGenerated;
+    public  event EventHandler<List<RecResult>>? RecResultGenerated;
 }

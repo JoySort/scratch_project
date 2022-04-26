@@ -21,7 +21,7 @@ public abstract class CameraDriverBase:ICameraDriver
     //也许没用
     internal bool isProjectRunning = false;
 
-    public virtual void ProjectStatusChangeHandler(object sender, ProjectStatusEventArgs args)
+    public virtual void ProjectStatusChangeHandler(object? sender, ProjectStatusEventArgs args)
     {
         if (args.State == ProjectState.stop)
         {

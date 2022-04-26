@@ -76,7 +76,7 @@ namespace CommonLib.Lib.Camera
             camera.StreamGrabber.Start(GrabStrategy.OneByOne, GrabLoop.ProvidedByStreamGrabber);
         }
         static PixelDataConverter converter = new PixelDataConverter();
-        void OnImageGrabbedAll(Object sender, ImageGrabbedEventArgs e)
+        void OnImageGrabbedAll(Object? sender, ImageGrabbedEventArgs e)
         {
             try
             {

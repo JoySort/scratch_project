@@ -7,7 +7,8 @@ public class CMDArgumentUtil
 {
     public static Logger logger = LogManager.GetCurrentClassLogger();
     private const string devConfigRoot = "../../../../LibUnitTest/config";
-    public static string  configRoot   =devConfigRoot;
+    public static string configRoot =devConfigRoot;
+    public static int gid = 0;
     public static void parse(string[] args)
     {
         
@@ -17,9 +18,30 @@ public class CMDArgumentUtil
         var configFolderSet = false;
         var p = new OptionSet ()
         {  
-            { "config_folder=", "Specify config folder RELATIVE to app i.e. ../config ../../config,you need to put config out of program path to avoid overwrite from upgrade", v => { if (v != null) {configRoot = v;
-                configFolderSet = true;logger.Info("Using cmd parameter {}:{}","config_folder",v);} } },
-            { "help",  "show this message and exit", v => show_help = v != null }
+            { 
+                "config_folder=", 
+                "Specify config folder RELATIVE to app i.e. ../config ../../config,you need to put config out of program path to avoid overwrite from upgrade",
+                v => { 
+                    if (v != null) 
+                    {
+                        configRoot = v;
+                        configFolderSet = true;
+                        logger.Info("Using cmd parameter {}:{}","config_folder",v);
+                    } 
+                } 
+            },
+            { 
+                "help",
+                "show this message and exit",
+                v => show_help = v != null
+            },
+            {
+                "gid=",
+                "Specify the sequence id of this program in the series",
+                v => {
+                    int.TryParse(v,out gid);
+                }
+            }
         };
 
         try
