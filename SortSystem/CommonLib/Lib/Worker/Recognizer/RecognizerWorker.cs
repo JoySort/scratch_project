@@ -193,7 +193,7 @@ public class RecognizerWorker
                             features.Add(new Feature(index, outdata[index]));
                         }
                         RecResult result = new RecResult(new Coordinate(j, i, ConfigVO.CameraPosition.middle, payload.TriggerId),
-                            5, features);
+                            5,DateTimeOffset.Now.ToUnixTimeMilliseconds(), features);
                         results.Add(result);
 
                     }
