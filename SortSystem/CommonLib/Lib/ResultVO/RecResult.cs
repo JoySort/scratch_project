@@ -13,7 +13,7 @@ public class RecResult:RawResult
         set => features = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public RecResult(Coordinate coordinate, int expectedFeatureCount, List<Feature> features) : base(coordinate, expectedFeatureCount)
+    public RecResult(Coordinate coordinate, int expectedFeatureCount, long createdTimestamp, List<Feature> features) : base(coordinate, expectedFeatureCount, createdTimestamp)
     {
         this.features = features;
     }
@@ -28,5 +28,7 @@ public class RecResult:RawResult
 
         return Coordinate.Key() + result;
     }
+
+
 
 }

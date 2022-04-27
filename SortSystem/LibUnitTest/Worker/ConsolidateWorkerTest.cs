@@ -119,7 +119,7 @@ public class ConsolidateWorkerTest
         Assert.AreEqual(args.Results.Last().Features.First().Value,10);
         Assert.AreEqual(args.Results.Last().Features[1].Value,22.5);
         Assert.AreEqual(args.Results.Last().Features.Last().Value,12.5);
-        logger.Info("PD assert finished process time {} ms",(DateTime.Now.ToFileTime()-args.Results.Last().ProcessTimestamp)/10000);
+        logger.Info("PD assert finished process time {} ms",(DateTime.Now.ToFileTime()-args.Results.Last().CreatedTimestamp)/10000);
         threadBlocking2 = false;
         worker.OnResult -= pdEventHanlder;
     }

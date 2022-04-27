@@ -3,6 +3,7 @@ using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.ConfigVO.Emission;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Util;
+using Newtonsoft.Json;
 using NLog;
 
 namespace LibUnitTest.Parser;
@@ -14,6 +15,17 @@ public class ConfigLoaderTest
     {
         LogManager.LoadConfiguration("config/logger.config");
         ConfigUtil.setConfigFolder( "../../../config");;
+    }
+
+
+    [Test]
+    public void LoadModuleSerialization()
+    {
+        ModuleConfig cfg = ConfigUtil.getModuleConfig();
+        var configString = JsonConvert.SerializeObject(cfg);
+        var cfgActual = JsonConvert.DeserializeObject<ModuleConfig>(configString);
+        var configStringActual = JsonConvert.SerializeObject(cfgActual);
+        Assert.AreEqual(configString,configStringActual);
     }
 
     [Test]
@@ -38,6 +50,7 @@ public class ConfigLoaderTest
        Assert.AreEqual(cfg.ConsolidatePolicy.ConsolidationOperation.Last(),ConsolidateOperation.avg);
        Assert.AreEqual(cfg.ConsolidatePolicy.CriteriaCode.Last(),"fm");
        Assert.AreEqual(cfg.CriteriaMapping["fm"].Key,"fm");
+       Assert.AreEqual(cfg.ElasticSearchConfig.url,"http://es.lan:9200");
        
     }
     

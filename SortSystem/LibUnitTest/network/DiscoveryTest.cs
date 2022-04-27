@@ -42,8 +42,8 @@ public class DiscoveryTest
         discoverService1.Uuid = Guid.NewGuid().ToString();
         //discoverService1.UnitTestFlag = true;
         discoverService1.StartListen();
-        DiscoverFoundEventArgs eventArgsFromInside1 = null;
-        discoverService1.EndPointDiscoverFound += (object sender, DiscoverFoundEventArgs e) =>
+        EndPointChangedArgs eventArgsFromInside1 = null;
+        discoverService1.EndPointDiscoverFound += (object sender, EndPointChangedArgs e) =>
         {
             eventArgsFromInside1 = e;
             blocking1 = false;
@@ -54,9 +54,9 @@ public class DiscoveryTest
         discoverService.KeepAliveInterval = 10;
         //discoverService.UnitTestFlag = true;
         discoverService.StartListen();
-        DiscoverFoundEventArgs eventArgsFromInside = null;
+        EndPointChangedArgs eventArgsFromInside = null;
 
-        discoverService.EndPointDiscoverFound += (object sender, DiscoverFoundEventArgs e) =>
+        discoverService.EndPointDiscoverFound += (object sender, EndPointChangedArgs e) =>
         {
             eventArgsFromInside = e;
             blocking2 = false;

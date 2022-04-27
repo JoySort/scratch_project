@@ -101,6 +101,7 @@ public class SortingWorker
                     applySortingRules(item);
                 }
                 logger.Debug("Sortingworker with count {} ",sortResults.Count);
+                if(sortResults.Count>0)
                 DispatchResultEvent(new SortingResultEventArg(sortResults));
                 
                
@@ -145,7 +146,7 @@ public class SortingWorker
 
         if (selectedOutlets.Count > 0)
         {
-            sortResults.Add(new SortResult(consolidatedResult.Coordinate, consolidatedResult.ExpectedFeatureCount, consolidatedResult.Features,
+            sortResults.Add(new SortResult(consolidatedResult.Coordinate, consolidatedResult.ExpectedFeatureCount,consolidatedResult.CreatedTimestamp ,consolidatedResult.Features,
                 selectedOutlets.ToArray()));
         }
         else

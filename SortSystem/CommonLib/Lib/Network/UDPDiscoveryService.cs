@@ -48,9 +48,9 @@ public class UDPDiscoveryService
 
 
     public bool ExitFlag { get; set; }
-    public event EventHandler<DiscoverFoundEventArgs> EndPointDiscoverFound;
+    public event EventHandler<EndPointChangedArgs> EndPointDiscoverFound;
 
-    protected virtual void OnEndPointDiscoverFound(DiscoverFoundEventArgs e)
+    protected virtual void OnEndPointDiscoverFound(EndPointChangedArgs e)
     {
         var handler = EndPointDiscoverFound;
         handler?.Invoke(this, e);
@@ -131,12 +131,7 @@ public class UDPDiscoveryService
 
         //simulator use rpcPort =-1 to avoid being found.
         if (rpcPort == -1) return;
-        var discoverEventArgs = new DiscoverFoundEventArgs
-        {
-            ipAddr = ip,
-            rpcPort = rpcPort,
-            uuid = UUID
-        };
+        var discoverEventArgs = new EndPointChangedArgs(ip, UUID, rpcPort);
         OnEndPointDiscoverFound(discoverEventArgs);
     }
 

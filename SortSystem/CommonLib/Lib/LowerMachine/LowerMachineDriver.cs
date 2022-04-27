@@ -68,6 +68,7 @@ public class LowerMachineDriver
         ComLinkDriver cl = (ComLinkDriver) sender;
         if(cl.LowerConfig.IsMaster)
             this.machineID = machineID;
+        ConfigUtil.getModuleConfig().MachineID = machineID;
     }
 
     private void setupHardwares(ComLinkDriver comLinkDriver)

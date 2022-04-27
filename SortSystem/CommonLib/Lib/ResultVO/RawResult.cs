@@ -6,18 +6,18 @@ public class RawResult
     //苹果会分别给出重量和识别结果，因此，可能会有2批结果需要缓存并且最终整合后才能使用。
     private int expectedFeatureCount;
     
-    private long process_timestamp = DateTime.Now.ToFileTime()  ;
-    public long ProcessTimestamp
+    private long created_timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds()  ;
+    public long CreatedTimestamp
     {
-        get => process_timestamp;
-        //set => process_timestamp = value;
+        get => created_timestamp;
+        set => created_timestamp = value;
 
     }
-
-    public RawResult(Coordinate coordinate, int expectedFeatureCount)
+    public RawResult(Coordinate coordinate, int expectedFeatureCount,long createdTimestamp)
     {
         this.coordinate = coordinate;
         this.expectedFeatureCount = expectedFeatureCount;
+        this.created_timestamp = createdTimestamp;
     }
 
     public Coordinate Coordinate => coordinate;

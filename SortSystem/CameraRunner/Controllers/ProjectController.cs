@@ -24,7 +24,7 @@ public class ProjectController
         string msg ="OK";
         try
         {
-            _logger.LogDebug($"Project start WEB API invoked project id {project.Id},project name {project.Id}");
+            _logger.LogInformation($"Project start WEB API invoked project id {project.Id},project name {project.Id}");
             ProjectManager.getInstance().dispatchProjectStatusStartEvent(project, ProjectState.start);
         }
         catch (Exception e)
@@ -44,6 +44,7 @@ public class ProjectController
         string msg = "OK";
         try
         {
+            _logger.LogInformation($"Project STOP WEB API invoked ");
             ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
         }
         catch (Exception e)

@@ -21,6 +21,13 @@ public class Project
 
     public Outlet[] Outlets => outlets;
 
+    private long createdTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+    public long TimeStamp
+    {
+        get => createdTimestamp;
+        set => createdTimestamp=value;
+    }
+
     public Project(string id, string name, Genre genre, Category category, Criteria[] criterias, Outlet[] outlets)
     {
         this.id = id;

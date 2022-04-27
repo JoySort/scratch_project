@@ -9,6 +9,10 @@
     "dllPaht": "./recognizer.dll",
     "initializationImagePath": "./assets/1.bmp"
   },
+  "elasticSearchConfig": {
+    "url": "http://es.lan:9200",
+    "enabled": true
+  },
   "lowerConfig":[
     {
       "hardwarePort": "/dev/com1",

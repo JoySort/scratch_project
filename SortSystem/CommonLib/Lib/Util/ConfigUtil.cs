@@ -50,7 +50,10 @@ public class ConfigUtil
         logger.Debug("using path "+path);
         var jsonString = File.ReadAllText(path);
         _machineStates = JsonConvert.DeserializeObject<MachineState[]>(jsonString);
+        getModuleConfig().MachineState = _machineStates;
         }
+
+        
 
         return _machineStates;
     }
@@ -65,6 +68,7 @@ public class ConfigUtil
             logger.Debug("using path " + path);
             var jsonString = File.ReadAllText(path);
             _emitters = JsonConvert.DeserializeObject<Emitter[]>(jsonString);
+            getModuleConfig().emiiters = _emitters;
         }
 
         return _emitters;

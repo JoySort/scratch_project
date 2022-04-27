@@ -19,8 +19,8 @@ public class Coordinate
         triggerID = triggerId;
     }
 
-    public string Key() =>  "t"+ triggerID+"-c" + column +"-p_"+cameraPosition;
-
+    public string Key() =>  "t"+ triggerID+"-c" + column + "-r"+rowOffset+"-p_"+cameraPosition;
+    public string ConsolidationKey() =>  "t"+ triggerID+"-c" + column ;
     public bool isSame(Coordinate cd)
     {
         if (cd == null) return false;

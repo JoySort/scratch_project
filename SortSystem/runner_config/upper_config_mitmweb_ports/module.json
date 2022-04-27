@@ -18,6 +18,10 @@
       "isMaster": false
     }
   ],
+  "elasticSearchConfig": {
+    "url": "http://es.lan:9200",
+    "enabled": true
+  },
   "cameraConfigs":[
     {
       "address": "192.168.66.1",

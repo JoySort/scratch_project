@@ -74,7 +74,7 @@ function generate_rec_obj(start,count,remote_uuid){
     var template1={
         "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 0},
         "expectedFeatureCount": 2,
-        "features": [ { "criteriaIndex": 1, "value": 10 }]
+        "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 10 },{ "criteriaIndex": 8, "value": 10 },{ "criteriaIndex": 4, "value": 10 },{ "criteriaIndex":5, "value": 10 },{ "criteriaIndex":9, "value": 10 }]
       }
 
     var template2=  {
@@ -97,7 +97,11 @@ function generate_rec_obj(start,count,remote_uuid){
                 cloned.coordinate.triggerId=i;
                 cloned.coordinate.column=col;
                 cloned.coordinate.section=Math.floor(col/6);
-                cloned.features[0].value=40;
+                for(var fi = 0 ; fi<cloned.features.length;fi ++){
+                    cloned.features[0].value=Math.random()*100;
+                   
+                }
+              
                 results.push(cloned);
                 if(row == 3){
                     cloned2 =  JSON.parse(JSON.stringify(template2));
@@ -105,6 +109,7 @@ function generate_rec_obj(start,count,remote_uuid){
                     cloned2.coordinate.column=col;
                     cloned2.coordinate.section=Math.floor(col/6);
                     cloned2.features[0].value=(col%2==0)?4:6;
+                   
                     results.push(cloned2);
                 }
                 

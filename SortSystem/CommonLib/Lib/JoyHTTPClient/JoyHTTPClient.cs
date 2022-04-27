@@ -21,13 +21,13 @@ public class JoyHTTPClient
         T? result = default;
         try
         {
-           result =  await httpClient.GetFromJsonAsync<T>(uri);
-           
-          
+            result = await httpClient.GetFromJsonAsync<T>(uri);
+
+
         }
         catch (HttpRequestException exception) // Non success
         {
-            logger.Error("An error occurred while making http get request from {},{}.",uri,exception.ToString());
+            logger.Error("An error occurred while making http get request from {},{}.", uri, exception.ToString());
         }
         catch (NotSupportedException) // When content type is not valid
         {
@@ -35,7 +35,11 @@ public class JoyHTTPClient
         }
         catch (JsonException exception) // Invalid JSON
         {
-            logger.Error("Invalid JSON.{}",exception.Message);
+            logger.Error("Invalid JSON.{}", exception.Message);
+        }
+        catch (Exception e)
+        {
+            logger.Error("httpClient.GetFromJsonAsync exception {}", e.Message);
         }
 
         return result;

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
+using Newtonsoft.Json;
 
 
 namespace LibUnitTest.Parser;
@@ -31,6 +32,13 @@ public class JsonParserTestV2 {
         Assert.AreEqual(project.Name,"a");
         Assert.AreEqual(project.Genre.Name,GenreName.palmDate);
         Assert.AreEqual(project.Category.CatId,2);
+    }
+    
+    [Test]
+    public void ProjectBackAndForth()
+    {
+       var myProject= JsonConvert.DeserializeObject<Project>(JsonConvert.SerializeObject(project));
+       Assert.AreEqual(JsonConvert.SerializeObject(project),JsonConvert.SerializeObject(myProject));
     }
 
     [Test]

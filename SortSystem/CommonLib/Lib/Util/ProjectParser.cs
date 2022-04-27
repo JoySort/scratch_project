@@ -45,8 +45,7 @@ public class ProjectParser
                     project = parser.getProject();
                     if (project == null) throw new Exception("Project content is not valid " + content);
                     if (logger.IsEnabled(LogLevel.Debug))
-                        logger.Debug("Parsing Project id: {} with name {} of content:{}", project.Id, project.Name,
-                            JsonConvert.SerializeObject(project));
+                        logger.Debug("Parsing Project id: {} with name {} ", project.Id, project.Name);
                 }
                 catch (Exception e)
                 {

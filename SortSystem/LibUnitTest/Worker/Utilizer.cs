@@ -147,7 +147,7 @@ public class Utilizer
                         featureList.Add(new Feature(key,featureValue));
                     }
                     
-                    var recResult = new RecResult(coordinate, expectedFeatureCount, featureList);
+                    var recResult = new RecResult(coordinate, expectedFeatureCount, DateTimeOffset.Now.ToUnixTimeMilliseconds(),featureList);
                     result.Add(recResult);
                 }
                 
@@ -162,13 +162,13 @@ public class Utilizer
                     //生成一个不小于下边界，不大于上边界的随机数。
                     var featureValue = offsetRowNotNormalFeature.FilterBoundaries.First().First() + ((float)rdn.Next((int)diff*100))/100;
                     featureList1.Add(new Feature(offsetRowNotNormalFeature.Criteria.Index,featureValue));
-                    var recResult1 = new RecResult(coordinate, expectedFeatureCount, featureList1);
+                    var recResult1 = new RecResult(coordinate, expectedFeatureCount,DateTimeOffset.Now.ToUnixTimeMilliseconds(), featureList1);
                     result.Add(recResult1);
                 }
                 else if(NotNormalOffsetRowCountIndex!=-1)
                 {
                     featureList1.Add(new Feature(NotNormalOffsetRowCountIndex,0));
-                    var recResult1 = new RecResult(coordinate, expectedFeatureCount, featureList1);
+                    var recResult1 = new RecResult(coordinate, expectedFeatureCount,DateTimeOffset.Now.ToUnixTimeMilliseconds(), featureList1);
                     result.Add(recResult1);
                 }
                 

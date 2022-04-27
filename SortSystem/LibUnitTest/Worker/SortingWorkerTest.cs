@@ -142,7 +142,7 @@ public class SortingWorkerTest
         {
             Assert.AreEqual("1", args.Results.First().Outlets.First().ChannelNo);
             logger.Info("time consumed (ms):{}",
-                (DateTime.Now.ToFileTime() - args.Results.First().ProcessTimestamp) / 100);
+                (DateTime.Now.ToFileTime() - args.Results.First().CreatedTimestamp) / 100);
             logger.Info("APPle assert finished {}", JsonConvert.SerializeObject(args.Results));
         }
         catch (Exception e)

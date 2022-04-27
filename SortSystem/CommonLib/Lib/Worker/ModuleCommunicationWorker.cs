@@ -3,8 +3,10 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.Controllers;
+using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Network;
 using CommonLib.Lib.Util;
+using CommonLib.Lib.vo;
 using NLog;
 
 namespace CommonLib.Lib.Worker;
@@ -34,12 +36,12 @@ public class ModuleCommunicationWorker
         if (proxyRpcPort == 0) proxyRpcPort = rpc_port;
         var udp_ports =  ConfigUtil.getModuleConfig().NetworkConfig.DiscoveryPorts;
         var moduleName = ConfigUtil.getModuleConfig().Name;
-        
+        OnRemove+=onRemoveEndPoint;
         foreach (var port in udp_ports)
         {
             var uppDiscoverService = new UDPDiscoveryService(rpc_port==proxyRpcPort?rpc_port:proxyRpcPort,port,moduleName);
             uppDiscoverService.EndPointDiscoverFound += onDiscoverEndPoint;
-            
+           
             _discoveryServices.Add(uppDiscoverService);
             Task.Run(() =>
             {
@@ -83,6 +85,7 @@ public class ModuleCommunicationWorker
                         RpcEndPoint tmp = null;
                         if (rdps.Remove(key, out tmp))
                         {
+                            OnRemove?.Invoke(this, module);
                             logger.Info($"Invalid Enpoint has been removed from Registry {tmp.Key()}");
                         }
                     }
@@ -129,7 +132,7 @@ public class ModuleCommunicationWorker
     public ConcurrentDictionary<JoyModule, ConcurrentDictionary<string,RpcEndPoint>> RpcEndPoints => rpcEndPoints;
 
   
-    private void onDiscoverEndPoint(object sender, DiscoverFoundEventArgs arg)
+    private void onDiscoverEndPoint(object sender, EndPointChangedArgs arg)
     {
         Task.Run(() =>
         {
@@ -140,8 +143,18 @@ public class ModuleCommunicationWorker
        
     }
 
+    private void onRemoveEndPoint(object sender, JoyModule arg)
+    {
+        if(ConfigUtil.getModuleConfig().Module==JoyModule.Camera && arg == JoyModule.Upper){
+            
+            if(ProjectManager.getInstance().ProjectState!=ProjectState.stop)
+                ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+        }
+    }
+
 
     public   event EventHandler<RpcEndPoint> OnDiscovery;
+    public   event EventHandler<JoyModule> OnRemove;
 }
 
 public class RpcEndPoint

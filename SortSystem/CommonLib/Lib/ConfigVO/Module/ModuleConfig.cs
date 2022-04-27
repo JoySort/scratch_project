@@ -1,3 +1,4 @@
+using CommonLib.Lib.ConfigVO.Emission;
 using CommonLib.Lib.vo;
 
 namespace CommonLib.Lib.ConfigVO;
@@ -21,12 +22,40 @@ public class ModuleConfig
     private bool cameraSimulationMode = false;
     private bool recognizerSimulationMode = false;
     private RecognizerConfig recognizerConfig;
+    private ElasticSearchConfig elasticSearchConfig;
+
+    public ElasticSearchConfig ElasticSearchConfig => elasticSearchConfig;
 
     public RecognizerConfig RecognizerConfig => recognizerConfig;
 
     private string uuid = Guid.NewGuid().ToString();
 
-    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, bool cameraSimulationMode, bool recognizerSimulationMode, RecognizerConfig recognizerConfig, string title, int version)
+    private string machineID;
+    public string MachineID
+    {
+        get => string.IsNullOrEmpty(machineID)?"需要在LowerMachineDriver初始化之后才能调用machineID这个属性，如果不在上位机，需要自己从上位机获取这个属性":machineID;
+        set=> machineID = value;
+    }
+
+    public string Id
+    {
+
+        get => MachineID+"-"+uuid;
+    }
+
+    public MachineState[] MachineState{
+        get;
+        set;
+    }
+
+    public Emitter[] emiiters
+    {
+        get;
+        set;
+    }
+
+
+    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, bool cameraSimulationMode, bool recognizerSimulationMode, RecognizerConfig recognizerConfig, ElasticSearchConfig elasticSearchConfig, string machineId, string title, int version, MachineState[] machineState, Emitter[] emiiters)
     {
         this.author = author;
         this.consolidatePolicy = consolidatePolicy;
@@ -44,11 +73,19 @@ public class ModuleConfig
         this.cameraSimulationMode = cameraSimulationMode;
         this.recognizerSimulationMode = recognizerSimulationMode;
         this.recognizerConfig = recognizerConfig;
+        this.elasticSearchConfig = elasticSearchConfig;
+        machineID = machineId;
         this.title = title;
         this.version = version;
+        MachineState = machineState;
+        this.emiiters = emiiters;
     }
 
-    public string Uuid => uuid;
+    public string Uuid
+    {
+        get => uuid; 
+        set => uuid = value;
+    }
 
     public bool LowerMachineSimulationMode
     {
@@ -149,4 +186,11 @@ public class RecognizerConfig
         this.dllPaht = dllPaht;
         this.initializationImagePath = initializationImagePath;
     }
+}
+
+public class ElasticSearchConfig
+{
+    public string url;
+    public bool enabled;
+ 
 }
