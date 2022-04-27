@@ -25,19 +25,23 @@ public class AdvancedEmitterDrive:DriverBase
         foreach (var item in results)
         {
             var column = item.Column;
+            if (column < first || column > last)
+                continue;
+            
             var outletNO = item.OutletNo; //Note, it ranges from 1-8, not start from 0
             triggerID = item.TriggerId;
+
             //EmitSingle(column, outletNO, triggerID);
             EmitRecord? er;
             if (_emitRecords.TryGetValue(triggerID, out er))
             {
-                er.results[last - first] = outletNO;
-                er.mask |= ((uint)1 << (last - first));
+                er.results[column - first] = outletNO;
+                er.mask |= ((uint)1 << (column - first));
             }
             else
             {
-                er = new EmitRecord(((uint)1 << (last - first)),new int[last-first+1]);
-                er.results[last - first] = outletNO;
+                er = new EmitRecord(((uint)1 << (column - first)),new int[last - first+1]);
+                er.results[column - first] = outletNO;
                 _emitRecords.Add(triggerID, er);
             }
         }
