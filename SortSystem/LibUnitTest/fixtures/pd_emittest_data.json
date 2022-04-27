@@ -1,0 +1,906 @@
+[
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 0,
+      "triggerId": 0,
+      "rowOffset": 0
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 20
+      },
+      {
+        "criteriaIndex": 12,
+        "value": 4
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 0,
+      "triggerId": 0,
+      "rowOffset": 1
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 25
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 0,
+      "triggerId": 0,
+      "rowOffset": 2
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 10
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 0,
+      "triggerId": 0,
+      "rowOffset": 3
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 0,
+      "triggerId": 0,
+      "rowOffset": 14
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 12,
+        "value": 4
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 1,
+      "triggerId": 0,
+      "rowOffset": 0
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 10
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 1,
+      "triggerId": 0,
+      "rowOffset": 1
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 25
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 1,
+      "triggerId": 0,
+      "rowOffset": 2
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 30
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 1,
+      "triggerId": 0,
+      "rowOffset": 3
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 1,
+      "triggerId": 0,
+      "rowOffset": 14
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 12,
+        "value": 24
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 2,
+      "triggerId": 0,
+      "rowOffset": 0
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 10
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 2,
+      "triggerId": 0,
+      "rowOffset": 1
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 25
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 2,
+      "triggerId": 0,
+      "rowOffset": 2
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 30
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 2,
+      "triggerId": 0,
+      "rowOffset": 3
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 2,
+      "triggerId": 0,
+      "rowOffset": 14
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 12,
+        "value": 24
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 3,
+      "triggerId": 0,
+      "rowOffset": 0
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 10
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 3,
+      "triggerId": 0,
+      "rowOffset": 1
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 25
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 3,
+      "triggerId": 0,
+      "rowOffset": 2
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 30
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 3,
+      "triggerId": 0,
+      "rowOffset": 3
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 3,
+      "triggerId": 0,
+      "rowOffset": 14
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 12,
+        "value": 24
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 4,
+      "triggerId": 0,
+      "rowOffset": 0
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 10
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 4,
+      "triggerId": 0,
+      "rowOffset": 1
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 25
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 4,
+      "triggerId": 0,
+      "rowOffset": 2
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 30
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 4,
+      "triggerId": 0,
+      "rowOffset": 3
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 4,
+      "triggerId": 0,
+      "rowOffset": 14
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 12,
+        "value": 24
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 5,
+      "triggerId": 0,
+      "rowOffset": 0
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 10
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 5,
+      "triggerId": 0,
+      "rowOffset": 1
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 25
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 5,
+      "triggerId": 0,
+      "rowOffset": 2
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 30
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 5,
+      "triggerId": 0,
+      "rowOffset": 3
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 5,
+      "triggerId": 0,
+      "rowOffset": 14
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 12,
+        "value": 24
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 6,
+      "triggerId": 0,
+      "rowOffset": 0
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 10
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 6,
+      "triggerId": 0,
+      "rowOffset": 1
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 25
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 6,
+      "triggerId": 0,
+      "rowOffset": 2
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 30
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 6,
+      "triggerId": 0,
+      "rowOffset": 3
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 6,
+      "triggerId": 0,
+      "rowOffset": 14
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 12,
+        "value": 24
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 7,
+      "triggerId": 0,
+      "rowOffset": 0
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 10
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 7,
+      "triggerId": 0,
+      "rowOffset": 1
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 25
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 7,
+      "triggerId": 0,
+      "rowOffset": 2
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 30
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 7,
+      "triggerId": 0,
+      "rowOffset": 3
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 7,
+      "triggerId": 0,
+      "rowOffset": 14
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 12,
+        "value": 24
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 8,
+      "triggerId": 0,
+      "rowOffset": 0
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 10
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 8,
+      "triggerId": 0,
+      "rowOffset": 1
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 25
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 8,
+      "triggerId": 0,
+      "rowOffset": 2
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 30
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 8,
+      "triggerId": 0,
+      "rowOffset": 3
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 8,
+      "triggerId": 0,
+      "rowOffset": 14
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 12,
+        "value": 24
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 9,
+      "triggerId": 0,
+      "rowOffset": 0
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 10
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 9,
+      "triggerId": 0,
+      "rowOffset": 1
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 25
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 9,
+      "triggerId": 0,
+      "rowOffset": 2
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 30
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 9,
+      "triggerId": 0,
+      "rowOffset": 3
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 9,
+      "triggerId": 0,
+      "rowOffset": 14
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 12,
+        "value": 24
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 10,
+      "triggerId": 0,
+      "rowOffset": 0
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 10
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 10,
+      "triggerId": 0,
+      "rowOffset": 1
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 25
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 10,
+      "triggerId": 0,
+      "rowOffset": 2
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 30
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 10,
+      "triggerId": 0,
+      "rowOffset": 3
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 10,
+      "triggerId": 0,
+      "rowOffset": 14
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 12,
+        "value": 24
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 11,
+      "triggerId": 0,
+      "rowOffset": 0
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 10
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 11,
+      "triggerId": 0,
+      "rowOffset": 1
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 25
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 11,
+      "triggerId": 0,
+      "rowOffset": 2
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 30
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 11,
+      "triggerId": 0,
+      "rowOffset": 3
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "coordinate": {
+      "section": 0,
+      "column": 11,
+      "triggerId": 0,
+      "rowOffset": 14
+    },
+    "expectedFeatureCount": 2,
+    "features": [
+      {
+        "criteriaIndex": 12,
+        "value": 24
+      }
+    ]
+  }
+]

@@ -35,13 +35,13 @@ public class AdvancedEmitterDrive:DriverBase
             EmitRecord? er;
             if (_emitRecords.TryGetValue(triggerID, out er))
             {
-                er.results[column - first] = outletNO;
+                er.results[column - first] = (byte)outletNO;
                 er.mask |= ((uint)1 << (column - first));
             }
             else
             {
-                er = new EmitRecord(((uint)1 << (column - first)),new int[last - first+1]);
-                er.results[column - first] = outletNO;
+                er = new EmitRecord(((uint)1 << (column - first)),new byte[last - first+1]);
+                er.results[column - first] = (byte)outletNO;
                 _emitRecords.Add(triggerID, er);
             }
         }
@@ -81,11 +81,11 @@ public class AdvancedEmitterDrive:DriverBase
 
 public class EmitRecord
 {
-    public EmitRecord(uint mask,int[] results)
+    public EmitRecord(uint mask,byte[] results)
     { 
         this.mask = mask;
         this.results = results;
     }
     public uint mask;
-    public int[] results;
+    public byte[] results;
 }
