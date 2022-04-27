@@ -11,7 +11,7 @@ public class AdvancedEmitterDrive:DriverBase
         int[] columns = cl.lowerConfig.Columns;
         first = columns.First();
         last = columns.Last();
-        for (int i = 0; i <= last - first;)
+        for (int i = 0; i <= last - first;i++)
         {
             completedMask |= (uint)(1 << i);
         }
@@ -31,13 +31,13 @@ public class AdvancedEmitterDrive:DriverBase
             EmitRecord? er;
             if (_emitRecords.TryGetValue(triggerID, out er))
             {
-                er.results[column - first] = outletNO;
-                er.mask |= ((uint)1 << (column - first));
+                er.results[last - first] = outletNO;
+                er.mask |= ((uint)1 << (last - first));
             }
             else
             {
-                er = new EmitRecord(((uint)1 << (column - first)),new int[last-first+1]);
-                er.results[column - first] = outletNO;
+                er = new EmitRecord(((uint)1 << (last - first)),new int[last-first+1]);
+                er.results[last - first] = outletNO;
                 _emitRecords.Add(triggerID, er);
             }
         }
