@@ -105,18 +105,18 @@ public class ElasticSearchWorker
     
     public void processBulkRecResult(List<RecResult> results)
     {
-       // Task.Run(() =>
-       // {
+        Task.Run(() =>
+        {
             recResulttoBeProcessed.Enqueue(results);
-       // });
+       });
         
     }
     public void processBulkLBResult(List<LBResult> results)
     {
-      //  Task.Run(() =>
-       // {
+        Task.Run(() =>
+        {
             lbResulttoBeProcessed.Enqueue(results);
-        //});
+        });
         
     }
 
@@ -165,6 +165,7 @@ public class ElasticSearchWorker
             }
         });
     }
+    
     
     public string getFilterString (Filter[][] filters)
     {

@@ -70,11 +70,11 @@ public class ConsolidateWorker
     private long totalProcessed = 0;
     public void processBulk(List<RecResult> results)
     {
-        
+        onRecReceiving?.Invoke(this, results);
         recResultQueue.Enqueue(results);
         totalProcessed += results.Count;
         logger.Debug("recResult Queue count : {}, with total processed count {}",recResultQueue.Count,totalProcessed);
-        onRecReceiving?.Invoke(this, results);
+        
             // foreach (var value in results)
             // {
             //     processSingle(value);
@@ -90,7 +90,7 @@ public class ConsolidateWorker
         {
             while (isProjectRunning)
             {
-                Thread.Sleep(10);
+                Thread.Sleep(1);
                 if (! (recResultQueue.Count > 0))
                 {
                     continue;
