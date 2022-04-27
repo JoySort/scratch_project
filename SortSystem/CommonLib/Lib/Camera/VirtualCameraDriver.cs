@@ -12,7 +12,7 @@ public class VirtualCameraDriver:CameraDriverBase
     {
     }
 
-    public override  void initCam()
+    public override  void InitCam()
     {
         for (var i = 0; i < 4; i++)
         {
@@ -40,7 +40,7 @@ public class VirtualCameraDriver:CameraDriverBase
                 //Thread.Sleep(70);
                 var fileIndex = filenameCounter++ % 4;
                
-                OnRecivingPicture(pictures[fileIndex]);
+                onRecivingPicture(pictures[fileIndex]);
             }
         });
     }

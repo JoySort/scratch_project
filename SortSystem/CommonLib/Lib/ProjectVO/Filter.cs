@@ -36,18 +36,22 @@ public class Filter
 
     public bool doFilter(RecResult recResult)
     {
-        
+        bool concerned = false;
         foreach (var feature in recResult.Features)
         {
             if (_criteria.Index != feature.CriteriaIndex) continue;
-           
+            concerned = true;
+
             foreach (var boundary in filterBoundaries)
             {
                 if (boundary.First() <= feature.Value && boundary.Last() > feature.Value) return true;
             }
         }
 
-        return false;
+        if (concerned)
+            return false;
+        else
+            return true;
     }
 
     public static List<float[]> fillBoundries(Criteria _criteria,int[] _filterBoundryIndices)

@@ -1,3 +1,5 @@
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Network;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.Worker;
@@ -13,6 +15,7 @@ logger.Info("init main");
 CMDArgumentUtil.parse(args);// use cmd option --config_folder=../config to setup a config folder outside the program folder to avoid lose config when upgrade 
 ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
 
+//LowerMachineDriver.getInstance();
 //initiate network http client 
 ModuleCommunicationWorker.getInstance();
 UpperToCameraHTTPClientWorker.getInstance();

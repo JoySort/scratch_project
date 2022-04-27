@@ -10,8 +10,8 @@ using NLog;
 namespace CommonLib.Lib.Worker.Camera;
 
 public class CameraWorker
-{ 
-    
+{
+
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private List<ICameraDriver> cameraDrivers = new List<ICameraDriver>();
 
@@ -28,6 +28,23 @@ public class CameraWorker
     {
         return me;
     }
+    private CameraDriverBase? getCameraDriver(ConfigVO.CameraConfig cameraConfig)
+    {
+        if (cameraConfig.GID != CMDArgumentUtil.gid)
+            return null;
+        CameraDriverBase? driver = null;
+
+        switch (cameraConfig.Brand.ToLower())
+        {
+            case "basler":
+                driver = new BaslerIPCamDriver(cameraConfig);
+                break;
+            default:
+                driver = null;
+                break;        
+        }
+        return driver;
+    }
 
     private void init()
     {
@@ -41,7 +58,15 @@ public class CameraWorker
         foreach (var item in cameraConfigs)
         {
 
-            CameraDriverBase cameraDriver = isSimulation ? new VirtualCameraDriver(item) : new IPCameraDriver(item);
+            CameraDriverBase? cameraDriver;
+
+            if (isSimulation)
+                cameraDriver = new VirtualCameraDriver(item);
+            else
+                cameraDriver = getCameraDriver(item);
+
+            if (cameraDriver == null)
+                continue;
             if (item.SaveRawImage) cameraDriver.OnPictureArrive += ((sender, cameraPayLoad) =>
             {
                 CameraPayLoad tmpCameraPayLoad = null;
@@ -58,7 +83,7 @@ public class CameraWorker
 
     }
 
-    private Project project;
+    private Project? project;
     private void ProjectStatusChangeHandler(object? sender, ProjectStatusEventArgs e)
     {
         if (e.State == ProjectState.start)

@@ -16,4 +16,10 @@
       <PackageReference Include="System.Net.Http.Json" Version="7.0.0-preview.3.22175.4" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="Basler.Pylon">
+        <HintPath>bin\Debug\net6.0\Basler.Pylon.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

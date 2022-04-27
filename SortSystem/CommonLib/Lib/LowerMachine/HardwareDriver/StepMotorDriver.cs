@@ -11,21 +11,37 @@ public class StepMotorDriver:DriverBase
     {
         cl.onStepMotorrCMD += onData;
     }
-    
+
+    private void sendStopCMD()
+    {
+        byte[] addr = new byte[2] { 0x00, 0x98 };
+        byte[] data = new byte[2] { 0x00, 0x00 };
+        comlink.writeSingleReg(addr, data, 0, 0);
+    }
+
+    private void sendStartCMD()
+    {
+        byte[] addr = new byte[2] { 0x00, 0x98 };
+        byte[] data = new byte[2] { 0x00, 0x01 };
+        comlink.writeSingleReg(addr, data, 0, 0);
+
+    }
+
     public void ApplyChange(StepMotoer config)
     {
         //logger.Info(" {} is applying parameters{}",config.Name,JsonConvert.SerializeObject(config));
   
-        //comlink.send();
-        //TODO: link to com communication
+        if (config.Enabled)
+        {
+            sendStartCMD();
+        }
+        else
+        {            
+            sendStopCMD();
+        }
     }
     
-    public void onData(object obj, byte[] cmd)
-    {
-        //解析代码
-        // if (cmd)
-        // {
-        //     var isStopped = true;
-        // }
+    public override void onData(object obj, byte[] cmd)
+    {        
     }
 }

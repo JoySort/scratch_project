@@ -69,4 +69,5 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
+    <ProjectExtensions><VisualStudio><UserProperties config_4module_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>
