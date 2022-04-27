@@ -50,8 +50,11 @@ public class AdvancedEmitterDrive:DriverBase
         foreach (long id in historyTriggerIDs)
         {
             if (triggerID - id > 100)
+            {
                 _emitRecords.Remove(id);
+                continue;
 
+            }
             if (_emitRecords[id].mask == completedMask)
             { 
                 byte[] data = new byte[last-first+1+4];
@@ -62,6 +65,7 @@ public class AdvancedEmitterDrive:DriverBase
                 data[last - first + 4] = (byte)(triggerID/256/256/256 % 256);
 
                 comlink.writeMultipleRegs(new byte[2] { 0x00, 0x40 },data, 0, 30);
+                _emitRecords.Remove(id);
             }
         }
     }
