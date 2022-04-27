@@ -19,14 +19,8 @@ namespace LibUnitTest.Hardware;
 public class AdvancedEmitterTest
 {
     private Logger logger ;
-   
-    private string? porjectJsonString;
-    private ProjectParser? jparser;
-    private Project project;
-    
-    private SortingWorker sortingWorker = SortingWorker.getInstance();
 
-
+    private List<EmitResult> emitResults = new List<EmitResult>();
     [SetUp]
     public void setup()
     {
@@ -34,72 +28,43 @@ public class AdvancedEmitterTest
         logger = LogManager.GetCurrentClassLogger();
         logger.Info("setup test ");
 
-        LBWorker.getInstance();
+
         LowerMachineWorker.getInstance();
-        EmitWorker.getInstance();
-        SortingWorker.getInstance();
+        
+        //setup data
+        setupData();
+
+    }
+
+    
+    public void setupData()
+    {
+        for(var triggerid=0; triggerid<10;triggerid++){
+            for (var column = 0; column < 23; column++)
+            {
+                for (var i = 0; i < 8; i++)
+                {
+                    var emitResult = new EmitResult(column,i+1,triggerid);
+                    emitResults.Add(emitResult);
+                }
+            }
+        }
     }
 
     [Test]
     public void LBTestASC()
     {
-        string JsonFilePath = @"./fixtures/project_pd_rec_start.json";
+        string JsonFilePath = @"./fixtures/project_start_v1.json";
         string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
-        porjectJsonString = File.ReadAllText(path);
-        ProjectParser parser = new ProjectParser(porjectJsonString,ProjectParser.V2);
-        project = parser.getProject();
+        string porjectJsonString = File.ReadAllText(path);
+        ProjectParser parser = new ProjectParser(porjectJsonString,ProjectParser.V1);
+        Project project = parser.getProject();
         
-       
         
-        string recResultJsonFixture = @"./fixtures/pd_sorttest_data.json";
-        string _path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,recResultJsonFixture);
-        string jsonString = File.ReadAllText(_path);
-        ConsolidatedResult[] consolidatedResults = JsonConvert.DeserializeObject<ConsolidatedResult[]>(jsonString);
-
-        outletPriorityChange(OutletPriority.ASC,consolidatedResults);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+        LowerMachineWorker.getInstance().processBulk(emitResults);
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
+        
     }
-     void outletPriorityChange(OutletPriority priority,ConsolidatedResult[] consolidatedResults)
-        {
-           
-            
-            bool blocking = true;
-            ConfigUtil.getModuleConfig().SortConfig.OutletPriority = priority;
-
-
-            var currentTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
-            
-            sortingWorker.OnResult += ((sender,e)=>{
-                LBWorker.getInstance().processBulk(e.Results);
-            });
-            LBWorker.getInstance().OnResult+=((sender,e)=>{
-                EmitWorker.getInstance().processBulk(e.Results);
-            });
-            EmitWorker.getInstance().OnResult+=((sender,e)=>{
-                LowerMachineWorker.getInstance().processBulk(e.Results);
-            });
-            
-            
-            if(ProjectManager.getInstance().ProjectState!=ProjectState.start)
-                ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
-          
-            
-            
-            
-            sortingWorker.processBulk(new List<ConsolidatedResult>(consolidatedResults));
-            
-            
-            
-
-            var counter = 0;
-            while (blocking)
-            {
-                if(counter>200)Assert.Fail("Timeout");
-                counter++;
-                Thread.Sleep(100);
-            }
-
-            
-            logger.Info("LB Test stop");
-            ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.stop);
-        }
+   
 }
