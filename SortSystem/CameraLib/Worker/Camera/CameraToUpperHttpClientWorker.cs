@@ -56,35 +56,51 @@ public class CameraToUpperHttpClientWorker
     {
         var toBeSent = new Dictionary<RpcEndPoint, List<RecResult>>();
         var totalAllocatedCount = 0;
-        var cameraRange = new int[2]{1000,0};//lower end initialize with 100 to find lowest ; higher end initialize with 0 to find hightest.
-        var lowerRanges =  new List<int[]>();
-        foreach(var item in upperRpcEndPoints)
-        {
-            toBeSent.Add(item,new List<RecResult>());
-            var remoteLowerConfigs = item.ModuleConfig.LowerConfig;
-            foreach (var remoteLowerConfig in remoteLowerConfigs)
+        
+        var lostRange = new Dictionary<int[][], int[]>();
+        var lostDataRange = new int[2]{1000,0};//lower end initialize with 100 to find lowest ; higher end initialize with 0 to find hightest.
+            
+            foreach (var result in results)
             {
-                var lowerRange = remoteLowerConfig.Columns;
-                lowerRanges.Add(lowerRange);
+                var found = false;
+                int[][] lowerRange = null;
                 
-                foreach (var result in results)
+                
+                foreach(var rpcEndPoint in upperRpcEndPoints)
                 {
-                    if (result.Coordinate.Column <= remoteLowerConfig.Columns[1] &&
-                        result.Coordinate.Column >= remoteLowerConfig.Columns[0])
+                    if(!toBeSent.ContainsKey(rpcEndPoint)) toBeSent.Add(rpcEndPoint,new List<RecResult>());
+                    
+                    var remoteLowerConfigs = rpcEndPoint.ModuleConfig.LowerConfig;
+                    lowerRange = remoteLowerConfigs.Select(value=>value.Columns).ToArray();
+                    foreach (var remoteLowerConfig in remoteLowerConfigs)
                     {
-                        toBeSent[item].Add(result);
-                        totalAllocatedCount++;
-                        cameraRange[0] = result.Coordinate.Column<= cameraRange[0]? result.Coordinate.Column:cameraRange[0];
-                        cameraRange[1] = result.Coordinate.Column>= cameraRange[1]? result.Coordinate.Column:cameraRange[1];
+                        
+                        if (result.Coordinate.Column <= remoteLowerConfig.Columns[1] &&
+                            result.Coordinate.Column >= remoteLowerConfig.Columns[0])
+                        {
+                            toBeSent[rpcEndPoint].Add(result);
+                            totalAllocatedCount++;
+                            found = true;
+                        }
+                       
+
+
                     }
+
+                }
+
+                if (!found)
+                {
+                    lostDataRange[0] = result.Coordinate.Column<= lostDataRange[0]? result.Coordinate.Column:lostDataRange[0];
+                    lostDataRange[1] = result.Coordinate.Column>= lostDataRange[1]? result.Coordinate.Column:lostDataRange[1];
+                   
                 }
             }
-        }
-
-        if (totalAllocatedCount != results.Count)
-        {
-            logger.Error("Camera data will be lost!!! ResultSet column range {} lower column ranges {}",JsonConvert.SerializeObject(cameraRange),JsonConvert.SerializeObject(lowerRanges)) ;
             
+
+        if (totalAllocatedCount != results.Count && (lostDataRange[0]!=1000)&&lostDataRange[1]!=0)
+        {
+            logger.Error("Camera data will be lost!!! ResultSet lost  range {} with Lower Coverage ranges {} ",JsonConvert.SerializeObject(lostDataRange),JsonConvert.SerializeObject(upperRpcEndPoints.Select(value=>value.ModuleConfig.LowerConfig.Select(value=>value.Columns)))) ;
         }
 
         return toBeSent;
@@ -104,11 +120,17 @@ public class CameraToUpperHttpClientWorker
         var remoteEndPoints = ModuleCommunicationWorker.getInstance().RpcEndPoints;
         foreach ((var module, var rdps) in remoteEndPoints)
         {
+            
             var localModuleConfig = ConfigUtil.getModuleConfig().CameraConfigs;
             if (module == JoyModule.Upper )
+                
+               
+            
                 foreach ((var Key, var item) in rdps)
                 {
+                    var found = false;
                     var remoteModuleconfig = item.ModuleConfig.LowerConfig;
+                    
                     foreach (var remoteLowerconfig in remoteModuleconfig)
                     {
                         foreach (var cameraConfig in localModuleConfig)
@@ -117,12 +139,17 @@ public class CameraToUpperHttpClientWorker
                             if (cameraConfig.Columns[0] <= remoteLowerconfig.Columns[1] &&
                                 cameraConfig.Columns[1] >= remoteLowerconfig.Columns[0])
                             {
-                                upperRpcEndPoints.Add(item);
+                                found = true;
+                               
                             }
                         }
                     }
+                    if(found && !upperRpcEndPoints.Contains(item)) upperRpcEndPoints.Add(item);
                 }
+                
+               
         }
+        logger.Info("CameraToUpperHttpClientWorker initialized on project change event with eligible Upper {}",JsonConvert.SerializeObject(upperRpcEndPoints.Select(value=> $"{value.Address}:{value.Port} with lower column range {JsonConvert.SerializeObject(value.ModuleConfig.LowerConfig.Select(value=>value.Columns))}")));
 
     }
 

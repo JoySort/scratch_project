@@ -32,10 +32,15 @@ public class UpperToCameraHTTPClientWorker
     private void OnProjectStatusChange(object? sender, ProjectStatusEventArgs e)
     {
         var remoteEndPoints = ModuleCommunicationWorker.getInstance().RpcEndPoints;
-        
+        if (!ConfigUtil.getModuleConfig().LowerConfig.Select(value => value.IsMaster).Contains(true))
+        {
+            logger.Info("This is a Slave node. Salve upper will not send project start cmd to other module");
+            return;
+        }
+
         foreach ((JoyModule module,ConcurrentDictionary<string,RpcEndPoint> rdps )in remoteEndPoints)
         {
-            if (module == ConfigUtil.getModuleConfig().Module)
+            if (module == ConfigUtil.getModuleConfig().Module )
             {
                 logger.Debug("ignore same type module as this module {}",Enum.GetName(module));
                 continue;
