@@ -11,6 +11,7 @@ using CommonLib.Lib.Sort;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
+using CommonLib.Lib.Worker;
 using CommonLib.Lib.Worker.Upper;
 using Newtonsoft.Json;
 using NLog;
@@ -39,7 +40,7 @@ public class ProjectConfigVersionTest
 
         
         //Piple line wireup;
-        UpperPipelineWireUtil.setup();
+        UpperWorkerManager.getInstance();
         
         
         
@@ -107,7 +108,7 @@ public class ProjectConfigVersionTest
         if(ProjectManager.getInstance().ProjectState!=ProjectState.stop)
         ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
         
-        UpperPipelineWireUtil.tearDown();
+        UpperWorkerManager.getInstance().tearDown();
     }
 
 

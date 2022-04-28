@@ -9,6 +9,7 @@ using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
+using CommonLib.Lib.Worker;
 using CommonLib.Lib.Worker.Upper;
 using NLog;
 using NUnit.Framework;
@@ -33,7 +34,7 @@ public class ThreadSafeTest
 
         
         //Piple line wireup;
-        UpperPipelineWireUtil.setup();
+        UpperWorkerManager.getInstance();
         
         
         
@@ -135,7 +136,7 @@ public class ThreadSafeTest
     {
         if(ProjectManager.getInstance().ProjectState != ProjectState.stop)
         ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
-        UpperPipelineWireUtil.tearDown();
+        UpperWorkerManager.getInstance().tearDown();
     }
 
 

@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UDPUpperRunner", "UDPUpperR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraRunner", "CameraRunner\CameraRunner.csproj", "{FDC24701-6099-41A4-8EA4-B410145EAEB1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraLib", "CameraLib\CameraLib.csproj", "{5801B639-DD59-45D8-A0B0-CDAE18A18A14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{FDC24701-6099-41A4-8EA4-B410145EAEB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDC24701-6099-41A4-8EA4-B410145EAEB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDC24701-6099-41A4-8EA4-B410145EAEB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5801B639-DD59-45D8-A0B0-CDAE18A18A14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5801B639-DD59-45D8-A0B0-CDAE18A18A14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5801B639-DD59-45D8-A0B0-CDAE18A18A14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5801B639-DD59-45D8-A0B0-CDAE18A18A14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

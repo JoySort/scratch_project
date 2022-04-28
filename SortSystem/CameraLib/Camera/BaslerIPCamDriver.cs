@@ -1,23 +1,18 @@
-﻿using CommonLib.Lib.ConfigVO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 using Basler.Pylon;
-using NLog;
-using System.Runtime.InteropServices;
+using CommonLib.Lib.ConfigVO;
 
 namespace CommonLib.Lib.Camera
 {
     public class BaslerIPCamDriver:IPCameraDriver
     {
+        static PixelDataConverter converter = new PixelDataConverter();
+
+        private Basler.Pylon.Camera? camera;
 
         public BaslerIPCamDriver(CameraConfig camConfig) : base(camConfig)
         {
         }
-
-        private Basler.Pylon.Camera? camera;
 
         public override void InitCam()
         {
@@ -75,7 +70,7 @@ namespace CommonLib.Lib.Camera
 
             camera.StreamGrabber.Start(GrabStrategy.OneByOne, GrabLoop.ProvidedByStreamGrabber);
         }
-        static PixelDataConverter converter = new PixelDataConverter();
+
         void OnImageGrabbedAll(Object? sender, ImageGrabbedEventArgs e)
         {
             try
@@ -101,6 +96,5 @@ namespace CommonLib.Lib.Camera
                 logger.Error(exception);                
             }
         }
-
     }
 }

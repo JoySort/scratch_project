@@ -21,7 +21,7 @@ ModuleCommunicationWorker.getInstance();
 UpperToCameraHTTPClientWorker.getInstance();
 
 //Piple line wireup;
-UpperPipelineWireUtil.setup();
+UpperWorkerManager.getInstance();
 
 //WebInitializer must last line of code, no code beyond this point will be executed
 WebInitializer.init();

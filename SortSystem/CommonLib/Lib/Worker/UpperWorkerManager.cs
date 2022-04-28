@@ -1,16 +1,27 @@
-using CommonLib.Lib.LowerMachine;
-using CommonLib.Lib.Sort;
 using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Util;
 using CommonLib.Lib.Worker.Analytics;
 using CommonLib.Lib.Worker.Upper;
 using NLog;
 
-namespace CommonLib.Lib.Util;
+namespace CommonLib.Lib.Worker;
 
-public class UpperPipelineWireUtil
+public class UpperWorkerManager
 {
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-    public static void setup()
+    private static UpperWorkerManager me = new UpperWorkerManager();
+
+    private UpperWorkerManager()
+    {
+        setup();
+    }
+
+    public static UpperWorkerManager getInstance()
+    {
+        return me;
+    }
+
+    private  void setup()
     {
         //Piple line wireup;
         
@@ -39,8 +50,8 @@ public class UpperPipelineWireUtil
         });
     }
 
-    private static bool running;
-    public static void printStats()
+    private  bool running;
+    public  void printStats()
     {
         foreach ((var key, var value) in stats)
         {
@@ -63,7 +74,7 @@ public class UpperPipelineWireUtil
 
     }
 
-    public static void tearDown()
+    public  void tearDown()
     {
         running = false;
         ConsolidateWorker.getInstance().onRecReceiving -= consolidateRecReceivingHandler;
@@ -75,8 +86,8 @@ public class UpperPipelineWireUtil
         
     }
 
-    private static Dictionary<Type, Queue<WorkerStats>> stats = new Dictionary<Type, Queue<WorkerStats>>();
-    private  static void consolidateResultEventHandler(object sender, ResultEventArg args)
+    private  Dictionary<Type, Queue<WorkerStats>> stats = new Dictionary<Type, Queue<WorkerStats>>();
+    private   void consolidateResultEventHandler(object sender, ResultEventArg args)
     {
         var startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         SortingWorker.getInstance().processBulk(args.Results);
@@ -87,7 +98,7 @@ public class UpperPipelineWireUtil
         stats[typeof(SortingWorker)].Enqueue(tmpStats);
     }
     
-    private  static void sortingResultEventHandler(object sender, SortingResultEventArg args)
+    private   void sortingResultEventHandler(object sender, SortingResultEventArg args)
     {
         var startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         LBWorker.getInstance().processBulk(args.Results);
@@ -98,7 +109,7 @@ public class UpperPipelineWireUtil
         stats[typeof(LBWorker)].Enqueue(tmpStats);
     }
 
-    private static void LBResultEventHandler(object sender, LBResultEventArg args)
+    private  void LBResultEventHandler(object sender, LBResultEventArg args)
     {
         
         if (ConfigUtil.getModuleConfig().ElasticSearchConfig != null &&
@@ -121,7 +132,7 @@ public class UpperPipelineWireUtil
         var tmpStats1 = new WorkerStats(triggerID1, timeTook1, count1);
         stats[typeof(EmitWorker)].Enqueue(tmpStats1);
     }
-    private static void EmitResultEventHandler(object sender, EmitResultEventArg args)
+    private  void EmitResultEventHandler(object sender, EmitResultEventArg args)
     {
         var startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         LowerMachineWorker.getInstance().processBulk(args.Results);
@@ -131,7 +142,7 @@ public class UpperPipelineWireUtil
         var tmpStats = new WorkerStats(triggerID, timeTook, count);
         stats[typeof(LowerMachineWorker)].Enqueue(tmpStats);
     }
-    private  static void consolidateRecReceivingHandler(object sender, List<RecResult> results)
+    private   void consolidateRecReceivingHandler(object sender, List<RecResult> results)
     {
         if (ConfigUtil.getModuleConfig().ElasticSearchConfig !=null && ConfigUtil.getModuleConfig().ElasticSearchConfig.enabled)
         {
