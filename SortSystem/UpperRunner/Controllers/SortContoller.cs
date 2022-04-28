@@ -1,7 +1,10 @@
+using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.Controllers;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort;
 using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.Worker;
 using CommonLib.Lib.Worker.Upper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -115,7 +118,18 @@ public class SortController: ControllerBase
     {
         var errorObj = new JoyError();
         var resultData = new V1Discover();
-        
+        var rpcEndPoints = ModuleCommunicationWorker.getInstance().RpcEndPoints;
+        var nodeCount = 1;
+        foreach(var item in rpcEndPoints){
+            if (item.Key == JoyModule.Upper)
+            {
+                nodeCount++;
+            }
+        }
+
+        var isLocalMaster = ConfigUtil.getModuleConfig().LowerConfig.Select(value=>value.IsMaster).Contains(true);
+        resultData.count = nodeCount;
+        resultData.node = isLocalMaster ? "master" : "slave";
         return new UIAPIResult(errorObj,resultData);
     }
     
@@ -188,7 +202,7 @@ public class UIResultChannelCounter:IJoyResult
 public class V1Discover
 {
     private string _node ="master";
-    private string _count = "1";
+    private int _count = 1;
 
     public string node
     {
@@ -196,10 +210,10 @@ public class V1Discover
         set => _node = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public string count
+    public int count
     {
         get => _count;
-        set => _count = value ?? throw new ArgumentNullException(nameof(value));
+        set => _count = value ;
     }
 }
 
