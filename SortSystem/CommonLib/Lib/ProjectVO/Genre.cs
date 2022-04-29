@@ -24,9 +24,9 @@ public class Genre
 //封袋
 public enum GenreName{
     palmDate,
-    greyDate,
+    greyDate=100,
     junJujube,
     apple,
-    chestnut,
+    chestnut=200,
     packingsealing
 }

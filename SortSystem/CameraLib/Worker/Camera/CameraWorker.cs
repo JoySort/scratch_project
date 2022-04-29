@@ -37,7 +37,7 @@ public class CameraWorker
             logger.Error(" Driver Class Name not specified in camera config ");
             return null;
         }
-        Type? driverType = Type.GetType(cameraConfig.ClassDriver);
+        Type? driverType = Type.GetType("CommonLib.Lib.Camera."+cameraConfig.ClassDriver);
         if (driverType == null)
         {
             logger.Error("Invalid Driver Class Name: " + cameraConfig.ClassDriver);
@@ -47,7 +47,7 @@ public class CameraWorker
         if (!typeof(CameraDriverBase).IsAssignableFrom(driverType))
             return null;
 
-        CameraDriverBase? driver = (CameraDriverBase?)Activator.CreateInstance(driverType);           
+        CameraDriverBase? driver = (CameraDriverBase?)Activator.CreateInstance(driverType, cameraConfig);           
         return driver;
     }
 

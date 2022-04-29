@@ -1,12 +1,14 @@
 {
   "name": "CameraRunner",
   "module": "Camera",
-  "genre": "palmDate",
-  "cameraSimulationMode": true,
-  "recognizerSimulationMode": true,
+  "genre": "greyDate",
+  "cameraSimulationMode": false,
+  "recognizerSimulationMode": false,
   "recognizerConfig": {
     "dllPaht": "./recognizer.dll",
-    "initializationImagePath": "./assets/1.bmp"
+    "initializationImagePath": "./assets/1.bmp",
+    "initCols": 6,
+    "initRows": 4
   },
   "cameraConfigs":[
     {

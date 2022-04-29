@@ -179,15 +179,22 @@ public class RecognizerConfig
 {
     private string dllPaht;
     private string initializationImagePath;
+    private int initCols;
+    private int initRows;
 
     public string DllPaht => dllPaht;
 
     public string InitializationImagePath => initializationImagePath;
 
-    public RecognizerConfig(string dllPaht, string initializationImagePath)
+    public int InitCols => initCols;
+    public int InitRows => initRows;
+
+    public RecognizerConfig(string dllPaht, string initializationImagePath,int initCols, int initRows)
     {
         this.dllPaht = dllPaht;
         this.initializationImagePath = initializationImagePath;
+        this.initCols = initCols;
+        this.initRows = initRows;
     }
 }
 

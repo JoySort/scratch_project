@@ -74,8 +74,12 @@ public class RecognizerWorker
 
             Task.Run(() =>
             {
+                var recConfig = ConfigUtil.getModuleConfig().RecognizerConfig;
+                int genreCode = (int)ConfigUtil.getModuleConfig().Genre;
+                set_category(genreCode, 0x0fffffff);
                 init_date_Algorithm();
-                var initPicturePath = ConfigUtil.getModuleConfig().RecognizerConfig.InitializationImagePath;
+
+                var initPicturePath = recConfig.InitializationImagePath;
                 var initPicRelativeToRunnerPath = Path.Combine(
                     Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
                     initPicturePath);
@@ -97,10 +101,12 @@ public class RecognizerWorker
                     + 256 * 256 * picture[24]
                     + 256 * 256 * 256 * picture[25];
 
+                int rows = recConfig.InitRows;
+                int cols = recConfig.InitCols;
 
                 IntPtr dataPtr = Marshal.UnsafeAddrOfPinnedArrayElement(picture, dataOffset);
-                int[] outdata = new int[20*width*height];
-                ApplicationRecognize(dataPtr, height, width, outdata, 4, 6);
+                int[] outdata = new int[20*rows*cols];
+                ApplicationRecognize(dataPtr, height, width, outdata,rows, cols);
 
 
             });

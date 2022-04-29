@@ -28,7 +28,12 @@ namespace CameraRunner.Controllers
                 {
                     ic.CloseCam();
                 }
-                Environment.Exit(0);
+                Task.Run(() =>
+                {
+                    Thread.Sleep(1000);
+                    Environment.Exit(0);
+                }
+                );
             }
             catch (Exception e)
             {
