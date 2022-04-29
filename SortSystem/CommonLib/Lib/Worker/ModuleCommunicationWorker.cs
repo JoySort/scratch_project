@@ -82,7 +82,7 @@ public class ModuleCommunicationWorker
 
                     foreach ((var key,var value) in expiredEndpoints)
                     {
-                        RpcEndPoint tmp = null;
+                        RpcEndPoint? tmp = null;
                         if (rdps.Remove(key, out tmp))
                         {
                             OnRemove?.Invoke(this, module);
@@ -132,7 +132,7 @@ public class ModuleCommunicationWorker
     public ConcurrentDictionary<JoyModule, ConcurrentDictionary<string,RpcEndPoint>> RpcEndPoints => rpcEndPoints;
 
   
-    private void onDiscoverEndPoint(object sender, EndPointChangedArgs arg)
+    private void onDiscoverEndPoint(object? sender, EndPointChangedArgs arg)
     {
         Task.Run(() =>
         {
@@ -143,7 +143,7 @@ public class ModuleCommunicationWorker
        
     }
 
-    private void onRemoveEndPoint(object sender, JoyModule arg)
+    private void onRemoveEndPoint(object? sender, JoyModule arg)
     {
         if(ConfigUtil.getModuleConfig().Module==JoyModule.Camera && arg == JoyModule.Upper){
             

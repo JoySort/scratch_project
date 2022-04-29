@@ -55,7 +55,7 @@ public class ModuleConfig
     }
 
 
-    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, bool cameraSimulationMode, bool recognizerSimulationMode, RecognizerConfig recognizerConfig, ElasticSearchConfig elasticSearchConfig, string machineId, string title, int version, MachineState[] machineState, Emitter[] emiiters)
+    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, bool cameraSimulationMode, bool recognizerSimulationMode, RecognizerConfig recognizerConfig, ElasticSearchConfig elasticSearchConfig, string machineId, string title, int version, MachineState[] machineState, Emitter[] emiiters,string uuid)
     {
         this.author = author;
         this.consolidatePolicy = consolidatePolicy;
@@ -79,6 +79,9 @@ public class ModuleConfig
         this.version = version;
         MachineState = machineState;
         this.emiiters = emiiters;
+        if(uuid != null)
+            if(uuid.Length > 0)
+                this.uuid = uuid;
     }
 
     public string Uuid

@@ -6,6 +6,7 @@ public interface ICameraDriver
 {
     void ProjectStatusChangeHandler(object sender, ProjectStatusEventArgs args);
     void InitCam();
+    void CloseCam();
     void processCameraData();
 
     void onRecivingPicture(byte[] picture);

@@ -46,12 +46,14 @@ public class ProjectController
         {
             _logger.LogInformation($"Project STOP WEB API invoked ");
             ProjectManager.getInstance().dispatchProjectStatusChangeEvent(ProjectState.stop);
+            
         }
         catch (Exception e)
         {
             msg = e.Message;
         }
-
+        
+        Environment.Exit(0);
         return new WebControllerResult(msg);
     }
 }

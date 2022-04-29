@@ -2,6 +2,7 @@ namespace CommonLib.Lib.ConfigVO;
 
 public class CameraConfig
 {
+    private string classDriver;
     private string brand;
     private string model;
     private string address;
@@ -17,8 +18,9 @@ public class CameraConfig
 
     private CameraType cameraType;
 
-    public CameraConfig(string brand, string model,string address, int[] columns,int[] offsets, CameraPosition cameraPosition, bool saveRawImage, string savePath,int width,int height,int gid,CameraType cameraType)
+    public CameraConfig(string classDriver, string brand, string model,string address, int[] columns,int[] offsets, CameraPosition cameraPosition, bool saveRawImage, string savePath,int width,int height,int gid,CameraType cameraType)
     {
+        this.ClassDriver = classDriver;
         this.brand = brand;
         this.model = model;
         this.address = address;
@@ -53,6 +55,8 @@ public class CameraConfig
     public int GID => gid;
     public int Width => width;
     public int Height => height;
+
+    public string ClassDriver { get => classDriver; set => classDriver = value; }
 }
 
 public enum CameraType

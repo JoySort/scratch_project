@@ -44,6 +44,12 @@ public abstract class CameraDriverBase:ICameraDriver
         throw new NotImplementedException();
     }
 
+    public virtual void CloseCam()
+    {
+        //TODO: code to init the camera
+        throw new NotImplementedException();
+    }
+
     public virtual void processCameraData()
     {
         //TODO: code to init the camera

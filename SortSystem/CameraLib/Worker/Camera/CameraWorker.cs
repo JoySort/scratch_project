@@ -32,17 +32,22 @@ public class CameraWorker
     {
         if (cameraConfig.GID != CMDArgumentUtil.gid)
             return null;
-        CameraDriverBase? driver = null;
-
-        switch (cameraConfig.Brand.ToLower())
+        if (cameraConfig.ClassDriver == null)
         {
-            case "basler":
-                driver = new BaslerIPCamDriver(cameraConfig);
-                break;
-            default:
-                driver = null;
-                break;        
+            logger.Error(" Driver Class Name not specified in camera config ");
+            return null;
         }
+        Type? driverType = Type.GetType(cameraConfig.ClassDriver);
+        if (driverType == null)
+        {
+            logger.Error("Invalid Driver Class Name: " + cameraConfig.ClassDriver);
+            return null;
+        }
+
+        if (!typeof(CameraDriverBase).IsAssignableFrom(driverType))
+            return null;
+
+        CameraDriverBase? driver = (CameraDriverBase?)Activator.CreateInstance(driverType);           
         return driver;
     }
 

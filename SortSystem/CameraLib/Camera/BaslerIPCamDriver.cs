@@ -6,7 +6,7 @@ namespace CommonLib.Lib.Camera
 {
     public class BaslerIPCamDriver:IPCameraDriver
     {
-        static PixelDataConverter converter = new PixelDataConverter();
+        private PixelDataConverter converter = new PixelDataConverter();
 
         private Basler.Pylon.Camera? camera;
 
@@ -71,6 +71,10 @@ namespace CommonLib.Lib.Camera
             camera.StreamGrabber.Start(GrabStrategy.OneByOne, GrabLoop.ProvidedByStreamGrabber);
         }
 
+        public override void CloseCam()
+        {
+            camera?.Close();
+        }
         void OnImageGrabbedAll(Object? sender, ImageGrabbedEventArgs e)
         {
             try

@@ -12,6 +12,11 @@ public class IPCameraDriver:CameraDriverBase
         //TODO: code to init the camera
         throw new NotImplementedException();
     }
+    public override void CloseCam()
+    {
+        //TODO: code to init the camera
+        throw new NotImplementedException();
+    }
 
     public override void processCameraData()
     {
