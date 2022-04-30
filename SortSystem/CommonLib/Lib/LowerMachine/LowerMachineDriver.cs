@@ -10,10 +10,10 @@ public class LowerMachineDriver
     
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private List<ComLinkDriver> comLinks = new List<ComLinkDriver>();
-    private List<ServoDriver> servos = new List<ServoDriver>();
+    public List<ServoDriver> servos = new List<ServoDriver>();
     private List<StepMotorDriver> stepMotors = new List<StepMotorDriver>();
     private List<SwitchDriver> switches = new List<SwitchDriver>();
-    private List<TriggerDriver> triggers = new List<TriggerDriver>();
+    public List<TriggerDriver> triggers = new List<TriggerDriver>();
     private EmitterDriver[][] emitters;
     public List<AdvancedEmitterDrive> advancedEmitter=new List<AdvancedEmitterDrive>();
     
@@ -51,8 +51,7 @@ public class LowerMachineDriver
     private void setupComLink(LowerConfig[] lcs)
     {
         foreach (var lc in lcs)
-        {
-            
+        {            
             ComLinkDriver comLinkDriver = !ConfigUtil.getModuleConfig().LowerMachineSimulationMode? new ComLinkDriver(lc):new VirtualComLinkDriver(lc);
             comLinkDriver.onMachineID += onMachineIDEventHandler;
             comLinkDriver.init();
@@ -77,11 +76,11 @@ public class LowerMachineDriver
             servos.Add(new ServoDriver(comLinkDriver));
             stepMotors.Add((new StepMotorDriver(comLinkDriver)));
             switches.Add((new SwitchDriver(comLinkDriver)));
-            var triggerDriver = new TriggerDriver(comLinkDriver);
-            triggers.Add(triggerDriver);
-        }  
             
-        
+        }
+        var triggerDriver = new TriggerDriver(comLinkDriver);
+        triggers.Add(triggerDriver);
+
 
         var rows = ConfigUtil.getEmitters();
         var columns = comLinkDriver.LowerConfig.Columns;
@@ -99,7 +98,6 @@ public class LowerMachineDriver
 
         advancedEmitter.Add(new AdvancedEmitterDrive(comLinkDriver));
     }
-
    
     private void setupEmitters(LowerConfig[] lcs)
     {
@@ -127,6 +125,14 @@ public class LowerMachineDriver
 
     public void applyStateChange( ProjectState state)
     {
+        if(state== ProjectState.start)
+        {
+            foreach (var trigger in triggers)
+            {
+                trigger.resetCounter();
+            }
+        }
+
         MachineState[] machineStates = ConfigUtil.getMachineState();
         foreach (var stateConfig in machineStates)
         {
@@ -195,6 +201,38 @@ public class LowerMachineDriver
             {
                 trigger.OnTrigger -= onTrigger;
             }
+        }
+    }
+
+    public void StartRunning()
+    {
+        foreach (var trigger in triggers)
+        {
+            trigger.resetCounter();
+        }
+
+        foreach (var servo in servos)
+        {
+            servo.sendStartCMD();
+        }
+
+        foreach (var step in stepMotors)
+        {
+            step.sendStartCMD();
+        }
+    }
+
+    public void StopRunning()
+    {
+        
+        foreach (var servo in servos)
+        {
+            servo.Stop();
+        }
+
+        foreach (var step in stepMotors)
+        {
+            step.sendStopCMD();
         }
     }
 }

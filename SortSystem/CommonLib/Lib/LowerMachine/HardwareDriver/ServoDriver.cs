@@ -21,31 +21,54 @@ public class ServoDriver:DriverBase
         Task.Run(()=>{
             while (keepWatching)
             {
+                Thread.Sleep(3000);
                 if (isStopped)
                 {
                     keepWatching = false;
                 }
                 else
                 {
+                    
                     sendStopCMD();
+                    
                 }
             }
         });
     }
 
-    private void sendStopCMD()
+    public void sendStopCMD()
     {
-        byte[] addr= new byte[2] { 0x00, 0x94 };
+        byte[] addr= new byte[2] { 0x00, 0x50 };
         byte[] data = new byte[2] { 0x00, 0x00 };
         comlink.writeSingleReg(addr, data, 0, 200);        
     }
 
-    private void sendStartCMD()
+    public void sendStartCMD()
     {
-        byte[] addr = new byte[2] { 0x00, 0x94 };
-        byte[] data = new byte[2] { 0x00, 0x01 };
+        byte[] addr = new byte[2] { 0x00, 0x50 };
+        byte[] data = new byte[2] { 0x01, 0x00 };
         comlink.writeSingleReg(addr, data, 0, 200);
 
+    }
+
+    public void Start()
+    {
+        sendStartCMD();
+    }
+
+    public void MoveOneSlot()
+    {
+        byte[] addr = new byte[2] { 0x00, 0x51 };
+        byte[] data = new byte[2] { 0x00, 0x01 };
+        comlink.writeSingleReg(addr, data, 0, 200);
+    }
+
+    public void Stop()
+    {
+        isStopped = false;
+        sendStopCMD();
+        Thread thread = new Thread(watcher);
+        thread.Start();
     }
 
     public void ApplyChange(Servo config)
@@ -58,10 +81,7 @@ public class ServoDriver:DriverBase
         }
         else
         {
-            isStopped = false;
-            sendStopCMD();
-            Thread thread = new Thread(watcher);
-            thread.Start();
+            Stop();
                 
         }        
     }
@@ -71,7 +91,7 @@ public class ServoDriver:DriverBase
         //解析代码
         // if (cmd)
         // {
-        if(cmd[3]==0)
+        if(cmd[5]==0)
             isStopped = true;
         // }
     }

@@ -1,4 +1,3 @@
-using CommonLib.Lib.Network;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.Worker;
 using CommonLib.Lib.Worker.Camera;
@@ -23,3 +22,4 @@ RecognizerWorker.getInstance().RecResultGenerated += CameraToUpperHttpClientWork
 
 WebInitializer.init();
 //Do not put code below, won't run.
+CameraWorker.CloseAllCams();

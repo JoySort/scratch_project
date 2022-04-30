@@ -22,6 +22,6 @@ public class IPCameraDriver:CameraDriverBase
     {
         //TODO: code to init the camera
         //OnRecivingPicture(byte[] picture)
-        throw new NotImplementedException();
+       // throw new NotImplementedException();
     }
 }

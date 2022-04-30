@@ -46,7 +46,7 @@ public abstract class CameraDriverBase:ICameraDriver
 
     public virtual void CloseCam()
     {
-        //TODO: code to init the camera
+        //TODO: code to shut down the camera
         throw new NotImplementedException();
     }
 
@@ -54,7 +54,7 @@ public abstract class CameraDriverBase:ICameraDriver
     {
         //TODO: code to init the camera
         //OnRecivingPicture(byte[] picture)
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     internal long counter = 0;

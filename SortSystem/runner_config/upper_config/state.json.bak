@@ -15,7 +15,7 @@
       "servos": [{
         "name": "main_motor",
         "address": 0,
-        "enabled": true,
+        "enable": true,
         "direction": 3,
         "speed": 2250,
         "delay": 1500,

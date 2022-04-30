@@ -51,8 +51,9 @@ public class WebInitializer
         //app.UseAuthorization();
 
         app.MapControllers();
-
+        
         app.Run();
+        
 
     }
 }

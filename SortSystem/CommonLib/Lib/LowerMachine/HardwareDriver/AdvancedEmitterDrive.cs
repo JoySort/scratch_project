@@ -56,15 +56,8 @@ public class AdvancedEmitterDrive:DriverBase
 
             }
             if (_emitRecords[id].mask == completedMask)
-            { 
-                byte[] data = new byte[last-first+1+4];
-                Array.Copy(_emitRecords[id].results,data,last-first+1);
-                data[last - first + 1] = (byte)(triggerID % 256);
-                data[last - first + 2] = (byte)(triggerID/256 % 256);
-                data[last - first + 3] = (byte)(triggerID/256/256 % 256);
-                data[last - first + 4] = (byte)(triggerID/256/256/256 % 256);
-
-                comlink.writeMultipleRegs(new byte[2] { 0x00, 0x40 },data, 0, 30);
+            {
+                SendEmitResultCMD(_emitRecords[id].results, id);               
                 _emitRecords.Remove(id);
             }
         }
@@ -75,6 +68,23 @@ public class AdvancedEmitterDrive:DriverBase
         //logger.Debug("Emitter triggered column:{}-outletNo:{} triggerID:{}",column,outletNo,triggerID);
         //TODO: link to com communication
         
+    }
+
+    public void SendEmitResultCMD(byte[] results,long triggerID)
+    {
+        int resLen = results.Length;
+        byte[] data = new byte[resLen  + 4];
+        Array.Copy(results, data, resLen);
+
+        triggerID -= 3;
+        if(triggerID <0)
+            triggerID = 0;
+        data[resLen + 0] = (byte)(triggerID % 256);
+        data[resLen + 1] = (byte)(triggerID / 256 % 256);
+        data[resLen + 2] = (byte)(triggerID / 256 / 256 % 256);
+        data[resLen + 3] = (byte)(triggerID / 256 / 256 / 256 % 256);
+
+        comlink.writeMultipleRegs(new byte[2] { 0x00, 0x40 }, data, 0, 30);
     }
 
     Dictionary<long,EmitRecord> _emitRecords = new Dictionary<long,EmitRecord>();

@@ -12,14 +12,14 @@ public class StepMotorDriver:DriverBase
         cl.onStepMotorrCMD += onData;
     }
 
-    private void sendStopCMD()
+    public void sendStopCMD()
     {
         byte[] addr = new byte[2] { 0x00, 0x98 };
         byte[] data = new byte[2] { 0x00, 0x00 };
         comlink.writeSingleReg(addr, data, 0, 0);
     }
 
-    private void sendStartCMD()
+    public void sendStartCMD()
     {
         byte[] addr = new byte[2] { 0x00, 0x98 };
         byte[] data = new byte[2] { 0x00, 0x01 };

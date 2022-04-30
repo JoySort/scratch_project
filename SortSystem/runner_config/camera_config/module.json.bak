@@ -18,7 +18,6 @@
       "address": "192.168.16.100",
       "_comment_columns": "相机覆盖的列范围，数组只能有2个元素，起和截止，注意，范围包含起也包含止的值，所以，【0，5】的意思是0，1，2，3，4，5 一共六列",
       "columns": [6,11] ,
-	  "offsets":[0,3],
       "_comment_cameraPosition": "可以使用的值: left,middle,right",
       "cameraPosition": "middle",
       "saveRawImage": false,

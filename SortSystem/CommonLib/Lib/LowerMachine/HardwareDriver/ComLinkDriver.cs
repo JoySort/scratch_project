@@ -43,13 +43,13 @@ public class ComLinkDriver
         _serialPort.Open();
         
         _continue = true;
-
+        onMachineIDChanged("virtual id: " + _serialPort.PortName);
         Thread writeThread = new Thread(Run);
         writeThread.Start();
-        writeThread.Join();
+        //writeThread.Join();
         //readThread.Start();
         //readThread.Join();
-        _serialPort.Close();
+        //_serialPort.Close();
     }
     
     public virtual void Close()
@@ -179,7 +179,7 @@ public class ComLinkDriver
         byte[] buff = new byte[len];
 
         buff[0] = 0x01;
-        buff[1] = 0x06;
+        buff[1] = 0x10;
         buff[2] = addr[0];  // 高位
         buff[3] = addr[1];  // 低位
 
@@ -191,8 +191,8 @@ public class ComLinkDriver
 
         byte[] crc = CRCHelper.CRC16Calc(buff, 0, len - 2);
 
-        buff[6] = crc[0];
-        buff[7] = crc[1];
+        buff[len-2] = crc[0];
+        buff[len-1] = crc[1];
 
         post(new ComLinkMsg(buff, delay, wait));
 
@@ -206,7 +206,7 @@ public class ComLinkDriver
         byte[] buff = new byte[len];
 
         buff[0] = 0x01;
-        buff[1] = 0x06;
+        buff[1] = 0x03;
         buff[2] = addr[0];  // 高位
         buff[3] = addr[1];  // 低位
 
@@ -226,7 +226,7 @@ public class ComLinkDriver
     {
         lock (comLinkMsgs)
         {
-            comLinkMsgs.Append(comLinkMsg);
+            comLinkMsgs.Add(comLinkMsg);
         }
     }
 

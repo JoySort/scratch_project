@@ -100,5 +100,18 @@ namespace CommonLib.Lib.Camera
                 logger.Error(exception);                
             }
         }
+
+        public override void processCameraData()
+        {
+            //TODO: code to init the camera
+            //OnRecivingPicture(byte[] picture)
+            // throw new NotImplementedException();
+            if (camera != null)
+            {
+                camera.Parameters[PLCamera.CounterSelector].SetValue(PLCamera.CounterSelector.Counter1);
+                camera.Parameters[PLCamera.CounterResetSource].SetValue(PLCamera.CounterResetSource.Software);
+                camera.Parameters[PLCamera.CounterReset].Execute();
+            }
+        }
     }
 }

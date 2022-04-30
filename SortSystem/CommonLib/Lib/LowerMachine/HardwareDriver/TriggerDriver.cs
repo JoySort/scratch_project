@@ -11,8 +11,17 @@ public class TriggerDriver:DriverBase
     {
         cl.OnTriggerCMD += onData;
     }
-    
- 
+
+    public void resetCounter()
+    {
+        byte[] addr = new byte[2] { 0x00, 0x4e };
+        byte[] data = new byte[2] { 0x00, 0x00 };
+        comlink.writeSingleReg(addr, data, 0, 10);
+    }
+
+    private int triggerCount = 0;
+    public int TriggerCount => triggerCount;
+
     public void ApplyChange(Trigger config)
     {
         
@@ -27,7 +36,13 @@ public class TriggerDriver:DriverBase
         // if cmd contains trigger id , fireTriggerEvent(this, new TriggerEventArg(triggerID))
         // for simulator
         if (obj is VirtualComLinkDriver) fireSimulationTriggerID(cmd);
+        triggerCount=(cmd[3]<<24)+(cmd[4]<<16)+(cmd[5]<<8)+(cmd[6]);
 
+    }
+    public void getTirggerCount()
+    {
+        byte[] addr = new byte[2] { 0x00, 0x9c };        
+        comlink.readReg(addr,2, 0, 20);
     }
     
     //Trigger声明事件对外的业务，让业务可以知道trigger在走。这个对于虚拟串口和真实串口都有效

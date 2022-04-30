@@ -45,6 +45,61 @@ public class LowerMachineController : ControllerBase
     }
     
 
-    
-  
+    [HttpGet]
+    [Route("/lower/startrunning")]
+    public string startrunning()
+    {
+        LowerMachineWorker.getInstance().LowerMachineDriver.StartRunning();
+        return "Ok";
+
+    }
+
+    [HttpGet]
+    [Route("/lower/stoprunning")]
+    public string stoprunning()
+    {
+        LowerMachineWorker.getInstance().LowerMachineDriver.StopRunning();
+        return "Ok";
+    }
+
+    [HttpGet]
+    [Route("/lower/gettriggercount")]
+    public string getTriggerCount()
+    {
+        LowerMachineWorker.getInstance().LowerMachineDriver.triggers[0].getTirggerCount();
+        Thread.Sleep(100);
+        return LowerMachineWorker.getInstance().LowerMachineDriver.triggers[0].TriggerCount.ToString();
+    }
+
+    [HttpGet]
+    [Route("/lower/moveoneslot")]
+    public string moveOneSlot()
+    {
+        LowerMachineWorker.getInstance().LowerMachineDriver.servos[0].MoveOneSlot();
+        
+        return "OK";
+    }
+
+    [HttpGet]
+    [Route("/lower/sendfakeresult")]
+    public string sendfakeresult()
+    {
+        byte[] fakeResults = new byte[16];
+        
+        fakeResults[0] = 1;
+        fakeResults[1] = 1;
+        fakeResults[2] = 1;
+        fakeResults[3] = 1;
+        fakeResults[4] = 1;
+        fakeResults[5] = 6;
+        fakeResults[6] = 6;
+        fakeResults[7] = 6;
+
+        int tid = 0;
+        int.TryParse(Request.Query["tid"], out tid);
+        LowerMachineWorker.getInstance().LowerMachineDriver
+            .advancedEmitter[0].SendEmitResultCMD(fakeResults, tid);
+        
+        return "OK";
+    }
 }

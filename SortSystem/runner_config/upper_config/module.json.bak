@@ -2,7 +2,7 @@
   "name": "UpperRunner",
   "module": "Upper",
   "genre": "palmDate",
-  "lowerMachineSimulationMode": false,
+  "lowerMachineSimulationMode": true,
   "cameraSimulationMode": false,
   "lowerConfig":[
     {

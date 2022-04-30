@@ -26,17 +26,17 @@ public class ConfigUtil
     }
 
 
-    private static ModuleConfig _moduleConfig;
-    private static MachineState[] _machineStates;
-    private static Emitter[] _emitters;
-    public static ModuleConfig getModuleConfig()
+    private static ModuleConfig? _moduleConfig;
+    private static MachineState[]? _machineStates;
+    private static Emitter[]? _emitters;
+    public static ModuleConfig? getModuleConfig()
     {
         if (_moduleConfig == null) {
         string filePath = configFolder+"/module.json";
         var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,filePath);
         logger.Debug("using path "+path);
         var jsonString = File.ReadAllText(path);
-        _moduleConfig =   JsonConvert.DeserializeObject<ModuleConfig>(jsonString);
+        _moduleConfig =   JsonConvert.DeserializeObject<ModuleConfig?>(jsonString);
         }
         return _moduleConfig;
 

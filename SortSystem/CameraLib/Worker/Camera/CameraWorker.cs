@@ -139,5 +139,13 @@ public class CameraWorker
         return value.ToString("yyyy-MM-dd_HH-mm-ss_ffff");
     }
 
+    public static void CloseAllCams()
+    {
+        foreach (ICameraDriver ic in me.CameraDrivers)
+        {
+            ic.CloseCam();
+        }
+    }
+
 
 }

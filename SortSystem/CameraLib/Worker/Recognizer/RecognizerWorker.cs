@@ -105,8 +105,22 @@ public class RecognizerWorker
                 int cols = recConfig.InitCols;
 
                 IntPtr dataPtr = Marshal.UnsafeAddrOfPinnedArrayElement(picture, dataOffset);
-                int[] outdata = new int[20*rows*cols];
-                ApplicationRecognize(dataPtr, height, width, outdata,rows, cols);
+                int[] outdata = new int[20 * rows * cols];
+                ApplicationRecognize(dataPtr, height, width, outdata, 20, rows, cols);
+                logger.Info("Recognization libaray initialized.");
+                logger.Info("Sample picture result 1: "
+                    + outdata[0]
+                    + ","
+                    + outdata[1]
+                    + ","
+                    + outdata[2]
+                    + ","
+                    + outdata[3]
+                    + ","
+                    + outdata[4]                      
+                    + ","
+                    + outdata[5]
+                    );
 
 
             });
@@ -124,6 +138,7 @@ public class RecognizerWorker
         {
             isProjectRunning = true;
             currentProject = e.currentProject;
+            logger.Info("Recognizer received project start || change message.");
             recognize();
         }
 
@@ -196,9 +211,9 @@ public class RecognizerWorker
                         for (int k = 0; k < criterias.Length; k++)
                         {
                             int index = criterias[k].Index;
-                            features.Add(new Feature(index, outdata[index]));
+                            features.Add(new Feature(index, outdata[(i*cols+j)*20+index]));
                         }
-                        RecResult result = new RecResult(new Coordinate(j, i, ConfigVO.CameraPosition.middle, payload.TriggerId),
+                        RecResult result = new RecResult(new Coordinate(j, rows-1-i, ConfigVO.CameraPosition.middle, payload.TriggerId),
                             5,DateTimeOffset.Now.ToUnixTimeMilliseconds(), features);
                         results.Add(result);
 

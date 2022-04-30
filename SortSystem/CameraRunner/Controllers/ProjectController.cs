@@ -53,7 +53,6 @@ public class ProjectController
             msg = e.Message;
         }
         
-        Environment.Exit(0);
         return new WebControllerResult(msg);
     }
 }
