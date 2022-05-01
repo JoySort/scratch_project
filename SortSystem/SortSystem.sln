@@ -10,11 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UDPUpperRunner", "UDPUpperR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraRunner", "CameraRunner\CameraRunner.csproj", "{FDC24701-6099-41A4-8EA4-B410145EAEB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraLib", "CameraLib\CameraLib.csproj", "{5801B639-DD59-45D8-A0B0-CDAE18A18A14}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecognizerLib", "RecognizerLib\RecognizerLib.csproj", "{7C2E0B32-411A-4A5A-A74C-3F166BBE246E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecognizerRunner", "RecognizerRunner\RecognizerRunner.csproj", "{19BCC7AF-01ED-4A0F-B5FE-AED79FA36388}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecognizeRunner", "RecognizeRunner\RecognizeRunner.csproj", "{6673F65E-9145-4001-99FD-125504855BE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,17 +38,9 @@ Global
 		{FDC24701-6099-41A4-8EA4-B410145EAEB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDC24701-6099-41A4-8EA4-B410145EAEB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDC24701-6099-41A4-8EA4-B410145EAEB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5801B639-DD59-45D8-A0B0-CDAE18A18A14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5801B639-DD59-45D8-A0B0-CDAE18A18A14}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5801B639-DD59-45D8-A0B0-CDAE18A18A14}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5801B639-DD59-45D8-A0B0-CDAE18A18A14}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C2E0B32-411A-4A5A-A74C-3F166BBE246E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C2E0B32-411A-4A5A-A74C-3F166BBE246E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C2E0B32-411A-4A5A-A74C-3F166BBE246E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C2E0B32-411A-4A5A-A74C-3F166BBE246E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{19BCC7AF-01ED-4A0F-B5FE-AED79FA36388}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{19BCC7AF-01ED-4A0F-B5FE-AED79FA36388}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{19BCC7AF-01ED-4A0F-B5FE-AED79FA36388}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{19BCC7AF-01ED-4A0F-B5FE-AED79FA36388}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6673F65E-9145-4001-99FD-125504855BE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6673F65E-9145-4001-99FD-125504855BE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6673F65E-9145-4001-99FD-125504855BE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6673F65E-9145-4001-99FD-125504855BE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

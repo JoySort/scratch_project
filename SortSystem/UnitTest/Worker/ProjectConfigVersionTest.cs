@@ -12,6 +12,7 @@ using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
 using CommonLib.Lib.Worker;
+using CommonLib.Lib.Worker.HTTP;
 using CommonLib.Lib.Worker.Upper;
 using Newtonsoft.Json;
 using NLog;

@@ -1,8 +1,6 @@
-using CommonLib.Lib.ConfigVO;
-using CommonLib.Lib.LowerMachine;
-using CommonLib.Lib.Network;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.Worker;
+using CommonLib.Lib.Worker.HTTP;
 using CommonLib.Lib.Worker.Upper;
 using Initializer;
 using NLog;

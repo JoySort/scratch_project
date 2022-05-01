@@ -1,11 +1,22 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "LowerRunner": {
+    "UpperRunner": {
       "commandName": "Project",
       "dotnetRunMessages": false,
       "launchBrowser": false,
-      "commandLineArgs":"--config_folder=../../../../runner_config/upper_config",
+      "commandLineArgs":"--config_folder=../../../../runner_config/upper_config_hw_connection",
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5113",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "UpperRunnerSimulationMode": {
+      "commandName": "Project",
+      "dotnetRunMessages": false,
+      "launchBrowser": false,
+      "commandLineArgs":"--config_folder=../../../../runner_config/upper_config_simulation",
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5113",
       "environmentVariables": {

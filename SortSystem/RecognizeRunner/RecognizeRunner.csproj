@@ -14,22 +14,27 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CommonLib\CommonLib.csproj" />
-      <ProjectReference Include="..\RecognizerLib\RecognizerLib.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="assets\2.bmp">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
       <None Update="assets\1.bmp">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="assets\4.bmp">
+      <None Update="assets\2.bmp">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="assets\3.bmp">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="assets\4.bmp">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="nlog.config">
+        <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

@@ -16,4 +16,16 @@
       <PackageReference Include="System.Net.Http.Json" Version="7.0.0-preview.3.22175.4" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Basler.Pylon.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Basler.Pylon, Version=1.1.0.0, Culture=neutral, PublicKeyToken=e389355f398382ab">
+        <HintPath>Basler.Pylon.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

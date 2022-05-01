@@ -4,7 +4,7 @@ using CommonLib.Lib.Worker.Analytics;
 using CommonLib.Lib.Worker.Upper;
 using NLog;
 
-namespace CommonLib.Lib.Worker;
+namespace CommonLib.Lib.Worker.HTTP;
 
 public class UpperWorkerManager
 {

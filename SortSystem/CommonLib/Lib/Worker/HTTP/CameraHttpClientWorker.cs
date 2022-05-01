@@ -1,6 +1,4 @@
-using CommonLib.Lib.Worker;
 using CommonLib.Lib.ConfigVO;
-using CommonLib.Lib.JoyHTTPClient;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
@@ -8,7 +6,7 @@ using CommonLib.Lib.vo;
 using Newtonsoft.Json;
 using NLog;
 
-namespace CommonLib.Lib.Worker;
+namespace CommonLib.Lib.Worker.HTTP;
 
 public class CameraHttpClientWorker
 {
