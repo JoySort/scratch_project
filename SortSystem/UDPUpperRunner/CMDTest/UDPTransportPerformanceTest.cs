@@ -7,13 +7,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CommonLib.Lib.LowerMachine;
-using CommonLib.Lib.Network;
-using CommonLib.Lib.Sort;
-using CommonLib.Lib.Sort.ResultVO;
-using CommonLib.Lib.Util;
-using CommonLib.Lib.vo;
-using CommonLib.Lib.Worker.Upper;
+using CameraLib.Lib.LowerMachine;
+using CameraLib.Lib.Network;
+using CameraLib.Lib.Sort;
+using CameraLib.Lib.Sort.ResultVO;
+using CameraLib.Lib.Util;
+using CameraLib.Lib.vo;
+using CameraLib.Lib.Worker.Upper;
 using Newtonsoft.Json;
 using NLog;
 
@@ -31,7 +31,7 @@ public class UDPTransportPerformanceTest
     public UDPTransportPerformanceTest()
     {
         LogManager.LoadConfiguration("../../../../UpperRunner/nlog.config");
-        ConfigUtil.setConfigFolder("../../../../LibUnitTest/config");
+        ConfigUtil.setConfigFolder("../../../../UnitTest/config");
         logger = LogManager.GetCurrentClassLogger();
     }
     
@@ -45,7 +45,7 @@ public class UDPTransportPerformanceTest
         LowerMachineWorker.init();
         
         try{
-            string project_file_path = @"../../../../LibUnitTest/fixtures/project_apple_rec_start.json";
+            string project_file_path = @"../../../../UnitTest/fixtures/project_apple_rec_start.json";
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,project_file_path);
             porjectJsonString = File.ReadAllText(path);
             ProjectParser parser = new ProjectParser(porjectJsonString,ProjectParser.V2);

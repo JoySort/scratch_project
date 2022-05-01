@@ -1,15 +1,15 @@
 
 using System.Collections.Concurrent;
 using System.Reflection;
-using CommonLib.Lib.ConfigVO;
-using CommonLib.Lib.Controllers;
-using CommonLib.Lib.LowerMachine;
-using CommonLib.Lib.Network;
-using CommonLib.Lib.Util;
-using CommonLib.Lib.vo;
+using CameraLib.Lib.ConfigVO;
+using CameraLib.Lib.Controllers;
+using CameraLib.Lib.LowerMachine;
+using CameraLib.Lib.Network;
+using CameraLib.Lib.Util;
+using CameraLib.Lib.vo;
 using NLog;
 
-namespace CommonLib.Lib.Worker;
+namespace CameraLib.Lib.Worker;
 
 public class ModuleCommunicationWorker
 {

@@ -1,10 +1,10 @@
 using System.Collections;
 using System.IO.Ports;
-using CommonLib.Lib.ConfigVO;
-using CommonLib.Lib.Util;
+using CameraLib.Lib.ConfigVO;
+using CameraLib.Lib.Util;
 using NLog;
 
-namespace CommonLib.Lib.LowerMachine.HardwareDriver;
+namespace CameraLib.Lib.LowerMachine.HardwareDriver;
 
 public class ComLinkDriver
 {
@@ -145,10 +145,10 @@ public class ComLinkDriver
 
     public SerialPort _serialPort { get; set; }
 
-    //modbusÐ­Òéµ¥¸ö¼Ä´æÆ÷ÊÇ16bit£¬Ò²¾ÍÊÇÒ»¸öshort
+    //modbusÐ­ï¿½éµ¥ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½16bitï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½short
 
-    //Ð´µ¥¸ö¼Ä´æÆ÷ £¬Ò»´Î·¢ËÍ8¸ö×Ö½Ú
-    //0x01 0x06 + 2¸ö×Ö½ÚµØÖ·+Á½×Ö½ÚÊý¾Ý£¨Ò²¾ÍÊÇÒ»¸öshort£©+ 2¸ö×Ö½ÚµÄcrc
+    //Ð´ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ ï¿½ï¿½Ò»ï¿½Î·ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½Ö½ï¿½
+    //0x01 0x06 + 2ï¿½ï¿½ï¿½Ö½Úµï¿½Ö·+ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½Ò²ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½shortï¿½ï¿½+ 2ï¿½ï¿½ï¿½Ö½Úµï¿½crc
     public void writeSingleReg(byte[] addr, byte[] data,int delay=0,int wait=0)//data length =2
     {
         int len = 8;
@@ -156,11 +156,11 @@ public class ComLinkDriver
 
         buff[0] = 0x01;
         buff[1] = 0x06;
-        buff[2] = addr[0];  // ¸ßÎ»
-        buff[3] = addr[1];  // µÍÎ»
+        buff[2] = addr[0];  // ï¿½ï¿½Î»
+        buff[3] = addr[1];  // ï¿½ï¿½Î»
 
-        buff[4] = data[0];  // ¸ßÎ»
-        buff[5] = data[1];  // µÍÎ»
+        buff[4] = data[0];  // ï¿½ï¿½Î»
+        buff[5] = data[1];  // ï¿½ï¿½Î»
 
         byte[] crc = CRCHelper.CRC16Calc(buff, 0, len - 2);
 
@@ -170,8 +170,8 @@ public class ComLinkDriver
         post(new ComLinkMsg(buff, delay, wait));
     }
 
-    //Ð´¶à¸ö¼Ä´æÆ÷ £¬Ò»´Î·¢ËÍ£¨9+Êý¾Ýbyte³¤¶È£©¸ö×Ö½Ú
-    //0x01 0x10 + 2¸ö×Ö½ÚµØÖ·+Á½×Ö½Ú³¤¶È£¨shortÊý¾ÝµÄ¸öÊý£©+ µ¥×Ö½ÚÊý¾Ý³¤¶È£¨byte¸öÊý£©+ Êý¾Ý + 2¸ö×Ö½ÚµÄcrc
+    //Ð´ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ ï¿½ï¿½Ò»ï¿½Î·ï¿½ï¿½Í£ï¿½9+ï¿½ï¿½ï¿½ï¿½byteï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½Ö½ï¿½
+    //0x01 0x10 + 2ï¿½ï¿½ï¿½Ö½Úµï¿½Ö·+ï¿½ï¿½ï¿½Ö½Ú³ï¿½ï¿½È£ï¿½shortï¿½ï¿½ï¿½ÝµÄ¸ï¿½ï¿½ï¿½ï¿½ï¿½+ ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½È£ï¿½byteï¿½ï¿½ï¿½ï¿½ï¿½ï¿½+ ï¿½ï¿½ï¿½ï¿½ + 2ï¿½ï¿½ï¿½Ö½Úµï¿½crc
 
     public void writeMultipleRegs(byte[] addr, byte[] data,int delay=0,int wait=0)
     {
@@ -180,11 +180,11 @@ public class ComLinkDriver
 
         buff[0] = 0x01;
         buff[1] = 0x10;
-        buff[2] = addr[0];  // ¸ßÎ»
-        buff[3] = addr[1];  // µÍÎ»
+        buff[2] = addr[0];  // ï¿½ï¿½Î»
+        buff[3] = addr[1];  // ï¿½ï¿½Î»
 
-        buff[4] = (byte)(data.Length / 2 / 256);// ¸ßÎ»
-        buff[5] = (byte)(data.Length / 2 % 256);// µÍÎ»
+        buff[4] = (byte)(data.Length / 2 / 256);// ï¿½ï¿½Î»
+        buff[5] = (byte)(data.Length / 2 % 256);// ï¿½ï¿½Î»
         buff[6] = (byte)(data.Length); 
 
         Array.Copy(data,0,buff,7,data.Length);
@@ -198,8 +198,8 @@ public class ComLinkDriver
 
     }
 
-    //¶Áµ¥¸ö»ò¶à¸ö¼Ä´æÆ÷£¬Ò»´Î·¢ËÍ8¸ö×Ö½Ú
-    //0x01 0x03 + 2¸ö×Ö½ÚµØÖ·+Á½×Ö½Ú³¤¶È£¨shortÊý¾ÝµÄ¸öÊý£©+ 2¸ö×Ö½ÚµÄcrc
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î·ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½Ö½ï¿½
+    //0x01 0x03 + 2ï¿½ï¿½ï¿½Ö½Úµï¿½Ö·+ï¿½ï¿½ï¿½Ö½Ú³ï¿½ï¿½È£ï¿½shortï¿½ï¿½ï¿½ÝµÄ¸ï¿½ï¿½ï¿½ï¿½ï¿½+ 2ï¿½ï¿½ï¿½Ö½Úµï¿½crc
     public void readReg(byte[] addr, ushort count,int delay=0, int wait=0)
     {
         int len = 8;
@@ -207,11 +207,11 @@ public class ComLinkDriver
 
         buff[0] = 0x01;
         buff[1] = 0x03;
-        buff[2] = addr[0];  // ¸ßÎ»
-        buff[3] = addr[1];  // µÍÎ»
+        buff[2] = addr[0];  // ï¿½ï¿½Î»
+        buff[3] = addr[1];  // ï¿½ï¿½Î»
 
-        buff[4] = (byte)(count/256);  // ¸ßÎ»
-        buff[5] = (byte)(count%256); ;  // µÍÎ»
+        buff[4] = (byte)(count/256);  // ï¿½ï¿½Î»
+        buff[5] = (byte)(count%256); ;  // ï¿½ï¿½Î»
 
         byte[] crc = CRCHelper.CRC16Calc(buff, 0, len - 2);
 
@@ -326,7 +326,7 @@ public class ComLinkDriver
     }
 
     internal string machineID;
-    private static List<byte> listDatBuffer = new List<byte>(); // ´®¿ÚÊý¾Ý»º´æ
+    private static List<byte> listDatBuffer = new List<byte>(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½
 
     public string MachineId => machineID;
 

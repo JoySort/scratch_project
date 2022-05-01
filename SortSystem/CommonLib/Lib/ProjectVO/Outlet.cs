@@ -1,4 +1,4 @@
-namespace CommonLib.Lib.vo;
+namespace CameraLib.Lib.vo;
 
 public class Outlet
 {

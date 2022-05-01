@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text.Json;
 using NLog;
 
-namespace CommonLib.Lib.JoyHTTPClient;
+namespace CameraLib.Lib.JoyHTTPClient;
 
 public class JoyHTTPClient
 {

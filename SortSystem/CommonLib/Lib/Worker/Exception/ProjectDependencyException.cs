@@ -1,4 +1,4 @@
-namespace CommonLib.Lib.Sort.Exception;
+namespace CameraLib.Lib.Sort.Exception;
 
 public class ProjectDependencyException:System.Exception
 {

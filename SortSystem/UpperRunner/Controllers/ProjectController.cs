@@ -1,12 +1,12 @@
-using CommonLib.Lib.Controllers;
-using CommonLib.Lib.LowerMachine;
-using CommonLib.Lib.Util;
-using CommonLib.Lib.vo;
+using CameraLib.Lib.Controllers;
+using CameraLib.Lib.LowerMachine;
+using CameraLib.Lib.Util;
+using CameraLib.Lib.vo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using EmptyResult = CommonLib.Lib.Controllers.EmptyResult;
+using EmptyResult = CameraLib.Lib.Controllers.EmptyResult;
 
-namespace CommonLib.Lib.WebAPIs.Upper;
+namespace CameraLib.Lib.WebAPIs.Upper;
 
 /**
  * <summary>项目启动，停止，暂停等相关API</summary>
@@ -48,7 +48,7 @@ public class ProjectController : ControllerBase
         }
 
 
-        var resultData = new EmptyResult();
+        var resultData = new Controllers.EmptyResult();
 
         return new UIAPIResult(errorObj, resultData);
     }
@@ -71,7 +71,7 @@ public class ProjectController : ControllerBase
         }
 
 
-        var resultData = new EmptyResult();
+        var resultData = new Controllers.EmptyResult();
 
         return new UIAPIResult(errorObj, resultData);
     }
@@ -95,7 +95,7 @@ public class ProjectController : ControllerBase
         }
 
 
-        var resultData = new EmptyResult();
+        var resultData = new Controllers.EmptyResult();
 
         return new UIAPIResult(errorObj, resultData);
     }
@@ -117,7 +117,7 @@ public class ProjectController : ControllerBase
         }
 
 
-        var resultData = new EmptyResult();
+        var resultData = new Controllers.EmptyResult();
 
         return new UIAPIResult(errorObj, resultData);
     }
@@ -140,7 +140,7 @@ public class ProjectController : ControllerBase
         }
 
 
-        var resultData = new EmptyResult();
+        var resultData = new Controllers.EmptyResult();
 
         return new UIAPIResult(errorObj, resultData);
     }
@@ -162,7 +162,7 @@ public class ProjectController : ControllerBase
         }
 
 
-        var resultData = new EmptyResult();
+        var resultData = new Controllers.EmptyResult();
 
         return new UIAPIResult(errorObj, resultData);
     }
@@ -183,7 +183,7 @@ public class ProjectController : ControllerBase
         }
 
 
-        var resultData = new EmptyResult();
+        var resultData = new Controllers.EmptyResult();
 
         return new UIAPIResult(errorObj, resultData);
     }

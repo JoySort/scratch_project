@@ -1,4 +1,4 @@
-namespace CommonLib.Lib.Controllers;
+namespace CameraLib.Lib.Controllers;
 
 public class EmptyResult :IJoyResult
 {

@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using CommonLib.Lib.Controllers;
-using CommonLib.Lib.Worker.Camera;
-using CommonLib.Lib.Camera;
-using CommonLib.Lib.Util;
+﻿using CameraLib.Lib.Worker.Camera;
+using Microsoft.AspNetCore.Mvc;
+using CameraLib.Lib.Controllers;
+using CameraLib.Lib.Camera;
+using CameraLib.Lib.Util;
 
 namespace CameraRunner.Controllers
 {

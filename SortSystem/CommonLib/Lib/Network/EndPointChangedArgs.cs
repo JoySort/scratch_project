@@ -1,4 +1,4 @@
-namespace CommonLib.Lib.Network;
+namespace CameraLib.Lib.Network;
 
 public class EndPointChangedArgs:EventArgs
 

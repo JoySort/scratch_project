@@ -1,7 +1,7 @@
-using CommonLib.Lib.Sort.ResultVO;
+using CameraLib.Lib.Sort.ResultVO;
 using NLog;
 
-namespace CommonLib.Lib.LowerMachine.HardwareDriver;
+namespace CameraLib.Lib.LowerMachine.HardwareDriver;
 
 public class AdvancedEmitterDrive:DriverBase
 {

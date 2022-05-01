@@ -1,4 +1,4 @@
-namespace CommonLib.Lib.ConfigVO;
+namespace CameraLib.Lib.ConfigVO;
 
 public class NetworkConfig
 {

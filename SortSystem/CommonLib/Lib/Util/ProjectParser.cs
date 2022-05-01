@@ -1,15 +1,15 @@
 using System.Text;
-using CommonLib.Lib.LowerMachine;
-using CommonLib.Lib.vo;
+using CameraLib.Lib.vo;
+using CameraLib.Lib.LowerMachine;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace CommonLib.Lib.Util;
+namespace CameraLib.Lib.Util;
 
 /**
- * <summary>Usage see @LibUnitTest.vo.JSONParserTest</summary>
+ * <summary>Usage see @UnitTest.vo.JSONParserTest</summary>
  */
 public class ProjectParser
 {

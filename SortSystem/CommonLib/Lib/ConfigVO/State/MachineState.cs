@@ -1,6 +1,6 @@
-using CommonLib.Lib.LowerMachine;
+using CameraLib.Lib.LowerMachine;
 
-namespace CommonLib.Lib.ConfigVO;
+namespace CameraLib.Lib.ConfigVO;
 
 public class MachineState
 {

@@ -1,6 +1,6 @@
 using NLog;
 
-namespace CommonLib.Lib.LowerMachine.HardwareDriver;
+namespace CameraLib.Lib.LowerMachine.HardwareDriver;
 
 public class EmitterDriver:DriverBase
 {

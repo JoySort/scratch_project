@@ -1,16 +1,16 @@
 using System.Collections.Concurrent;
-using CommonLib.Lib.ConfigVO;
-using CommonLib.Lib.LowerMachine;
-using CommonLib.Lib.Sort.ResultVO;
-using CommonLib.Lib.Util;
-using CommonLib.Lib.vo;
-using CommonLib.Lib.Worker.Upper;
+using CameraLib.Lib.ConfigVO;
+using CameraLib.Lib.LowerMachine;
+using CameraLib.Lib.Sort.ResultVO;
+using CameraLib.Lib.Util;
+using CameraLib.Lib.vo;
+using CameraLib.Lib.Worker.Upper;
 using Elasticsearch.Net;
 using Nest;
 using NLog;
-using Filter = CommonLib.Lib.vo.Filter;
+using Filter = CameraLib.Lib.vo.Filter;
 
-namespace CommonLib.Lib.Worker.Analytics;
+namespace CameraLib.Lib.Worker.Analytics;
 
 public class ElasticSearchWorker
 {
@@ -167,7 +167,7 @@ public class ElasticSearchWorker
     }
     
     
-    public string getFilterString (Filter[][] filters)
+    public string getFilterString (vo.Filter[][] filters)
     {
         string result="";
         foreach (var OrFilter in filters)

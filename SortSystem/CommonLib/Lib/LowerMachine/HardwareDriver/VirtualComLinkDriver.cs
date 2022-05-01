@@ -1,9 +1,9 @@
 using System.Collections;
-using CommonLib.Lib.ConfigVO;
-using CommonLib.Lib.vo;
+using CameraLib.Lib.ConfigVO;
+using CameraLib.Lib.vo;
 using NLog;
 
-namespace CommonLib.Lib.LowerMachine.HardwareDriver;
+namespace CameraLib.Lib.LowerMachine.HardwareDriver;
 
 public class VirtualComLinkDriver:ComLinkDriver
 {

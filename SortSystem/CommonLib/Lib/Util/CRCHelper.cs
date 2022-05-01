@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CommonLib.Lib.Util
+namespace CameraLib.Lib.Util
 {
     internal class CRCHelper
     {

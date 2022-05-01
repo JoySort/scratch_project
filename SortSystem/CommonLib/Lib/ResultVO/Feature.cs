@@ -1,6 +1,6 @@
-using CommonLib.Lib.vo;
+using CameraLib.Lib.vo;
 
-namespace CommonLib.Lib.Sort.ResultVO;
+namespace CameraLib.Lib.Sort.ResultVO;
 
 public class Feature
 {

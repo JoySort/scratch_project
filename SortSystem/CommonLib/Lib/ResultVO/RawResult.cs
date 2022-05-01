@@ -1,4 +1,4 @@
-namespace CommonLib.Lib.Sort.ResultVO;
+namespace CameraLib.Lib.Sort.ResultVO;
 
 public class RawResult
 {

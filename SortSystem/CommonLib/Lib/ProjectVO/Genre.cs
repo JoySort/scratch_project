@@ -1,4 +1,4 @@
-namespace CommonLib.Lib.vo;
+namespace CameraLib.Lib.vo;
 
 /**
  * <summary>类别，比如枣，苹果，包装袋等等</summary>

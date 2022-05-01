@@ -1,14 +1,15 @@
 using NDesk.Options;
 using NLog;
 
-namespace CommonLib.Lib.Util;
+namespace CameraLib.Lib.Util;
 
 public class CMDArgumentUtil
 {
     public static Logger logger = LogManager.GetCurrentClassLogger();
-    private const string devConfigRoot = "../../../../LibUnitTest/config";
+    private const string devConfigRoot = "../../../../UnitTest/config";
     public static string configRoot =devConfigRoot;
     public static int gid = 0;
+    public static bool standalone = true;
     public static void parse(string[] args)
     {
         
@@ -40,6 +41,13 @@ public class CMDArgumentUtil
                 "Specify the sequence id of this program in the series",
                 v => {
                     int.TryParse(v,out gid);
+                }
+            },
+            {
+                "standalone=",
+                "wether run as a standalone application or recieve data from remote",
+                v => {
+                    bool.TryParse(v,out standalone);
                 }
             }
         };

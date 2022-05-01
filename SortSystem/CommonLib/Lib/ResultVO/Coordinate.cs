@@ -1,6 +1,6 @@
-using CommonLib.Lib.ConfigVO;
+using CameraLib.Lib.ConfigVO;
 
-namespace CommonLib.Lib.Sort.ResultVO;
+namespace CameraLib.Lib.Sort.ResultVO;
 
 public class Coordinate
 {

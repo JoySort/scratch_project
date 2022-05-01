@@ -1,11 +1,11 @@
-using CommonLib.Lib.ConfigVO;
-using CommonLib.Lib.ConfigVO.Emission;
-using CommonLib.Lib.LowerMachine;
-using CommonLib.Lib.Util;
+using CameraLib.Lib.ConfigVO;
+using CameraLib.Lib.ConfigVO.Emission;
+using CameraLib.Lib.Util;
+using CameraLib.Lib.LowerMachine;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace CommonLib.Lib.Controllers;
+namespace CameraLib.Lib.Controllers;
 
 /**
  * <summary>发现服务，用来提供给调用端，作为第一个调用的方法来获得其提供的服务类型。</summary>

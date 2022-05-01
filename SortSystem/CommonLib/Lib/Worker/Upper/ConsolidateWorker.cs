@@ -1,14 +1,14 @@
 using System.Collections.Concurrent;
-using CommonLib.Lib.ConfigVO;
-using CommonLib.Lib.LowerMachine;
-using CommonLib.Lib.Sort.Exception;
-using CommonLib.Lib.Sort.ResultVO;
-using CommonLib.Lib.Util;
-using CommonLib.Lib.vo;
+using CameraLib.Lib.ConfigVO;
+using CameraLib.Lib.LowerMachine;
+using CameraLib.Lib.Sort.Exception;
+using CameraLib.Lib.Sort.ResultVO;
+using CameraLib.Lib.Util;
+using CameraLib.Lib.vo;
 using Newtonsoft.Json;
 using NLog;
 
-namespace CommonLib.Lib.Worker.Upper;
+namespace CameraLib.Lib.Worker.Upper;
 
 public class ConsolidateWorker
 {
