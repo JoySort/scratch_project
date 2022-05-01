@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
-using CameraLib.Lib.Controllers;
-using CameraLib.Lib.Sort.ResultVO;
-using CameraLib.Lib.Worker.Recognizer;
+using CommonLib.Lib.Controllers;
+using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Worker.Recognizer;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using RecognizerLib.Lib.Worker;

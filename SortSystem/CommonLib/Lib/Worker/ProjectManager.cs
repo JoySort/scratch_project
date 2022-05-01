@@ -2,10 +2,10 @@ using System.Runtime.Serialization.Formatters.Binary;
 using NLog;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-using CameraLib.Lib.vo;
+using CommonLib.Lib.vo;
 using Newtonsoft.Json;
 
-namespace CameraLib.Lib.LowerMachine;
+namespace CommonLib.Lib.LowerMachine;
 
 public class ProjectManager
 {

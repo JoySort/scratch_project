@@ -1,10 +1,10 @@
 using System.Collections;
 using System.IO.Ports;
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.Util;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.Util;
 using NLog;
 
-namespace CameraLib.Lib.LowerMachine.HardwareDriver;
+namespace CommonLib.Lib.LowerMachine.HardwareDriver;
 
 public class ComLinkDriver
 {

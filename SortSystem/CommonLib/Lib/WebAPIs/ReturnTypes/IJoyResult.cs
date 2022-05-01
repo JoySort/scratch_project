@@ -1,4 +1,4 @@
-namespace CameraLib.Lib.Controllers;
+namespace CommonLib.Lib.Controllers;
 
 public interface IJoyResult
 {

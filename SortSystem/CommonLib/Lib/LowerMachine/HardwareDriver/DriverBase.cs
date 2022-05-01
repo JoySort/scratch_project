@@ -1,7 +1,7 @@
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.Util;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.ConfigVO;
 
-namespace CameraLib.Lib.LowerMachine.HardwareDriver;
+namespace CommonLib.Lib.LowerMachine.HardwareDriver;
 
 public abstract class  DriverBase
 {

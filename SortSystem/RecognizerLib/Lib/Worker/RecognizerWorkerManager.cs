@@ -1,7 +1,7 @@
 
-using CameraLib.Lib.Worker.Camera;
-using CameraLib.Lib.Sort.ResultVO;
-using CameraLib.Lib.Worker.Recognizer;
+using CommonLib.Lib.Worker.Camera;
+using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Worker.Recognizer;
 using NLog;
 
 namespace RecognizerLib.Lib.Worker;

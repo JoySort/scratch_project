@@ -1,4 +1,4 @@
-namespace CameraLib.Lib.Sort.ResultVO;
+namespace CommonLib.Lib.Sort.ResultVO;
 
 public class ConsolidatedResult:RecResult
 {

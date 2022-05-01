@@ -1,5 +1,5 @@
-using CameraLib.Lib.Util;
-using CameraLib.Lib.Worker;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.Worker;
 using Initializer;
 using NLog;
 using NLog.Web;

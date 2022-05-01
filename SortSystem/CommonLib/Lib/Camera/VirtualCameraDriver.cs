@@ -1,9 +1,9 @@
 using System.Reflection;
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.LowerMachine;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.ConfigVO;
 using NLog;
 
-namespace CameraLib.Lib.Camera;
+namespace CommonLib.Lib.Camera;
 
 public class VirtualCameraDriver:CameraDriverBase
 {

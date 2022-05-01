@@ -1,4 +1,4 @@
-namespace CameraLib.Lib.vo;
+namespace CommonLib.Lib.vo;
 
 public class Project
 {

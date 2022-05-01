@@ -1,13 +1,13 @@
 using System.Collections.Concurrent;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using CameraLib.Lib.LowerMachine;
-using CameraLib.Lib.Sort.ResultVO;
-using CameraLib.Lib.Util;
-using CameraLib.Lib.vo;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.vo;
 using NLog;
 
-namespace CameraLib.Lib.Worker.Recognizer;
+namespace CommonLib.Lib.Worker.Recognizer;
 
 public class RecognizerWorker
 {

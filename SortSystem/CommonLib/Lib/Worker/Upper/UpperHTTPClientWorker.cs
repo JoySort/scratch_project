@@ -1,12 +1,13 @@
 using System.Collections.Concurrent;
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.Controllers;
-using CameraLib.Lib.LowerMachine;
-using CameraLib.Lib.Util;
-using CameraLib.Lib.vo;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.Controllers;
+using CommonLib.Lib.JoyHTTPClient;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.vo;
 using NLog;
 
-namespace CameraLib.Lib.Worker.Upper;
+namespace CommonLib.Lib.Worker.Upper;
 
 public class UpperToCameraHTTPClientWorker
 {

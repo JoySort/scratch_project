@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.Sort.ResultVO;
-using CameraLib.Lib.Util;
-using CameraLib.Lib.vo;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.vo;
 
 namespace UnitTest.Worker;
 

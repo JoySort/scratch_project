@@ -1,12 +1,12 @@
-using CameraLib.Lib.Controllers;
-using CameraLib.Lib.LowerMachine;
-using CameraLib.Lib.Util;
-using CameraLib.Lib.vo;
+using CommonLib.Lib.Controllers;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.vo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using EmptyResult = CameraLib.Lib.Controllers.EmptyResult;
+using EmptyResult = CommonLib.Lib.Controllers.EmptyResult;
 
-namespace CameraLib.Lib.WebAPIs.Upper;
+namespace CommonLib.Lib.WebAPIs.Upper;
 
 /**
  * <summary>项目启动，停止，暂停等相关API</summary>

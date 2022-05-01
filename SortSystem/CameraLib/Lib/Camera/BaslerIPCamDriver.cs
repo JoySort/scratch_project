@@ -1,8 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 using Basler.Pylon;
-using CameraLib.Lib.ConfigVO;
+using CommonLib.Lib.ConfigVO;
 
-namespace CameraLib.Lib.Camera
+namespace CommonLib.Lib.Camera
 {
     public class BaslerIPCamDriver:IPCameraDriver
     {

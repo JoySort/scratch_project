@@ -1,7 +1,7 @@
 using NDesk.Options;
 using NLog;
 
-namespace CameraLib.Lib.Util;
+namespace CommonLib.Lib.Util;
 
 public class CMDArgumentUtil
 {

@@ -1,9 +1,9 @@
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.LowerMachine.HardwareDriver;
-using CameraLib.Lib.Util;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.LowerMachine.HardwareDriver;
+using CommonLib.Lib.Util;
 using NLog;
 
-namespace CameraLib.Lib.LowerMachine;
+namespace CommonLib.Lib.LowerMachine;
 
 public class LowerMachineDriver
 {

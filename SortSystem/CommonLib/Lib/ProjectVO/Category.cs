@@ -1,4 +1,4 @@
-namespace CameraLib.Lib.vo;
+namespace CommonLib.Lib.vo;
 /**
  * <summary>子类别，比如椰枣下面有medjoul, fard, lulu  等等</summary>
  */

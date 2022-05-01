@@ -1,7 +1,7 @@
-using CameraLib.Lib.ConfigVO.Emission;
-using CameraLib.Lib.vo;
+using CommonLib.Lib.ConfigVO.Emission;
+using CommonLib.Lib.vo;
 
-namespace CameraLib.Lib.ConfigVO;
+namespace CommonLib.Lib.ConfigVO;
 
 public class ModuleConfig
 {

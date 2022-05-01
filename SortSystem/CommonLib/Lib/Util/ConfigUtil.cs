@@ -1,11 +1,11 @@
 using System.Reflection;
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.ConfigVO.Emission;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.ConfigVO.Emission;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NLog;
 
-namespace CameraLib.Lib.Util;
+namespace CommonLib.Lib.Util;
 
 public class ConfigUtil
 {

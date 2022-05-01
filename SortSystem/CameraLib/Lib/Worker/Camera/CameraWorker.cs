@@ -1,14 +1,14 @@
 using System.Collections.Concurrent;
 using System.Reflection;
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.Camera;
-using CameraLib.Lib.LowerMachine;
-using CameraLib.Lib.Sort.ResultVO;
-using CameraLib.Lib.Util;
-using CameraLib.Lib.vo;
+using CommonLib.Lib.Camera;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.vo;
 using NLog;
 
-namespace CameraLib.Lib.Worker.Camera;
+namespace CommonLib.Lib.Worker.Camera;
 
 public class CameraWorker
 {

@@ -1,12 +1,12 @@
 
 
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.JoyHTTPClient;
-using CameraLib.Lib.LowerMachine;
-using CameraLib.Lib.Sort.ResultVO;
-using CameraLib.Lib.Util;
-using CameraLib.Lib.vo;
-using CameraLib.Lib.Worker;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.vo;
+using CommonLib.Lib.Worker;
+using CommonLib.Lib.JoyHTTPClient;
 using Newtonsoft.Json;
 using NLog;
 

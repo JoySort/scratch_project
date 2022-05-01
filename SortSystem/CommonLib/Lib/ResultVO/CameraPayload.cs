@@ -1,6 +1,6 @@
-using CameraLib.Lib.ConfigVO;
+using CommonLib.Lib.ConfigVO;
 
-namespace CameraLib.Lib.Sort.ResultVO;
+namespace CommonLib.Lib.Sort.ResultVO;
 
 public class CameraPayLoad
 {

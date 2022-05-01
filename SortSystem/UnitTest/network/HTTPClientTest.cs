@@ -3,9 +3,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.Network;
-using CameraLib.Lib.Worker;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.Network;
+using CommonLib.Lib.Worker;
 using NLog;
 using NUnit.Framework;
 

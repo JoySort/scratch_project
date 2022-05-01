@@ -1,12 +1,12 @@
 using System.Text;
-using CameraLib.Lib.vo;
-using CameraLib.Lib.LowerMachine;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.vo;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace CameraLib.Lib.Util;
+namespace CommonLib.Lib.Util;
 
 /**
  * <summary>Usage see @UnitTest.vo.JSONParserTest</summary>

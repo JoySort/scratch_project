@@ -1,16 +1,14 @@
-
-
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.JoyHTTPClient;
-using CameraLib.Lib.LowerMachine;
-using CameraLib.Lib.Sort.ResultVO;
-using CameraLib.Lib.Util;
-using CameraLib.Lib.vo;
-using CameraLib.Lib.Worker;
+using CommonLib.Lib.Worker;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.JoyHTTPClient;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.vo;
 using Newtonsoft.Json;
 using NLog;
 
-namespace CameraLib.Lib.Worker;
+namespace CommonLib.Lib.Worker;
 
 public class CameraHttpClientWorker
 {
@@ -31,7 +29,7 @@ public class CameraHttpClientWorker
 
     public void onRecResultGenerated(object? sender, List<RecResult> results)
     {
-        var joyHttpClient = new JoyHTTPClient();
+        var joyHttpClient = new JoyHTTPClient.JoyHTTPClient();
         var toBeSent = filterResultAgainstLowerMachineRange(results);
         
         foreach((var key,var value) in toBeSent){

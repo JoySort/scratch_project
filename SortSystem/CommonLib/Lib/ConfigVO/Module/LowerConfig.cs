@@ -1,4 +1,4 @@
-namespace CameraLib.Lib.ConfigVO;
+namespace CommonLib.Lib.ConfigVO;
 
 public class LowerConfig
 {

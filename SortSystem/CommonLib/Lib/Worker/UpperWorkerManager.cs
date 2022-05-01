@@ -1,10 +1,10 @@
-using CameraLib.Lib.Sort.ResultVO;
-using CameraLib.Lib.Util;
-using CameraLib.Lib.Worker.Analytics;
-using CameraLib.Lib.Worker.Upper;
+using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.Worker.Analytics;
+using CommonLib.Lib.Worker.Upper;
 using NLog;
 
-namespace CameraLib.Lib.Worker;
+namespace CommonLib.Lib.Worker;
 
 public class UpperWorkerManager
 {

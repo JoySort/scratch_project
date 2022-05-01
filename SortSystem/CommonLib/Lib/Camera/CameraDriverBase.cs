@@ -1,8 +1,8 @@
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.LowerMachine;
-using CameraLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Sort.ResultVO;
 using NLog;
-namespace CameraLib.Lib.Camera;
+namespace CommonLib.Lib.Camera;
 
 public abstract class CameraDriverBase:ICameraDriver
 {

@@ -1,9 +1,9 @@
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.Sort.ResultVO;
-using CameraLib.Lib.vo;
-using CameraLib.Lib.Util;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.vo;
 
-namespace CameraLib.Lib.Worker.Recognizer;
+namespace CommonLib.Lib.Worker.Recognizer;
 
 
 public class RecResultGenerator

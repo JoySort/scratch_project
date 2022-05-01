@@ -1,6 +1,6 @@
-using CameraLib.Lib.vo;
+using CommonLib.Lib.vo;
 
-namespace CameraLib.Lib.Sort.ResultVO;
+namespace CommonLib.Lib.Sort.ResultVO;
 
 public class ESFeature
 {

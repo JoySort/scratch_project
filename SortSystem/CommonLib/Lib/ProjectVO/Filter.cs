@@ -1,6 +1,6 @@
-using CameraLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Sort.ResultVO;
 
-namespace CameraLib.Lib.vo;
+namespace CommonLib.Lib.vo;
 
 public class Filter
 {

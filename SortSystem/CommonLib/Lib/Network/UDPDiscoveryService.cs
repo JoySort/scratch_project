@@ -1,11 +1,11 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using CameraLib.Lib.Util;
+using CommonLib.Lib.Util;
 using Newtonsoft.Json;
 using NLog;
 
-namespace CameraLib.Lib.Network;
+namespace CommonLib.Lib.Network;
 
 public class UDPDiscoveryService
 {

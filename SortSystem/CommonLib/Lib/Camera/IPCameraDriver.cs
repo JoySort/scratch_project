@@ -1,6 +1,6 @@
-using CameraLib.Lib.ConfigVO;
+using CommonLib.Lib.ConfigVO;
 
-namespace CameraLib.Lib.Camera;
+namespace CommonLib.Lib.Camera;
 
 public class IPCameraDriver:CameraDriverBase
 {

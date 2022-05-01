@@ -1,6 +1,6 @@
-using CameraLib.Lib.Controllers;
-using CameraLib.Lib.LowerMachine;
-using CameraLib.Lib.vo;
+using CommonLib.Lib.Controllers;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.vo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CameraRunner.Controllers;

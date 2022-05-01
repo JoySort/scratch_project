@@ -5,12 +5,12 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using CameraLib.Lib.LowerMachine;
-using CameraLib.Lib.Sort.ResultVO;
-using CameraLib.Lib.Util;
-using CameraLib.Lib.vo;
-using CameraLib.Lib.Worker;
-using CameraLib.Lib.Worker.Upper;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.vo;
+using CommonLib.Lib.Worker;
+using CommonLib.Lib.Worker.Upper;
 using NLog;
 using NUnit.Framework;
 

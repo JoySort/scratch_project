@@ -1,7 +1,7 @@
-using CameraLib.Lib.LowerMachine;
-using CameraLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Sort.ResultVO;
 
-namespace CameraLib.Lib.Camera;
+namespace CommonLib.Lib.Camera;
 
 public interface ICameraDriver
 {

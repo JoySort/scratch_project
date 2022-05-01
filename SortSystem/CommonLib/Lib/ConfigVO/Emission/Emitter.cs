@@ -1,4 +1,4 @@
-namespace CameraLib.Lib.ConfigVO.Emission;
+namespace CommonLib.Lib.ConfigVO.Emission;
 
 public class Emitter
 {

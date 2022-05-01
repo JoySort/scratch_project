@@ -1,9 +1,9 @@
 using System.Collections;
-using CameraLib.Lib.ConfigVO;
+using CommonLib.Lib.ConfigVO;
 using Newtonsoft.Json;
 using NLog;
 
-namespace CameraLib.Lib.LowerMachine.HardwareDriver;
+namespace CommonLib.Lib.LowerMachine.HardwareDriver;
 
 public class ServoDriver:DriverBase
 { 

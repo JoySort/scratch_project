@@ -1,4 +1,4 @@
-namespace CameraLib.Lib.vo;
+namespace CommonLib.Lib.vo;
 
 /**
  * <summary>分拣标准， 比如可能出现宽度，高度，颜色，每个都有一个名字Name, 一个序号，CriteriaIndex ，最大值和最小值是边界</summary>

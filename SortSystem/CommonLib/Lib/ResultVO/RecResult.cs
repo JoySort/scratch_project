@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace CameraLib.Lib.Sort.ResultVO;
+namespace CommonLib.Lib.Sort.ResultVO;
 
 public class RecResult:RawResult
 {

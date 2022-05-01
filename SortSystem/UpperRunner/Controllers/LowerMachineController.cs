@@ -1,10 +1,10 @@
-using CameraLib.Lib.Controllers;
-using CameraLib.Lib.LowerMachine;
-using CameraLib.Lib.Worker.Upper;
+using CommonLib.Lib.Controllers;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Worker.Upper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace CameraLib.Lib.WebAPIs.Upper;
+namespace CommonLib.Lib.WebAPIs.Upper;
 
 /**
  * <summary>发现服务，用来提供给调用端，作为第一个调用的方法来获得其提供的服务类型。</summary>

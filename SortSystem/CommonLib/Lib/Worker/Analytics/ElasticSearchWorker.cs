@@ -1,16 +1,16 @@
 using System.Collections.Concurrent;
-using CameraLib.Lib.ConfigVO;
-using CameraLib.Lib.LowerMachine;
-using CameraLib.Lib.Sort.ResultVO;
-using CameraLib.Lib.Util;
-using CameraLib.Lib.vo;
-using CameraLib.Lib.Worker.Upper;
+using CommonLib.Lib.Worker.Upper;
+using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.LowerMachine;
+using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Util;
+using CommonLib.Lib.vo;
 using Elasticsearch.Net;
 using Nest;
 using NLog;
-using Filter = CameraLib.Lib.vo.Filter;
+using Filter = CommonLib.Lib.vo.Filter;
 
-namespace CameraLib.Lib.Worker.Analytics;
+namespace CommonLib.Lib.Worker.Analytics;
 
 public class ElasticSearchWorker
 {

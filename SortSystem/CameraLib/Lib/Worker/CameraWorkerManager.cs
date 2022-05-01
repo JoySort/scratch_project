@@ -1,8 +1,8 @@
-using CameraLib.Lib.Worker.Camera;
-using CameraLib.Lib.Camera;
+using CommonLib.Lib.Camera;
+using CommonLib.Lib.Worker.Camera;
 using NLog;
 
-namespace CameraLib.Lib.Worker;
+namespace CommonLib.Lib.Worker;
 
 public class CameraWorkerManager
 {
