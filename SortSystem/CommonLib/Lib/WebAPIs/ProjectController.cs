@@ -2,6 +2,7 @@ using CommonLib.Lib.Controllers;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.vo;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CameraRunner.Controllers;
 

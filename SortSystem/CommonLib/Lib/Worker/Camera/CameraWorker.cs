@@ -31,8 +31,33 @@ public class CameraWorker
     }
     private CameraDriverBase? getCameraDriver(CameraConfig cameraConfig)
     {
-        if (cameraConfig.GID != CMDArgumentUtil.gid)
+        bool found = false;
+        foreach (var i in CMDArgumentUtil.gid)
+        {
+            if (cameraConfig.GID != i){
+                continue;
+            }
+            else
+            {
+                found = true;
+            }
+           
+        }
+
+      
+        if (CMDArgumentUtil.gid.Length == 1 && CMDArgumentUtil.gid[0]==-1)
+        {
+            found = true;
+            logger.Info("启动参数gid 没有初始化，使用了默认值-1，但是，相机驱动被调用进行初始化。除非你确认这是希望的情景，否则应该设置--gid=命令行参数来确保初始化正常。");
+            logger.Info("GID设置为-1，忽略gid配置，初始化全部相机配置！！！");
+        }
+        
+        if (!found)
+        {
             return null;
+        }
+        
+
         if (cameraConfig.ClassDriver == null)
         {
             logger.Error(" Driver Class Name not specified in camera config ");
@@ -68,9 +93,10 @@ public class CameraWorker
 
             if (isSimulation)
                 cameraDriver = new VirtualCameraDriver(item);
+               
             else
                 cameraDriver = getCameraDriver(item);
-
+                
             if (cameraDriver == null)
                 continue;
             if (item.SaveRawImage) cameraDriver.OnPictureArrive += ((sender, cameraPayLoad) =>

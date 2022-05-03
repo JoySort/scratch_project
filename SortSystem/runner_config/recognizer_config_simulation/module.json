@@ -12,7 +12,7 @@
   },
   "cameraConfigs":[
     {
-		"classDriver": "BaslerIPCamDriver",
+      "classDriver": "BaslerIPCamDriver",
       "brand":"basler",
 		"model":"1920",
       "address": "192.168.16.100",

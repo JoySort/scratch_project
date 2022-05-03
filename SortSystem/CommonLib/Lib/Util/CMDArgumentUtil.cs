@@ -8,7 +8,7 @@ public class CMDArgumentUtil
     public static Logger logger = LogManager.GetCurrentClassLogger();
     private const string devConfigRoot = "../../../../UnitTest/config";
     public static string configRoot =devConfigRoot;
-    public static int gid = 0;
+    public static int[] gid = new int[]{-1};
     public static bool standalone = true;
     public static void parse(string[] args)
     {
@@ -39,8 +39,11 @@ public class CMDArgumentUtil
             {
                 "gid=",
                 "Specify the sequence id of this program in the series",
-                v => {
-                    int.TryParse(v,out gid);
+                v =>
+                {
+                    string[] tmpGids = v.Split(",");
+                    gid = tmpGids.Select(value => int.Parse(value)).ToArray();
+                    //int.TryParse(v,out gid);
                 }
             },
             {

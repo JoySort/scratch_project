@@ -14,6 +14,7 @@ public abstract class CameraDriverBase:ICameraDriver
     
     public CameraDriverBase(CameraConfig camConfig)
     {
+        logger.Info($"初始化相机{camConfig.Address} camPosition:{camConfig.CameraPosition} GID:{camConfig.GID}");
         this.camConfig = camConfig;
         ProjectManager.getInstance().ProjectStatusChanged += ProjectStatusChangeHandler;
         InitCam();

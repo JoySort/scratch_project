@@ -14,7 +14,7 @@
     },
     "RecognizeRunnerSimulation": {
       "commandName": "Project",
-      "commandLineArgs":"--config_folder=../../../../runner_config/recognizer_config_simulation",
+      "commandLineArgs":"--config_folder=../../../../runner_config/recognizer_config_simulation --standalone=false",
       "launchBrowser": false,
       "launchUrl": "swagger",
       "environmentVariables": {

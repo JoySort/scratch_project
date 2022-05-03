@@ -10,6 +10,8 @@ public class VirtualCameraDriver:CameraDriverBase
     private static Logger  logger = LogManager.GetCurrentClassLogger();
     public VirtualCameraDriver(CameraConfig camConfig) : base(camConfig)
     {
+        logger.Info("相机模拟模式启动，初始化模拟相机驱动");
+        
     }
 
     public override  void InitCam()
