@@ -3,6 +3,7 @@ using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.ConfigVO.Emission;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NLog;
 
 namespace CommonLib.Lib.Util;
@@ -36,12 +37,13 @@ public class ConfigUtil
         var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,filePath);
         logger.Debug("using path "+path);
         var jsonString = File.ReadAllText(path);
-        _moduleConfig =   JsonConvert.DeserializeObject<ModuleConfig?>(jsonString);
+        
+        _moduleConfig =   JsonConvert.DeserializeObject<ModuleConfig>(loadSubConfig(jsonString).ToString());
         }
         return _moduleConfig;
 
     }
-
+    
     public static MachineState[] getMachineState()
     {
         if(_machineStates == null){
@@ -87,6 +89,70 @@ public class ConfigUtil
             return;
         }
         Console.WriteLine($"Changed: {e.FullPath}");
+    }
+
+
+
+   
+    public static JToken loadSubConfig(string subConfigPath)
+    {
+        string filePath = configFolder+"/"+subConfigPath;
+        var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,filePath);
+        logger.Debug("loading sub config path "+path);
+        var jsonString = File.ReadAllText(path);
+        JToken jresult = null;
+        try
+        {
+            var jObject= JObject.Parse(jsonString);
+            var resultList = new Dictionary<string, object>();
+            foreach (var jToken in jObject)
+            {
+                
+                    foreach (var token in jToken.Value)
+                    {
+                        JProperty myProperty = null;
+                        if (token is JProperty)
+                        {
+                            myProperty = (JProperty) token;
+                            if (myProperty.Name == "import")
+                            {
+                                resultList.Add(jToken.Key,loadSubConfig((string)(myProperty.Value)));
+                                //jObject[jToken.Key] = parseSubConfig(jresult);
+                                break;
+                            }
+
+                            
+                        }
+
+                        
+                    }
+                
+            }
+            foreach (var keyValuePair in resultList)
+            {
+                jObject[keyValuePair.Key] = (JToken?) keyValuePair.Value;
+            }
+
+            jresult = jObject;
+        }
+        catch (Exception e1)
+        {
+            try
+            {
+                jresult = JArray.Parse(jsonString);
+            }
+            catch (Exception e2)
+            {
+                
+            }
+        }
+
+       
+        
+    
+    
+
+        return jresult;
     }
 }
 
