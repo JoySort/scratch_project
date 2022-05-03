@@ -14,7 +14,7 @@
     },
     "RecognizeRunnerSimulation": {
       "commandName": "Project",
-      "commandLineArgs":"--config_folder=../../../../runner_config/recognizer_config_simulation --standalone=false",
+      "commandLineArgs":"--config_folder=../../../../runner_config/recognizer_config_simulation",
       "launchBrowser": false,
       "launchUrl": "swagger",
       "environmentVariables": {
@@ -24,7 +24,7 @@
       "dotnetRunMessages": true
     },"RecognizeRunnerSimulationStandalone": {
       "commandName": "Project",
-      "commandLineArgs":"--config_folder=../../../../runner_config/recognizer_config_simulation_standalone",
+      "commandLineArgs":"--config_folder=../../../../runner_config/recognizer_config_simulation_standalone --standalone=true",
       "launchBrowser": false,
       "launchUrl": "swagger",
       "environmentVariables": {

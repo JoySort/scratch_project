@@ -1,10 +1,13 @@
 using CommonLib.Lib.ConfigVO.Emission;
+using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
+using NLog;
 
 namespace CommonLib.Lib.ConfigVO;
 
 public class ModuleConfig
 {
+    public static Logger logger = LogManager.GetCurrentClassLogger();
     private string author;
     private ConsolidatePolicy consolidatePolicy;
     private Dictionary<string, CriteriaMapping> criteriaMapping;
@@ -23,6 +26,13 @@ public class ModuleConfig
     private bool recognizerSimulationMode = false;
     private RecognizerConfig recognizerConfig;
     private ElasticSearchConfig elasticSearchConfig;
+    private bool standalone = true;
+
+    public bool Standalone
+    {
+        get => standalone;
+        set => standalone = value;
+    }
 
     public ElasticSearchConfig ElasticSearchConfig => elasticSearchConfig;
 
@@ -55,7 +65,7 @@ public class ModuleConfig
     }
 
 
-    public ModuleConfig(string author, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, bool cameraSimulationMode, bool recognizerSimulationMode, RecognizerConfig recognizerConfig, ElasticSearchConfig elasticSearchConfig, string machineId, string title, int version, MachineState[] machineState, Emitter[] emiiters,string uuid)
+    public ModuleConfig(string author,bool standalone, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, bool cameraSimulationMode, bool recognizerSimulationMode, RecognizerConfig recognizerConfig, ElasticSearchConfig elasticSearchConfig, string machineId, string title, int version, MachineState[] machineState, Emitter[] emiiters,string uuid)
     {
         this.author = author;
         this.consolidatePolicy = consolidatePolicy;
@@ -79,6 +89,7 @@ public class ModuleConfig
         this.version = version;
         MachineState = machineState;
         this.emiiters = emiiters;
+        this.standalone = standalone;
         if(uuid != null)
             if(uuid.Length > 0)
                 this.uuid = uuid;

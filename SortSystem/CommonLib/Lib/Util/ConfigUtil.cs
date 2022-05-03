@@ -33,12 +33,13 @@ public class ConfigUtil
     public static ModuleConfig? getModuleConfig()
     {
         if (_moduleConfig == null) {
-        string filePath = configFolder+"/module.json";
-        var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,filePath);
-        logger.Debug("using path "+path);
-        var jsonString = File.ReadAllText(path);
-        
-        _moduleConfig =   JsonConvert.DeserializeObject<ModuleConfig>(loadSubConfig(jsonString).ToString());
+        string filePath = "/module.json";
+        _moduleConfig =   JsonConvert.DeserializeObject<ModuleConfig>(loadSubConfig(filePath).ToString());
+        if (CMDArgumentUtil.standalone != -1 && (CMDArgumentUtil.standalone==1 != _moduleConfig.Standalone))
+        {
+            logger.Warn($"Configuration file standalone:{_moduleConfig.Standalone} has a different value than CMD parameter {CMDArgumentUtil.standalone == 1}, Using CMD Parameter");
+            _moduleConfig.Standalone = CMDArgumentUtil.standalone == 1 ? true : false;
+        }
         }
         return _moduleConfig;
 

@@ -9,13 +9,12 @@ public class CMDArgumentUtil
     private const string devConfigRoot = "../../../../UnitTest/config";
     public static string configRoot =devConfigRoot;
     public static int[] gid = new int[]{-1};
-    public static bool standalone = true;
+    public static int standalone = -1;
     public static void parse(string[] args)
     {
         
         var show_help = false;
-
-
+        
         var configFolderSet = false;
         var p = new OptionSet ()
         {  
@@ -49,8 +48,12 @@ public class CMDArgumentUtil
             {
                 "standalone=",
                 "wether run as a standalone application or recieve data from remote",
-                v => {
-                    bool.TryParse(v,out standalone);
+                v =>
+                {
+                    var tmpstandalone = false;
+                    bool.TryParse(v,out tmpstandalone);
+                    if (tmpstandalone == true) standalone = 1;
+                    else standalone = 0;
                 }
             }
         };

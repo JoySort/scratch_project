@@ -15,7 +15,7 @@ ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
 //initiate network http client 
 ModuleCommunicationWorker.getInstance();
 
-RecognizerWorkerManager.getInstance().setup(CMDArgumentUtil.standalone);
+RecognizerWorkerManager.getInstance().setup();
 
 
 WebInitializer.init();

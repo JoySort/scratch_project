@@ -1,6 +1,7 @@
 
 using CommonLib.Lib.Worker.Camera;
 using CommonLib.Lib.Sort.ResultVO;
+using CommonLib.Lib.Util;
 using CommonLib.Lib.Worker.Recognizer;
 using NLog;
 
@@ -22,9 +23,9 @@ public class RecognizerWorkerManager
         return me;
     }
 
-    public void setup(bool standalone)
+    public void setup()
     {
-        this.standalone = standalone;
+        this.standalone = ConfigUtil.getModuleConfig().Standalone;
         running = true;
         if (standalone)
         {

@@ -4,6 +4,7 @@
   "genre": "palmDate",
   "cameraSimulationMode": true,
   "recognizerSimulationMode": true,
+  "standalone": false,
   "recognizerConfig": {
     "dllPaht": "./recognizer.dll",
     "initializationImagePath": "./assets/1.bmp",
