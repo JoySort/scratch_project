@@ -68,6 +68,9 @@
       <None Update="fixtures\project_configv2_pd_rec_start.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="config\module_with_sub_config.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
     <ProjectExtensions><VisualStudio><UserProperties config_4module_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 </Project>
