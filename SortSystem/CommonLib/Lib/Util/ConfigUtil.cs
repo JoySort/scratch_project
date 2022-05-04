@@ -13,10 +13,11 @@ public class ConfigUtil
     public static Logger logger = LogManager.GetCurrentClassLogger();
 
     private static string configFolder ="../../../config";
+    private static string configFile = "module.json";
     public static void setConfigFolder(string cFolder)
     {
         var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,cFolder);
-        logger.Info("ConfigUtil using path config:{}",path);
+        logger.Info("ConfigUtil setConfigFolder using config path :{}",path);
         
         bool dirExists = Directory.Exists(path);
         if (!dirExists)
@@ -24,6 +25,19 @@ public class ConfigUtil
             throw new Exception("Folder doesn't exist "+path+" original using "+cFolder);
         }
         configFolder = cFolder;
+    }
+    
+    public static void setConfigFile(string cFile)
+    {
+        var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,configFolder+"/"+cFile);
+        logger.Info("ConfigUtil setConfigFile config file:{}",path);
+        
+        bool dirExists = File.Exists(path);
+        if (!dirExists)
+        {
+            throw new Exception("Folder doesn't exist "+path+" original using "+cFile);
+        }
+        configFile = cFile;
     }
 
 
@@ -33,13 +47,13 @@ public class ConfigUtil
     public static ModuleConfig? getModuleConfig()
     {
         if (_moduleConfig == null) {
-        string filePath = "/module.json";
+        string filePath = configFile;
         _moduleConfig =   JsonConvert.DeserializeObject<ModuleConfig>(loadSubConfig(filePath).ToString());
-        if (CMDArgumentUtil.standalone != -1 && (CMDArgumentUtil.standalone==1 != _moduleConfig.Standalone))
-        {
-            logger.Warn($"Configuration file standalone:{_moduleConfig.Standalone} has a different value than CMD parameter {CMDArgumentUtil.standalone == 1}, Using CMD Parameter");
-            _moduleConfig.Standalone = CMDArgumentUtil.standalone == 1 ? true : false;
-        }
+            if (CMDArgumentUtil.standalone != -1 && (CMDArgumentUtil.standalone==1 != _moduleConfig.Standalone))
+            {
+                logger.Warn($"Configuration file standalone:{_moduleConfig.Standalone} has a different value than CMD parameter {CMDArgumentUtil.standalone == 1}, Using CMD Parameter");
+                _moduleConfig.Standalone = CMDArgumentUtil.standalone == 1 ? true : false;
+            }
         }
         return _moduleConfig;
 
@@ -48,16 +62,8 @@ public class ConfigUtil
     public static MachineState[] getMachineState()
     {
         if(_machineStates == null){
-        string filePath = configFolder+"/state.json";
-        var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,filePath);
-        logger.Debug("using path "+path);
-        var jsonString = File.ReadAllText(path);
-        _machineStates = JsonConvert.DeserializeObject<MachineState[]>(jsonString);
-        getModuleConfig().MachineState = _machineStates;
+            _machineStates = getModuleConfig().MachineState ;
         }
-
-        
-
         return _machineStates;
     }
     
@@ -65,13 +71,7 @@ public class ConfigUtil
     {
         if (_emitters == null)
         {
-            string filePath = configFolder + "/emitters.json";
-            var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
-                filePath);
-            logger.Debug("using path " + path);
-            var jsonString = File.ReadAllText(path);
-            _emitters = JsonConvert.DeserializeObject<Emitter[]>(jsonString);
-            getModuleConfig().emiiters = _emitters;
+            _emitters = getModuleConfig().emiiters;
         }
 
         return _emitters;

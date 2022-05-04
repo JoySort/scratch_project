@@ -213,5 +213,13 @@ public class ProjectParser
 
         return null;
     }
+
+    private void afterParsingCheck()
+    {
+        foreach (var enabledCriterion in EnabledCriteria)
+        {
+           // enabledCriterion.Code == "existance";
+        }
+    }
 }
 

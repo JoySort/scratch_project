@@ -38,7 +38,7 @@ public class DiscoveryTest
         
         
         
-        UDPDiscoveryService discoverService1 = new UDPDiscoveryService(ConfigUtil.getModuleConfig().NetworkConfig.RpcPort, ConfigUtil.getModuleConfig().NetworkConfig.DiscoveryPorts.First(), "unitTestInstance1");
+        UDPDiscoveryService discoverService1 = new UDPDiscoveryService(ConfigUtil.getModuleConfig().NetworkConfig.RpcPort,ConfigUtil.getModuleConfig().NetworkConfig.TcpPort, ConfigUtil.getModuleConfig().NetworkConfig.DiscoveryPorts.First(), "unitTestInstance1");
         discoverService1.Uuid = Guid.NewGuid().ToString();
         //discoverService1.UnitTestFlag = true;
         discoverService1.StartListen();
@@ -50,7 +50,7 @@ public class DiscoveryTest
         };
         
         
-        UDPDiscoveryService discoverService = new UDPDiscoveryService(ConfigUtil.getModuleConfig().NetworkConfig.RpcPort, ConfigUtil.getModuleConfig().NetworkConfig.DiscoveryPorts.First(), "unitTestInstance2");
+        UDPDiscoveryService discoverService = new UDPDiscoveryService(ConfigUtil.getModuleConfig().NetworkConfig.RpcPort,ConfigUtil.getModuleConfig().NetworkConfig.TcpPort ,ConfigUtil.getModuleConfig().NetworkConfig.DiscoveryPorts.First(), "unitTestInstance2");
         discoverService.KeepAliveInterval = 10;
         //discoverService.UnitTestFlag = true;
         discoverService.StartListen();

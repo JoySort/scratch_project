@@ -38,9 +38,14 @@ public class RecognizerWorker
         return me;
     }
 
-    public void processData(object sender, CameraPayLoad cpl)
+    public void processData(object sender, List<CameraPayLoad> cpl)
     {
-        toBeRecognized.Enqueue(cpl);
+        foreach (var cameraPayLoad in cpl)
+        {
+            toBeRecognized.Enqueue(cameraPayLoad);
+        }
+
+        
     }
 
     private void init()

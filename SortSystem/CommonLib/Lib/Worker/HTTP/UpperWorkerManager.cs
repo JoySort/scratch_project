@@ -13,7 +13,7 @@ public class UpperWorkerManager
 
     private UpperWorkerManager()
     {
-        setup();
+        //setup();
     }
 
     public static UpperWorkerManager getInstance()
@@ -21,8 +21,10 @@ public class UpperWorkerManager
         return me;
     }
 
-    private  void setup()
+    public  void setup()
     {
+        
+        UpperToCameraHTTPClientWorker.getInstance();
         //Piple line wireup;
         
         ConsolidateWorker.getInstance().onRecReceiving += consolidateRecReceivingHandler;
@@ -32,6 +34,7 @@ public class UpperWorkerManager
         EmitWorker.getInstance().OnResult+=EmitResultEventHandler;
         LowerMachineWorker.init();
         ElasticSearchWorker.getInstance();
+        
         running = true;
         stats.Add(typeof(ConsolidateWorker),new Queue<WorkerStats>());
         stats.Add(typeof(SortingWorker),new Queue<WorkerStats>());

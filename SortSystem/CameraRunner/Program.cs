@@ -1,5 +1,6 @@
 using CommonLib.Lib.Util;
 using CommonLib.Lib.Worker;
+using CommonLib.Lib.Worker.Upper;
 using Initializer;
 using NLog;
 using NLog.Web;
@@ -7,10 +8,14 @@ using NLog.Web;
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Info("init main");
 
-CMDArgumentUtil.parse(args);// use cmd option --config_folder=../config to setup a config folder outside the program folder to avoid lose config when upgrade 
-ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
-ModuleCommunicationWorker.getInstance();
+//处理命令行参数
+CommonEnvSetupUtil.init(args);
 
 
-//RecognizerWorkerManager.getInstance().setup(CMDArgumentUtil.standalone);
+CameraWorkerManager.getInstance().setup();
+
+
 WebInitializer.init();
+
+
+CameraWorkerManager.getInstance().tearDown();

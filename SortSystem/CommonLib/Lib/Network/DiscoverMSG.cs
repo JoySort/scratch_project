@@ -12,12 +12,18 @@ public class DiscoverMSG
     private string uuid;
     
     private int rpcPort;
-    private int listenPort;
+    private int udpPort;
+    private int tcpPort;
 
+    public int TcpPort
+    {
+        get => tcpPort;
+        set => tcpPort = value;
+    }
 
     private string type = "BROADCAST";
     private int msgID = 0;
-    public int ListenPort => listenPort;
+    public int UdpPort => udpPort;
 
     public int Count
     {
@@ -37,12 +43,13 @@ public class DiscoverMSG
         set => uuid = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public DiscoverMSG(string uuid, int rpcPort, int listenPort, string type, int msgId)
+    public DiscoverMSG(string uuid, int rpcPort,int tcpPort, int udpPort, string type, int msgId)
     {
         this.uuid = uuid;
         this.rpcPort = rpcPort;
-        this.listenPort = listenPort;
+        this.udpPort = udpPort;
         this.type = type;
+        this.tcpPort = tcpPort;
         msgID = msgId;
     }
 
@@ -52,9 +59,7 @@ public class DiscoverMSG
     
     public override string ToString()
     {
-        return "rpc port:" + rpcPort +
-               " type:"+type+
-               " msgID:"+msgID;
+        return $"DiscoverMSG ==> rpc port(web):{rpcPort} tcpPort:{tcpPort} type:{type} msgID:{msgID}";
     }
 }
 

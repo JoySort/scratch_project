@@ -34,7 +34,7 @@ public class CameraWorker
         bool found = false;
         foreach (var i in CMDArgumentUtil.gid)
         {
-            if (cameraConfig.GID != i){
+            if (cameraConfig.Gid != i){
                 continue;
             }
             else
@@ -48,8 +48,7 @@ public class CameraWorker
         if (CMDArgumentUtil.gid.Length == 1 && CMDArgumentUtil.gid[0]==-1)
         {
             found = true;
-            logger.Info("启动参数gid 没有初始化，使用了默认值-1，但是，相机驱动被调用进行初始化。除非你确认这是希望的情景，否则应该设置--gid=命令行参数来确保初始化正常。");
-            logger.Info("GID设置为-1，忽略gid配置，初始化全部相机配置！！！");
+            logger.Info("Camera process id `gid` was not set from cmd line, default to -1 ,meaning initializing all camera in config!");
         }
         
         if (!found)

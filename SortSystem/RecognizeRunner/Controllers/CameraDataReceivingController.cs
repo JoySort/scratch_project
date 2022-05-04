@@ -14,9 +14,9 @@ public class CameraDataReceivingController : ControllerBase
 {
  
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-    [Route("/recognizer/process_batch")]
+    [Route("/recognize/process_camera_data")]
     [HttpPost]
-    public WebControllerResult proces_batch(CameraPayLoad cpl)
+    public WebControllerResult proces_batch(List<CameraPayLoad> cpl)
     {
 
         WebControllerBridge.processCameraDataFromWeb(cpl);

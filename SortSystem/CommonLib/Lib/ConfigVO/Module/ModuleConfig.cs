@@ -192,6 +192,22 @@ public class RecognizerConfig
     private string initializationImagePath;
     private int initCols;
     private int initRows;
+    private int[] columns;
+
+    public RecognizerConfig(string dllPaht, string initializationImagePath, int initCols, int initRows, int[] columns)
+    {
+        this.dllPaht = dllPaht;
+        this.initializationImagePath = initializationImagePath;
+        this.initCols = initCols;
+        this.initRows = initRows;
+        this.columns = columns;
+    }
+
+    public int[] Columns
+    {
+        get => columns == null ?new int[]{0,9999}:columns;
+        set => columns = value ?? throw new ArgumentNullException(nameof(value));
+    }
 
     public string DllPaht => dllPaht;
 
@@ -200,13 +216,7 @@ public class RecognizerConfig
     public int InitCols => initCols;
     public int InitRows => initRows;
 
-    public RecognizerConfig(string dllPaht, string initializationImagePath,int initCols, int initRows)
-    {
-        this.dllPaht = dllPaht;
-        this.initializationImagePath = initializationImagePath;
-        this.initCols = initCols;
-        this.initRows = initRows;
-    }
+
 }
 
 public class ElasticSearchConfig

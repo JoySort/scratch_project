@@ -1,5 +1,7 @@
-namespace CommonLib.Lib.ConfigVO;
+using ZeroFormatter;
 
+namespace CommonLib.Lib.ConfigVO;
+[ZeroFormattable]
 public class CameraConfig
 {
     private string classDriver;
@@ -34,29 +36,84 @@ public class CameraConfig
         this.height = height;
         this.gid = gid;
     }
-
-    public string Brand => brand;
-    public string Model => model;
-
-    public string SavePath => savePath;
-
-    public string Address => address;
-
-    public bool SaveRawImage => saveRawImage;
-
-    public int[] Columns => columns;
-
-    public int[] Offsets => offsets;
-
-    public CameraPosition CameraPosition => cameraPosition;
-
-    public CameraType CameraType => cameraType;
-
-    public int GID => gid;
-    public int Width => width;
-    public int Height => height;
-
-    public string ClassDriver { get => classDriver; set => classDriver = value; }
+ 
+    public CameraConfig()
+    {
+    }
+    [Index(0)]
+    public virtual string Brand
+    {
+        get => brand;
+        set => brand = value ;
+    }
+    [Index(1)]
+    public virtual string Model
+    {
+        get => model;
+        set => model = value ;
+    }
+    [Index(2)]
+    public virtual string Address
+    {
+        get => address;
+        set => address = value ;
+    }
+    [Index(3)]
+    public virtual int[] Columns
+    {
+        get => columns;
+        set => columns = value;
+    }
+    [Index(4)]
+    public virtual int[] Offsets
+    {
+        get => offsets;
+        set => offsets = value ;
+    }
+    [Index(5)]
+    public virtual CameraPosition CameraPosition
+    {
+        get => cameraPosition;
+        set => cameraPosition = value;
+    }
+    [Index(6)]
+    public virtual bool SaveRawImage
+    {
+        get => saveRawImage;
+        set => saveRawImage = value;
+    }
+    [Index(7)]
+    public virtual string SavePath
+    {
+        get => savePath;
+        set => savePath = value ;
+    }
+    [Index(8)]
+    public virtual int Gid
+    {
+        get => gid;
+        set => gid = value;
+    }
+    [Index(9)]
+    public virtual int Width
+    {
+        get => width;
+        set => width = value;
+    }
+    [Index(10)]
+    public virtual int Height
+    {
+        get => height;
+        set => height = value;
+    }
+    [Index(11)]
+    public virtual CameraType CameraType
+    {
+        get => cameraType;
+        set => cameraType = value;
+    }
+    [Index(12)]
+    public virtual string ClassDriver { get => classDriver; set => classDriver = value; }
 }
 
 public enum CameraType

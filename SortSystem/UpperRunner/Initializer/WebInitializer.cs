@@ -1,3 +1,4 @@
+using System.Net;
 using CommonLib.Lib.Util;
 using NLog;
 using NLog.Web;
@@ -11,8 +12,19 @@ public class WebInitializer
     public static string[] rpcSetup() {
         
         var rpcPort = ConfigUtil.getModuleConfig().NetworkConfig.RpcPort;
+        
+        var bindAddressString = ConfigUtil.getModuleConfig().NetworkConfig.RpcBindIp;
+        IPAddress ipaddress = null;
+        if (!(IPAddress.TryParse(bindAddressString, out ipaddress)))
+        {
+            if (bindAddressString == null || bindAddressString == "*")
+            {
+                ipaddress=IPAddress.Any;
+            }
+        }
+        
         string rpcListenKey = "--urls";
-        string rpcUrl = "http://0.0.0.0:" + rpcPort;
+        string rpcUrl = "http://"+ipaddress.ToString() +":"+ rpcPort;
         string[] joyArgs = new[] {rpcListenKey, rpcUrl};
         //logger.Info("Listening on {}",rpcUrl);
         return joyArgs;

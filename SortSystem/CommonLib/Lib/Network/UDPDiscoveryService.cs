@@ -28,20 +28,20 @@ public class UDPDiscoveryService
         set => uuid = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public UDPDiscoveryService(int rpc_port, int listenPort, string serviceName)
+    public UDPDiscoveryService(int rpc_port, int tcpPort,int udpPort, string serviceName)
     {
         this.serviceName = serviceName;
-        this.ListenPort = listenPort;
+        this.UdpPort = udpPort;
         
         
        
         uuid=ConfigUtil.getModuleConfig().Uuid;
-        localDiscoverMsg = new DiscoverMSG(uuid,rpc_port, listenPort, DiscoverMSG.MSG_TYPE_BRD, 0);
-        logger.Info("Discovery Service {} listen at {} reporting rpc {} with uuid {}initialized",serviceName,listenPort,rpc_port,uuid);
+        localDiscoverMsg = new DiscoverMSG(uuid,rpc_port,tcpPort, udpPort, DiscoverMSG.MSG_TYPE_BRD, 0);
+        logger.Info("Discovery Service {} listen at {} reporting rpc {} tcpPort {} with uuid {}initialized",serviceName,udpPort,rpc_port,tcpPort,uuid);
     }
 
     public bool UnitTestFlag { get; set; } = false;
-    public int ListenPort { get; set; }
+    public int UdpPort { get; set; }
 
     public int KeepAliveInterval { get; set; } = 1000 * 3;
     private int msgCounter = 0;
@@ -58,7 +58,16 @@ public class UDPDiscoveryService
 
     public void StartListen()
     {
-        StartListen(IPAddress.Any);
+        var bindAddressString = ConfigUtil.getModuleConfig().NetworkConfig.UdpBindIp;
+        IPAddress ipaddress = null;
+        if (!(IPAddress.TryParse(bindAddressString, out ipaddress)))
+        {
+            if (bindAddressString == null || bindAddressString == "*")
+            {
+                ipaddress=IPAddress.Any;
+            }
+        }
+        StartListen(ipaddress);
     }
 
     public void StartListen(IPAddress bindAddr)
@@ -67,7 +76,7 @@ public class UDPDiscoveryService
         bindAddress = bindAddr;
         udpClient = new UdpClient();
         udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-        udpClient.Client.Bind(new IPEndPoint(bindAddress, ListenPort));
+        udpClient.Client.Bind(new IPEndPoint(bindAddress, UdpPort));
 
         var from = new IPEndPoint(0, 0);
         Task.Run(() =>
@@ -91,7 +100,7 @@ public class UDPDiscoveryService
                     sendResponds(fromIP, fromPort, peerDiscoverMsg.Count);
 
                     
-                    dispatchDiscovery(peerDiscoverMsg.RpcPort, fromIP,peerDiscoverMsg.Uuid);
+                    dispatchDiscovery(peerDiscoverMsg.RpcPort, peerDiscoverMsg.TcpPort,fromIP,peerDiscoverMsg.Uuid);
 
                     logger.Debug("[" + serviceName + "]" + "BROADCAST From : " + fromIP + ":" + from.Port +
                                  " msg count: " +
@@ -99,7 +108,7 @@ public class UDPDiscoveryService
                 }
                 else
                 {
-                    dispatchDiscovery(peerDiscoverMsg.RpcPort, fromIP,peerDiscoverMsg.Uuid);
+                    dispatchDiscovery(peerDiscoverMsg.RpcPort, peerDiscoverMsg.TcpPort ,fromIP,peerDiscoverMsg.Uuid);
                     logger.Debug("[" + serviceName + "]" + "ACK From : " + fromIP + ":" + from.Port +
                                  "  content: " +
                                  peerDiscoverMsg.ToString());
@@ -126,19 +135,20 @@ public class UDPDiscoveryService
         });
     }
 
-    private void dispatchDiscovery(int rpcPort, string ip,string UUID)
+    private void dispatchDiscovery(int rpcPort,int tcpPort, string ip,string UUID)
     {
 
         //simulator use rpcPort =-1 to avoid being found.
         if (rpcPort == -1) return;
-        var discoverEventArgs = new EndPointChangedArgs(ip, UUID, rpcPort);
+        var discoverEventArgs = new EndPointChangedArgs(ip, UUID, rpcPort,tcpPort);
         OnEndPointDiscoverFound(discoverEventArgs);
     }
 
     private void sendResponds(string fromIP, int fromPort, int msgID)
     {
-        var respondDiscoverMsg = new DiscoverMSG(uuid,localDiscoverMsg.RpcPort, ListenPort, DiscoverMSG.MSG_TYPE_ACK, msgID);
+        var respondDiscoverMsg = new DiscoverMSG(uuid,localDiscoverMsg.RpcPort, localDiscoverMsg.TcpPort,UdpPort, DiscoverMSG.MSG_TYPE_ACK, msgID);
         var msg = JsonConvert.SerializeObject(respondDiscoverMsg);
+        logger.Debug($"UDP Send Response with {msg}");
         var data = Encoding.UTF8.GetBytes(msg);
         udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, fromPort);
     }
@@ -150,8 +160,9 @@ public class UDPDiscoveryService
         localDiscoverMsg.Type = DiscoverMSG.MSG_TYPE_BRD;
         localDiscoverMsg.Count = msgCounter;
         var msg = JsonConvert.SerializeObject(localDiscoverMsg);
+        logger.Debug($"UDP Send Announcement with {msg}");
         var data = Encoding.UTF8.GetBytes(msg);
-        udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, ListenPort);
+        udpClient.Send(data, data.Length, DiscoverMSG.BROADCAST_ADDR, UdpPort);
     }
 
 

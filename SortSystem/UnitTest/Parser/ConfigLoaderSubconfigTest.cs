@@ -26,7 +26,7 @@ public class ConfigLoaderSubconfigTest
 
 
         ModuleConfig cfg = ConfigUtil.getModuleConfig();
-        var cfgToken = ConfigUtil.loadSubConfig("module_with_sub_config.json");
+        var cfgToken = ConfigUtil.loadSubConfig("module.json");
 
         var cfgActual = JsonConvert.DeserializeObject<ModuleConfig>(cfgToken.ToString());
         

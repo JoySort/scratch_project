@@ -1,25 +1,42 @@
 using CommonLib.Lib.ConfigVO;
+using ZeroFormatter;
 
 namespace CommonLib.Lib.Sort.ResultVO;
 
+[ZeroFormattable]
 public class CameraPayLoad
 {
-    private long triggerID = 0;
     private CameraConfig camConfig;
     private byte[] pictureData;
+    private long triggerID = 0;
 
 
     public CameraPayLoad(long triggerId, CameraConfig camConfig, byte[] pictureData)
     {
-        
         triggerID = triggerId;
         this.camConfig = camConfig;
         this.pictureData = pictureData;
     }
 
-    public long TriggerId => triggerID;
-
-    public byte[] PictureData => pictureData;
-
-    public CameraConfig CamConfig => camConfig;
+    public CameraPayLoad()
+    {
+    }
+    [Index(0)]
+    public virtual CameraConfig CamConfig
+    {
+        get => camConfig;
+        set => camConfig = value ?? throw new ArgumentNullException(nameof(value));
+    }
+    [IgnoreFormat]
+    public virtual byte[] PictureData
+    {
+        get => pictureData;
+        set => pictureData = value ?? throw new ArgumentNullException(nameof(value));
+    }
+    [Index(1)]
+    public virtual long TriggerId
+    {
+        get => triggerID;
+        set => triggerID = value;
+    }
 }

@@ -1,49 +1,106 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System;
+using System.Diagnostics.Metrics;
+using System.Net;
+using GenericProtocol.Implementation;
 
-using System.Data;
-using Terminal.Gui;
-using NStack;
-
-Application.Init();
-var top = Application.Top;
-
-// Creates the top-level window to show
-var win = new Window("JoyUpper")
+namespace GenericProtocolTest
 {
-    X = 1,
-    Y = 1, // Leave one row for the toplevel menu
+    public static class Program
+    {
+        private static ProtoServer<string> _server;
+        private static ProtoClient<string> _client;
+        private static readonly IPAddress ServerIp = IPAddress.Loopback;
+        private static bool TestServer { get; set; } = false;
+        private static bool TestClient { get; set; } = false;
 
-    // By using Dim.Fill(), it will automatically resize without manual intervention
-    Width = Dim.Fill(),
-    Height = Dim.Fill()
-};
-var dt = new DataTable();
-var lines = File.ReadAllLines("test.csv");
+        private static void Main(string[] args)
+        {
+            //INetworkDiscovery discovery = new NetworkDiscovery();
+            //discovery.Host(IPAddress.Any);
+            //discovery.Discover();
+            if (args.Length > 0)
+            {
+                TestServer = true;
+            }
+            else
+            {
+                TestClient = true;
+            }
 
-foreach(var h in lines[0].Split(',')){
-    dt.Columns.Add(h);
+            if (TestServer)
+                StartServer();
+            if (TestClient)
+                StartClient();
+
+            Console.WriteLine("\n");
+
+            while (true)
+            {
+                string text = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(text)) continue;
+
+                if (TestClient)
+                    SendToServer(text);
+                else
+                    SendToClients(text);
+            }
+        }
+
+
+        private static void StartClient()
+        {
+            _client = new ProtoClient<string>(ServerIp, 55024) { AutoReconnect = true };
+            _client.ReceivedMessage += ClientMessageReceived;
+            _client.ConnectionLost += Client_ConnectionLost;
+
+            Console.WriteLine("Connecting");
+            _client.Connect().GetAwaiter().GetResult();
+            Console.WriteLine("Connected!");
+            _client.Send("Hello Server!").GetAwaiter().GetResult();
+        }
+
+        private static void SendToServer(string message)
+        {
+            _client?.Send(message);
+        }
+
+        private static void SendToClients(string message)
+        {
+            _server?.Broadcast(message);
+        }
+
+        private static void Client_ConnectionLost(IPEndPoint endPoint)
+        {
+            Console.WriteLine($"Connection lost! {endPoint.Address}");
+        }
+
+        private static void StartServer()
+        {
+            _server = new ProtoServer<string>(IPAddress.Any, 55024);
+            Console.WriteLine("Starting Server...");
+            _server.Start();
+            Console.WriteLine("Server started!");
+            _server.ClientConnected += ClientConnected;
+            _server.ReceivedMessage += ServerMessageReceived;
+        }
+
+        private static async void ServerMessageReceived(IPEndPoint sender, string message)
+        {
+            Console.WriteLine($"{sender}: {message}");
+            await _server.Send($"Hello {sender}! echo {message}", sender);
+        }
+
+        private static int counter = 0;
+        private static void ClientMessageReceived(IPEndPoint sender, string message)
+        {
+            Console.WriteLine($"{sender}: {message}");
+            Thread.Sleep(1000);
+            SendToServer($"ping message {counter++}");
+        }
+
+        private static async void ClientConnected(IPEndPoint address)
+        {
+            await _server.Send($"Hello {address}!", address);
+        }
+    }
 }
-
-foreach(var line in lines.Skip(1)) {
-    dt.Rows.Add(line.Split(','));
-}
-
-
-var tableView = new TableView () {
-    X = 0,
-    Y = 0,
-    Width = 50,
-    Height = 15,
-};
-
-tableView.Table = dt;
-
-top.Add(win);
-
-
-// Add some controls, 
-win.Add(
-    tableView
-);
-
-Application.Run();

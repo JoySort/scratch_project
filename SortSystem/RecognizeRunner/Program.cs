@@ -1,5 +1,6 @@
 using CommonLib.Lib.Util;
 using CommonLib.Lib.Worker;
+using CommonLib.Lib.Worker.Upper;
 using Initializer;
 using NLog;
 using NLog.Web;
@@ -8,12 +9,11 @@ using RecognizerLib.Lib.Worker;
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Info("init main");
 
-//处理命令行参数
-CMDArgumentUtil.parse(args);// use cmd option --config_folder=../config to setup a config folder outside the program folder to avoid lose config when upgrade 
-ConfigUtil.setConfigFolder(CMDArgumentUtil.configRoot);
 
-//initiate network http client 
-ModuleCommunicationWorker.getInstance();
+//处理命令行参数
+CommonEnvSetupUtil.init(args);
+
+
 
 RecognizerWorkerManager.getInstance().setup();
 

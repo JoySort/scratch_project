@@ -7,7 +7,10 @@ public class CMDArgumentUtil
 {
     public static Logger logger = LogManager.GetCurrentClassLogger();
     private const string devConfigRoot = "../../../../UnitTest/config";
-    public static string configRoot =devConfigRoot;
+    private const string devconfigFile = "module.json";
+    
+    public static string configRoot = devConfigRoot;
+    public static string configFile = devconfigFile;
     public static int[] gid = new int[]{-1};
     public static int standalone = -1;
     public static void parse(string[] args)
@@ -20,7 +23,7 @@ public class CMDArgumentUtil
         {  
             { 
                 "config_folder=", 
-                "Specify config folder RELATIVE to app i.e. ../config ../../config,you need to put config out of program path to avoid overwrite from upgrade",
+                "Specify config folder RELATIVE to app i.e. `../config` or `../../config`, DO NOT use folder inside program execution path to avoid overwritten by upgrade package",
                 v => { 
                     if (v != null) 
                     {
@@ -31,23 +34,40 @@ public class CMDArgumentUtil
                 } 
             },
             { 
+                "config_file=", 
+                "Specify main config entry file. the file is defaulted as `module.json` if not set",
+                v => { 
+                    if (v != null) 
+                    {
+                        configFile = v;
+                        logger.Info("Using cmd parameter {}:{}","--configFile",v);
+                    } 
+                } 
+            },
+            { 
                 "help",
                 "show this message and exit",
                 v => show_help = v != null
             },
             {
                 "gid=",
-                "Specify the sequence id of this program in the series",
+                "Specify the sequence id of this program in the series, should be provided with int value i.e. --gid=1 or --gid=0,1,2,3",
                 v =>
                 {
                     string[] tmpGids = v.Split(",");
-                    gid = tmpGids.Select(value => int.Parse(value)).ToArray();
-                    //int.TryParse(v,out gid);
+                    try
+                    {
+                        gid = tmpGids.Select(value => int.Parse(value)).ToArray();
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception($"gid require int value,{v} is not int or comma seperated int array. i.e. --gid=1 or --gid=0,1,2,3");
+                    }
                 }
             },
             {
                 "standalone=",
-                "wether run as a standalone application or recieve data from remote",
+                "whether run as a standalone application or recieve data from remote",
                 v =>
                 {
                     var tmpstandalone = false;
@@ -65,7 +85,7 @@ public class CMDArgumentUtil
             var isDevEnv = "Development"==devEnvString;
             if (!configFolderSet && !isDevEnv)
             {
-                throw new Exception("命令行参数config_folder在生产环境下必须提供！如果这不是生产环境，检查你的环境变量设置 ASPNETCORE_ENVIRONMENT=Development");
+                throw new Exception("command line configuration `config_folder` must be provided in production!");
             }
         }
         catch (OptionException e)

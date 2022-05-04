@@ -4,7 +4,7 @@ using CommonLib.Lib.vo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace CameraRunner.Controllers;
+namespace CommonLib.Lib.WebAPIs;
 
 [ApiController]
 
@@ -31,6 +31,7 @@ public class ProjectController
         catch (Exception e)
         {
             msg = e.Message;
+            _logger.LogError($"project start failed with error {e.Message}");
         }
 
         return new WebControllerResult(msg);

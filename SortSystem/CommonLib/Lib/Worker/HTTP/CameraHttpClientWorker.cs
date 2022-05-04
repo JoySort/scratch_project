@@ -32,7 +32,7 @@ public class CameraHttpClientWorker
         
         foreach((var key,var value) in toBeSent){
             
-            var remoteURI = remoteCallProtocal + key.Address + ":" + key.Port + consolidateURL;
+            var remoteURI = remoteCallProtocal + key.Address + ":" + key.WebPort + consolidateURL;
                 joyHttpClient.PostToRemote<Object>(
                     remoteURI,
                     value);
@@ -146,7 +146,7 @@ public class CameraHttpClientWorker
                 
                
         }
-        logger.Info("CameraToUpperHttpClientWorker initialized on project change event with eligible Upper {}",JsonConvert.SerializeObject(upperRpcEndPoints.Select(value=> $"{value.Address}:{value.Port} with lower column range {JsonConvert.SerializeObject(value.ModuleConfig.LowerConfig.Select(value=>value.Columns))}")));
+        logger.Info("CameraToUpperHttpClientWorker initialized on project change event with eligible Upper {}",JsonConvert.SerializeObject(upperRpcEndPoints.Select(value=> $"{value.Address}:{value.WebPort} with lower column range {JsonConvert.SerializeObject(value.ModuleConfig.LowerConfig.Select(value=>value.Columns))}")));
 
     }
 

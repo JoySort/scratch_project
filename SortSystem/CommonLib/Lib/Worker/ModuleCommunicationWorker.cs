@@ -32,15 +32,16 @@ public class ModuleCommunicationWorker
 
     private void init() {
         
-        var rpc_port = ConfigUtil.getModuleConfig().NetworkConfig.RpcPort;
+        var webPort = ConfigUtil.getModuleConfig().NetworkConfig.RpcPort;
+        var tcp_port = ConfigUtil.getModuleConfig().NetworkConfig.TcpPort;
         var proxyRpcPort = ConfigUtil.getModuleConfig().NetworkConfig.RpcProxyPort;
-        if (proxyRpcPort == 0) proxyRpcPort = rpc_port;
+        if (proxyRpcPort == 0) proxyRpcPort = webPort;
         var udp_ports =  ConfigUtil.getModuleConfig().NetworkConfig.DiscoveryPorts;
         var moduleName = ConfigUtil.getModuleConfig().Name;
         OnRemove+=onRemoveEndPoint;
-        foreach (var port in udp_ports)
+        foreach (var udpPort in udp_ports)
         {
-            var uppDiscoverService = new UDPDiscoveryService(rpc_port==proxyRpcPort?rpc_port:proxyRpcPort,port,moduleName);
+            var uppDiscoverService = new UDPDiscoveryService(webPort==proxyRpcPort?webPort:proxyRpcPort,tcp_port,udpPort,moduleName);
             uppDiscoverService.EndPointDiscoverFound += onDiscoverEndPoint;
            
             _discoveryServices.Add(uppDiscoverService);
@@ -71,7 +72,7 @@ public class ModuleCommunicationWorker
                     Dictionary<string,RpcEndPoint> expiredEndpoints = new Dictionary<string,RpcEndPoint>();
                     foreach ((var Key, var item) in rdps)
                     {
-                        var remoteURI =buildUri( item.Address ,item.Port,"/isAlive") ;
+                        var remoteURI =buildUri( item.Address ,item.WebPort,"/isAlive") ;
                         var result = await (new JoyHTTPClient.JoyHTTPClient()).GetFromRemote<WebControllerResult>(remoteURI);
                         if (result == null)
                         {
@@ -97,13 +98,13 @@ public class ModuleCommunicationWorker
         
     }
 
-    private async Task registerRPCEndPoint(string ipAddr,int port,string uuid)
+    private async Task registerRPCEndPoint(string ipAddr,int webPort,int tcpPort,string uuid)
     {
-        var url = buildUri(ipAddr, port, "/config/module");
+        var url = buildUri(ipAddr, webPort, "/config/module");
         var result = await (new JoyHTTPClient.JoyHTTPClient()).GetFromRemote<ModuleConfig>(url);
         if (result == null) return;
         
-        var rpcEndpoint = new RpcEndPoint(port, ipAddr, uuid);
+        var rpcEndpoint = new RpcEndPoint(webPort, tcpPort,ipAddr, uuid);
         rpcEndpoint.ModuleConfig = result;
         if(!rpcEndPoints.ContainsKey(result.Module))rpcEndPoints.TryAdd(result.Module,new ConcurrentDictionary<string,RpcEndPoint>());
 
@@ -116,7 +117,7 @@ public class ModuleCommunicationWorker
             rpcEndPoints[result.Module].TryAdd(rpcEndpoint.Key(),rpcEndpoint);
         }
 
-        logger.Info($"Registering remote endpoint {rpcEndpoint.ModuleConfig.Name} with address info {rpcEndpoint.Address}:{rpcEndpoint.Port} on Module {Enum.GetName(rpcEndpoint.ModuleConfig.Module)}");
+        logger.Info($"Registering remote endpoint {rpcEndpoint.ModuleConfig.Name} with address info {rpcEndpoint.Address}:{rpcEndpoint.WebPort} tcp port {rpcEndpoint.TcpPort} on Module {Enum.GetName(rpcEndpoint.ModuleConfig.Module)}");
 
 
 
@@ -139,7 +140,7 @@ public class ModuleCommunicationWorker
         {
             //delay discovery for 2 seconds for web api to properly startup
             Thread.Sleep(3000);
-            registerRPCEndPoint(arg.ipAddr, arg.rpcPort,arg.uuid);   
+            registerRPCEndPoint(arg.ipAddr, arg.rpcPort,arg.tcpPort,arg.uuid);   
         });
        
     }
@@ -160,7 +161,15 @@ public class ModuleCommunicationWorker
 
 public class RpcEndPoint
 {
-    private int port;
+    private int webPort;
+    private int tcpPort;
+
+    public int TcpPort
+    {
+        get => tcpPort;
+        set => tcpPort = value;
+    }
+
     private string address;
     private string uuid;
     private ModuleConfig moduleConfig;
@@ -171,7 +180,7 @@ public class RpcEndPoint
         set => moduleConfig = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public int Port => port;
+    public int WebPort => webPort;
 
     public string Uuid
     {
@@ -181,15 +190,16 @@ public class RpcEndPoint
 
     public string Address => address;
 
-    public RpcEndPoint(int port, string address,string uuid)
+    public RpcEndPoint(int webPort,int tcpPort, string address,string uuid)
     {
-        this.port = port;
+        this.webPort = webPort;
         this.address = address;
         this.uuid = uuid;
+        this.TcpPort = tcpPort;
     }
 
     public string Key()
     {
-        return this.Address +":"+ this.Port;
+        return $"{this.Address}:{this.WebPort}:{this.TcpPort}";
     }
 }
