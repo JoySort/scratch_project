@@ -27,7 +27,7 @@ public class CameraWorkerManager
         List<ICameraDriver> cameraDrivers = CameraWorker.getInstance().CameraDrivers;
         //TCPChannelService.getInstance().initClient(ConfigUtil.getModuleConfig().NetworkConfig.TcpBindIp,ConfigUtil.getModuleConfig().NetworkConfig.TcpPort);
         
-        CameraWorker.getInstance().CameraDrivers.ForEach(value=>value.OnPictureArrive+=CameraTCPClientWorker.getInstance().onCameraPayLoad);
+        CameraWorker.getInstance().CameraDrivers.ForEach(value=>value.OnPictureArrive+=CameraHttpClientWorker.getInstance().onCameraPayLoad);
         
         
         Task.Run(() =>

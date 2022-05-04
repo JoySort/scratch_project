@@ -1,0 +1,57 @@
+{
+  "existence": {
+    "index": 0,
+    "key": "existence"
+  },
+  "width": {
+    "index": 1,
+    "key": "width"
+  },
+  "height": {
+    "index": 2,
+    "key": "height"
+  },
+  "area": {
+    "index": 3,
+    "key": "area"
+  },
+  "color": {
+    "index": 4,
+    "key": "color"
+  },
+  "sf": {
+    "index": 5,
+    "key": "sf"
+  },
+  "bp": {
+    "index": 6,
+    "key": "bp"
+  },
+  "sb": {
+    "index": 7,
+    "key": "sb"
+  },
+  "zl": {
+    "index": 8,
+    "key": "zl"
+  },
+  "dd": {
+    "index": 9,
+    "key": "dd"
+  },
+  "ca": {
+    "index": 10,
+    "key": "ca"
+  },"yc": {
+  "index": 11,
+  "key": "yc"
+},
+  "wt": {
+    "index": 12,
+    "key": "wt"
+  },
+  "fm": {
+    "index": 16,
+    "key": "fm"
+  }
+}

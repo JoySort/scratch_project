@@ -1,5 +1,4 @@
 
-using CommonLib.Lib.Network;
 using CommonLib.Lib.Worker.Camera;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
@@ -33,11 +32,7 @@ public class RecognizerWorkerManager
             CameraWorker.getInstance().CameraDrivers.ForEach(value=>value.OnPictureArrive+=WebControllerBridge.wrapCameraData);
            
         }
-        else
-        {
-            TCPChannelService.getInstance().initServer();
-        }
-
+       
         WebControllerBridge.OnPicturesArrive += RecognizerWorker.getInstance().processData;
         RecognizerWorker.getInstance().RecResultGenerated += RecognizerHttpClientWorker.getInstance().onRecResultGenerated; //将识别结果通过HttpClient发出去。
         

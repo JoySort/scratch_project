@@ -11,6 +11,7 @@ using CommonLib.Lib.Network;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.Worker;
+using Newtonsoft.Json;
 using NLog;
 using NUnit.Framework;
 
@@ -33,11 +34,7 @@ public class TCPConnectionTest
     public void test1()
     {
         
-        ModuleCommunicationWorker.getInstance().OnDiscovery += ((Object sender,RpcEndPoint args) =>
-        {
-            blocking = false;
-            if(args.ModuleConfig.Module==JoyModule.Recognizer)
-                TCPChannelService.getInstance().initClient(args);
+   
             var data = new CameraPayLoad();
             data.CamConfig = ConfigUtil.getModuleConfig().CameraConfigs[0];
             var path = Path.Combine(
@@ -45,24 +42,12 @@ public class TCPConnectionTest
                 "assets/" + 1 + ".bmp");
             byte[] picture = File.ReadAllBytes(path);
             logger.Info($"picture length {picture.Length}");
-            data.PictureData = picture;
+            //data.PictureData = picture;
             data.TriggerId = 1;//4681014
             var tmpList = new List<CameraPayLoad>();
             tmpList.Add(data);
-            TCPChannelService.getInstance().onSendCameraData(args, tmpList);
-            TCPChannelService.getInstance().closeClientConnection(args);
-            logger.Info("data sent");
-        });
-        
+            
+            Console.WriteLine(JsonConvert.SerializeObject(tmpList));
 
-        while (blocking)
-        {
-            
-            Thread.Sleep(50000);
-            
-        }
-        ModuleConfig value = ModuleCommunicationWorker.getInstance().RpcEndPoints.First().Value.First().Value.ModuleConfig;
-        Assert.IsNotNull(value);
-        Assert.False(blocking);
     }
 }

@@ -31,7 +31,7 @@ public class CameraPayLoad
     public virtual byte[] PictureData
     {
         get => pictureData;
-        set => pictureData = value ?? throw new ArgumentNullException(nameof(value));
+        set => pictureData = value ;
     }
     [Index(1)]
     public virtual long TriggerId

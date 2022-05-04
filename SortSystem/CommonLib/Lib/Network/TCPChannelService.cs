@@ -60,7 +60,8 @@ public class TCPChannelService
         
         IPAddress ServerIp = IPAddress.Parse(rpcEndPoint.Address);
         ProtoClient<List<CameraPayLoad>> _client = new ProtoClient<List<CameraPayLoad>>(ServerIp, rpcEndPoint.TcpPort) { AutoReconnect = true };
-        _client.Connect().GetAwaiter().GetResult();
+        _client.SendBufferSize = 2048;
+        _client.Connect();//.GetAwaiter().GetResult();
         _client.ConnectionLost += ClientConnectionLost;
         logger.Info($"Local TCP client initialized:{rpcEndPoint.Address}:{rpcEndPoint.TcpPort}");
         if (!tcpClients.ContainsKey(rpcEndPoint))
