@@ -50,6 +50,7 @@ public class ProjectConfigVersionTest
     [Test]
     public void testV1()
     {
+        ConfigUtil.getModuleConfig().SortConfig.OutletPriority = OutletPriority.ASC;
         string JsonFilePath = @"./fixtures/project_start_v1.json";
         string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
         porjectJsonString = File.ReadAllText(path);
@@ -78,6 +79,7 @@ public class ProjectConfigVersionTest
     [Test]
     public void testV2()
     {
+        ConfigUtil.getModuleConfig().SortConfig.OutletPriority = OutletPriority.ASC;
         string JsonFilePath = @"./fixtures/project_configv2_pd_rec_start.json";
         string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
         porjectJsonString = File.ReadAllText(path);
@@ -168,7 +170,7 @@ public class ProjectConfigVersionTest
                     
                     Assert.AreEqual(triggerId,lbResults[lbResultIndex].Coordinate.TriggerId); 
                     Assert.AreEqual(col,lbResults[lbResultIndex].Coordinate.Column);
-                    var actualLBChannel = int.Parse(lbResults[lbResultIndex].LoadBalancedOutlet.First().ChannelNo) -1;
+                    var actualLBChannel = int.Parse(lbResults[lbResultIndex].LoadBalancedOutlet.First().ChannelNo) ;
                     Assert.AreEqual(expectedTriggerOutletMapping[triggerId],actualLBChannel);
                     lbResultIndex++;
                 }

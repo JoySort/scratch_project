@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort;
 using CommonLib.Lib.Sort.ResultVO;
@@ -42,6 +43,9 @@ public class ConsolidateWorkerTest
     [Test]
     public void appleConsolidationTest()
     {
+
+        //ConfigUtil.getModuleConfig().WorkingMode = WorkingMode.EjectDefault;
+        
         string JsonFilePath = @"./fixtures/project_apple_rec_start.json";
         string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,JsonFilePath);
         porjectJsonString = File.ReadAllText(path);
@@ -100,11 +104,11 @@ public class ConsolidateWorkerTest
     
     public void appleEventHanlder(Object sender, ResultEventArg args)
     {
-        Assert.AreEqual(args.Results.First().Features.First().Value,15);
-        Assert.AreEqual(args.Results.First().Features.Last().Value,4);
+        Assert.AreEqual(args.Results.First().Features.Where(value=>value.CriteriaIndex==1).First().Value,15);
+        Assert.AreEqual(args.Results.First().Features.Where(value=>value.CriteriaIndex==12).First().Value,4);
             
-        Assert.AreEqual(args.Results.Last().Features.First().Value,20);
-        Assert.AreEqual(args.Results.Last().Features.Last().Value,24);
+        Assert.AreEqual(args.Results.Last().Features.Where(value=>value.CriteriaIndex==1).First().Value,20);
+        Assert.AreEqual(args.Results.Last().Features.Where(value=>value.CriteriaIndex==12).First().Value,24);
         logger.Info("APPLE assert finished");
         threadBlocking1 = false;
         worker.OnResult -= appleEventHanlder;
@@ -112,13 +116,13 @@ public class ConsolidateWorkerTest
     
     public void pdEventHanlder(Object sender, ResultEventArg args)
     {
-        Assert.AreEqual(args.Results.First().Features.First().Value,25);
-        Assert.AreEqual(args.Results.First().Features[1].Value,25);
-        Assert.AreEqual(args.Results.First().Features.Last().Value,15);
+        Assert.AreEqual(args.Results.First().Features.Where(value=>value.CriteriaIndex==1).First().Value,25);
+        Assert.AreEqual(args.Results.First().Features.Where(value=>value.CriteriaIndex==7).First().Value,25);
+        Assert.AreEqual(args.Results.First().Features.Where(value=>value.CriteriaIndex==8).First().Value,15);
         
-        Assert.AreEqual(args.Results.Last().Features.First().Value,10);
-        Assert.AreEqual(args.Results.Last().Features[1].Value,22.5);
-        Assert.AreEqual(args.Results.Last().Features.Last().Value,12.5);
+        Assert.AreEqual(args.Results.Last().Features.Where(value=>value.CriteriaIndex==1).First().Value,10);
+        Assert.AreEqual(args.Results.Last().Features.Where(value=>value.CriteriaIndex==7).First().Value,22.5);
+        Assert.AreEqual(args.Results.Last().Features.Where(value=>value.CriteriaIndex==8).First().Value,12.5);
         logger.Info("PD assert finished process time {} ms",(DateTime.Now.ToFileTime()-args.Results.Last().CreatedTimestamp)/10000);
         threadBlocking2 = false;
         worker.OnResult -= pdEventHanlder;

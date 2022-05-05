@@ -2,7 +2,7 @@
   {
     "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 0},
     "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 10 },{ "criteriaIndex": 8, "value": 10 }]
+    "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 10 },{ "criteriaIndex": 8, "value": 10 },{ "criteriaIndex": 0, "value": 1 },{ "criteriaIndex": 16, "value": 0 }]
   },
   {
     "coordinate": { "section": 0, "column": 0,"triggerId": 0,"rowOffset": 1},
@@ -27,7 +27,7 @@
   {
     "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 0},
     "expectedFeatureCount": 2,
-    "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 10 },{ "criteriaIndex": 8, "value": 10 }]
+    "features": [ { "criteriaIndex": 1, "value": 10 },{ "criteriaIndex": 7, "value": 10 },{ "criteriaIndex": 8, "value": 10 },{ "criteriaIndex": 0, "value": 1 },{ "criteriaIndex": 16, "value": 0 }]
   },
   {
     "coordinate": { "section": 0, "column": 0,"triggerId": 1,"rowOffset": 1},

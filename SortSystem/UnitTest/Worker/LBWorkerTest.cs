@@ -116,10 +116,21 @@ public class LBWorkerTest
                             lbresults.Add(item.LoadBalancedOutlet.First().ChannelNo);
                         }
 
-                        var expected = (priority == OutletPriority.ASC) ? new string[] {"1","2","1","3","3","2","2","3" } : new string[] {"1","3","1","2","5","4","2","3" };
                         var lbresultArray = lbresults.ToArray();
-                        Assert.AreEqual(expected.Length,lbresultArray.Length);
-                        Assert.AreEqual(expected, lbresultArray);
+                        string[] expected = null;
+                        if(ConfigUtil.getModuleConfig().WorkingMode==WorkingMode.FreefallDefault){
+                             expected = (priority == OutletPriority.ASC) ? new string[] {"1","2","1","3","3","2","2","3" } : new string[] {"1","3","1","2","5","4","2","3" };
+
+                            Assert.AreEqual(expected.Length,lbresultArray.Length);
+                            Assert.AreEqual(expected, lbresultArray);
+                        }
+                        else
+                        {
+                              expected = (priority == OutletPriority.ASC) ? new string[] {"1","2","1","3","3","2","2","3" } : new string[] {"1","3","1","2","5","4","2","3" };
+                            Assert.AreEqual(expected.Length,lbresultArray.Length);
+                            Assert.AreEqual(expected, lbresultArray);
+                        }
+
                         logger.Info("Assert finished expect:{} result:{}",JsonConvert.SerializeObject(expected),JsonConvert.SerializeObject(lbresultArray));
                         blocking=false;
                         

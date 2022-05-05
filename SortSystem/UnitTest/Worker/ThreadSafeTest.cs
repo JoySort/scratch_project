@@ -101,7 +101,7 @@ public class ThreadSafeTest
         {
             for (var col = 0; col < columnCount; col++)
             {
-                var actualLBChannel = int.Parse(resultSet[startIndex].LoadBalancedOutlet.First().ChannelNo) -1;
+                var actualLBChannel = int.Parse(resultSet[startIndex].LoadBalancedOutlet.First().ChannelNo) ;
                 Assert.AreEqual(resultTriggerIdMapping[triggerId],actualLBChannel);
                 startIndex++;
             }

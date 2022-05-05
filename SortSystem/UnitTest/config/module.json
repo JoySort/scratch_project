@@ -2,7 +2,7 @@
   "name": "UpperRunner",
   "module": "Upper",
   "genre": "palmDate",
-  "workingMode": "EjectDefault",
+  "workingMode": "FreefallDefault",
   "lowerMachineSimulationMode": true,
   "cameraSimulationMode": true,
   "recognizerSimulationMode": true,

@@ -20,7 +20,9 @@ public class Utilizer
         
         var result = new List<RecResult>();
         var critieraList = project.Criterias;
-        var outlets = project.Outlets;
+        var outlets = ConfigUtil.getModuleConfig().SortConfig.OutletPriority==OutletPriority.DESC
+            ?project.Outlets.OrderByDescending(outlet => outlet.ChannelNo).ToArray()
+            :project.Outlets.OrderBy(outlet => outlet.ChannelNo).ToArray();
         var consolidatePolicy = ConfigUtil.getModuleConfig().ConsolidatePolicy;
         Random rdn = new Random();
         var selectedOutletIndex = 0;

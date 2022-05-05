@@ -259,8 +259,8 @@ public class ProjectParser
         {   
             
             //让FM被选中
-            Filter[][] fmFreefallWhenEjectdefaultFilter = new Filter[][] {new Filter[] {fmFilter}};
-            Outlet zeroChannelOutlet = new Outlet("0","auto",fmFreefallWhenEjectdefaultFilter);
+            Filter[][] fmChooseByZeroWhenEjectdefaultFilter = new Filter[][] {new Filter[] {fmFilter}};
+            Outlet zeroChannelOutlet = new Outlet("0","auto",fmChooseByZeroWhenEjectdefaultFilter);
             Outlets.Add(zeroChannelOutlet);
             
             //让单，双枣都进入吹出通道
@@ -271,6 +271,7 @@ public class ProjectParser
             eightChannelOutlet.Filters = ejectDefaultFilter;
            
         }
+        
         
         
     }
