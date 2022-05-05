@@ -41,7 +41,7 @@ public class ProjectConfigVersionTest
 
         
         //Piple line wireup;
-        UpperWorkerManager.getInstance();
+        UpperWorkerManager.getInstance().setup();
         
         
         
@@ -116,7 +116,6 @@ public class ProjectConfigVersionTest
     public void performTest(int index,int start,int count,int columnCount,int perTargetPictureCount,int columCountPerSection)
     {
         long startTimestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();;
-        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
         ConsolidateWorker consolidateWorker = ConsolidateWorker.getInstance();
         List<Object> ppdResult = Utilizer.prepareData(project,start, count, columnCount, perTargetPictureCount, columCountPerSection);
         var expectedTriggerOutletMapping = (Dictionary<long, int>) ppdResult.First();
@@ -124,7 +123,8 @@ public class ProjectConfigVersionTest
         
         LBWorker lbWorker = LBWorker.getInstance();
         lbWorker.OnResult += lbEventHandler;
-        
+        ProjectManager.getInstance().dispatchProjectStatusStartEvent(project,ProjectState.start);
+
         var counter = 0;
         foreach (var item in rrs)
         {

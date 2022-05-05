@@ -86,6 +86,8 @@ public class UpperWorkerManager
         LBWorker.getInstance().OnResult-=LBResultEventHandler;
         EmitWorker.getInstance().OnResult-=EmitResultEventHandler;
         
+        stats.Clear();
+        
         
     }
 

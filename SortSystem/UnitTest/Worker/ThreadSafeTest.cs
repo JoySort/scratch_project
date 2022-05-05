@@ -35,7 +35,7 @@ public class ThreadSafeTest
 
         
         //Piple line wireup;
-        UpperWorkerManager.getInstance();
+        UpperWorkerManager.getInstance().setup();
         
         
         

@@ -83,7 +83,7 @@ public class CameraWorker
         
         var cameraConfigs = ConfigUtil.getModuleConfig().CameraConfigs;
         var isSimulation = ConfigUtil.getModuleConfig().CameraSimulationMode;
-        
+
         
         foreach (var item in cameraConfigs)
         {
