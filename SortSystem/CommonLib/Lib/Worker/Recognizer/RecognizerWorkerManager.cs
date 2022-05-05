@@ -29,11 +29,11 @@ public class RecognizerWorkerManager
         running = true;
         if (!standalone)
         {
-            CameraWorker.getInstance().CameraDrivers.ForEach(value=>value.OnPictureArrive+=WebControllerBridge.wrapCameraData);
+            CameraWorker.getInstance().CameraDrivers.ForEach(value=>value.OnPictureArrive+=RawDataBridge.wrapCameraData);
            
         }
        
-        WebControllerBridge.OnPicturesArrive += RecognizerWorker.getInstance().processData;
+        RawDataBridge.OnPicturesArrive += RecognizerWorker.getInstance().processData;
         RecognizerWorker.getInstance().RecResultGenerated += RecognizerHttpClientWorker.getInstance().onRecResultGenerated; //将识别结果通过HttpClient发出去。
         
         
@@ -52,18 +52,18 @@ public class RecognizerWorkerManager
         running = false;
         if (!standalone)
         {
-            CameraWorker.getInstance().CameraDrivers.ForEach(value=>value.OnPictureArrive-=WebControllerBridge.wrapCameraData);
+            CameraWorker.getInstance().CameraDrivers.ForEach(value=>value.OnPictureArrive-=RawDataBridge.wrapCameraData);
             CameraWorker.CloseAllCams();
            
         }
-        WebControllerBridge.OnPicturesArrive -= RecognizerWorker.getInstance().processData;
+        RawDataBridge.OnPicturesArrive -= RecognizerWorker.getInstance().processData;
         RecognizerWorker.getInstance().RecResultGenerated -= RecognizerHttpClientWorker.getInstance().onRecResultGenerated; //将识别结果通过HttpClient发出去。
        
     }
 
 }
 
-public class WebControllerBridge
+public class RawDataBridge
 {
     public static void processCameraDataFromWeb(List<CameraPayLoad> cpl)
     {

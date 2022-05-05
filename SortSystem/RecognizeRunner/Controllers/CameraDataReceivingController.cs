@@ -47,7 +47,7 @@ public class CameraDataReceivingController : ControllerBase
                 
             }
         }
-        WebControllerBridge.processCameraDataFromWeb(cpls);
+        RawDataBridge.processCameraDataFromWeb(cpls);
         return  ;
     }
     

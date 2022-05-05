@@ -50,7 +50,7 @@ public class TCPChannelService
     private void ServerMessageReceived(IPEndPoint senderendpoint, List<CameraPayLoad> message)
     {
         logger.Debug($"CameraPayload recieved: {message.Last().TriggerId}");
-        WebControllerBridge.processCameraDataFromWeb(message);
+        RawDataBridge.processCameraDataFromWeb(message);
     }
 
     private Dictionary<RpcEndPoint, ProtoClient<List<CameraPayLoad>>> tcpClients =
