@@ -40,7 +40,7 @@ public class ESClientTest
         
     }
     
-    [Test]
+    //[Test]
     public void testV1()
     {
         LowerMachineDriver.getInstance();
