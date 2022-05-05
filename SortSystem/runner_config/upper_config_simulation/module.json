@@ -2,130 +2,20 @@
   "name": "UpperRunner",
   "module": "Upper",
   "genre": "palmDate",
+  "workingMode": "EjectDefault",
   "lowerMachineSimulationMode": true,
   "cameraSimulationMode": true,
-  "lowerConfig":[
-    {
-      "hardwarePort": "COM4",
-      "baudRate": 115200,
-      "columns": [0,11] ,
-      "isMaster": true
-    }
-  ],
-  "elasticSearchConfig": {
-    "url": "http://es.lan:9200",
-    "enabled": false
-  },
-  "cameraConfigs":[
-    {
-      "address": "192.168.66.1",
-      "_comment_columns": "相机覆盖的列范围，数组只能有2个元素，起和截止，注意，范围包含起也包含止的值，所以，【0，5】的意思是0，1，2，3，4，5 一共六列",
-      "columns": [0,5] ,
-      "_comment_cameraPosition": "可以使用的值: left,middle,right",
-      "cameraPosition": "middle",
-      "saveRawImage": true,
-      "savePath": "../cam1"
-    },
-    {
-      "address": "192.168.66.2",
-      "columns": [6,11],
-      "cameraPosition": "middle",
-      "saveRawImage": true,
-      "savePath": "../cam2"
-    },
-    {
-      "address": "192.168.66.3",
-      "columns": [12,17],
-      "cameraPosition": "middle",
-      "saveRawImage": true,
-      "savePath": "../cam3"
-    },
-    {
-      "address": "192.168.66.4",
-      "columns": [18,23],
-      "cameraPosition": "middle",
-      "saveRawImage": true,
-      "savePath": "../cam4"
-    }
-  ],
-  "networkConfig": {
-    "rpcPort": 5186,
-    "_comment_rpcProxyProt": "如果和rpcPort相同，则发现服务 如果希望使用 mitmweb --mode upstream:http://localhost:5185 --listen-port 8082 --web-port 8083 其中，5185是rpcPort, 8082是rpcProxyPort , 8083是WEBUI浏览器查看debug信息的端口。 工具来进行http的debug,则可以设置这个参数 rpcProxyport ，让mitmweb 可以监听这个rpcProxyPort,并且转给upstream的rpcPort {port value} . 这里的设置，是让自动发现服务给对端广播这个代理端口，以让我们可以进行调试。. ",
-    "rpcProxyPort": 5186,
-    "discoveryPorts": [13567],
-    "rpcBindIP": "*",
-    "udpBindIP": "*"
-  },
-  "sortConfig": {
-    "outletPriority": "ASC",
-    "sortingInterval": 10
-  },
-  "consolidatePolicy":
-  {
-    "criteriaCode":           ["width","height","area","color","sf"   ,"bp"       ,"sb"       ,"zl"   ,"dd"   ,"ca"   ,"yc"       ,"wt"   ,"fm"  ],
-    "offSetRowCount":         [4      ,4       ,4     ,4      ,4      ,4          ,4          ,4      ,4      ,4      ,4          ,15      ,4    ],
-    "offSetRowStep":          [1      ,1       ,1     ,1      ,1      ,1          ,1          ,1      ,1      ,1      ,1          ,14       ,1    ],
-    "consolidationOperation": ["avg"  ,"avg"   ,"avg" ,"avg"  ,"avg"  ,"maxNAvg"  ,"maxNAvg"  ,"firstNAvg"  ,"avg"  ,"avg"  ,"maxNAvg"  ,"merge"  ,"avg"],
-    "consolidateArg":         [0      ,0       ,0     ,0      ,0      ,2          ,2          ,2      ,0      ,0      ,2          ,0      ,0    ]
-  },
-  "criteriaMapping":{
-    "existence": {
-      "index": 0,
-      "key": "existence"
-    },
-    "width": {
-      "index": 1,
-      "key": "width"
-    },
-    "height": {
-      "index": 2,
-      "key": "height"
-    },
-    "area": {
-      "index": 3,
-      "key": "area"
-    },
-    "color": {
-      "index": 4,
-      "key": "color"
-    },
-    "sf": {
-      "index": 5,
-      "key": "sf"
-    },
-    "bp": {
-      "index": 6,
-      "key": "bp"
-    },
-    "sb": {
-      "index": 7,
-      "key": "sb"
-    },
-    "zl": {
-      "index": 8,
-      "key": "zl"
-    },
-    "dd": {
-      "index": 9,
-      "key": "dd"
-    },
-    "ca": {
-      "index": 10,
-      "key": "ca"
-    },"yc": {
-      "index": 11,
-      "key": "yc"
-    },
-    "wt": {
-      "index": 12,
-      "key": "wt"
-    },
-    "fm": {
-      "index": 16,
-      "key": "fm"
-    }
-  },
-
+  "recognizerSimulationMode": true,
+  "recognizerConfig":{"import": "sub_config/recognizer_config.json"},
+  "elasticSearchConfig": {"import": "sub_config/elasticsearch_config.json"},
+  "MachineState": {"import": "sub_config/state.json"},
+  "emiiters": {"import": "sub_config/emitters.json"},
+  "lowerConfig":{"import": "sub_config/lower_config.json"},
+  "cameraConfigs":{"import": "sub_config/camera_config.json"},
+  "networkConfig": { "import": "sub_config/network_config.json"},
+  "sortConfig": {"outletPriority": "ASC","sortingInterval": 10},
+  "consolidatePolicy":{ "import": "sub_config/consolidate_policy.json"},
+  "criteriaMapping":{"import": "sub_config/criteria_mapping.json"},
   "description": "模块配置：上位机模块配置",
   "minimumCoreVersion": "1.1",
   "title": "上位机模块配置",

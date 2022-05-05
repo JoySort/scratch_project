@@ -4,9 +4,17 @@ public class Outlet
 {
     public string ChannelNo => channelNo;
 
-    public string Type => type;
+    public string Type
+    {
+        get => type;
+        set => type = value ?? throw new ArgumentNullException(nameof(value));
+    }
 
-    public Filter[][] Filters => filters;
+    public Filter[][] Filters
+    {
+        get => filters;
+        set => filters = value ?? throw new ArgumentNullException(nameof(value));
+    }
 
     private string channelNo;
     private string type;

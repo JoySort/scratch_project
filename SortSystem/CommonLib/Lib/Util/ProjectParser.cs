@@ -1,4 +1,5 @@
 using System.Text;
+using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.vo;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +28,7 @@ public class ProjectParser
         ParseCriteria();
         ParseOutlet();
         ParseOtherProperties();
+        afterParsingCheck();
     }
     
     public static Project ParseHttpRequest(HttpRequest Request,string version)
@@ -216,10 +218,61 @@ public class ProjectParser
 
     private void afterParsingCheck()
     {
-        foreach (var enabledCriterion in EnabledCriteria)
+        var existanceConfig = ConfigUtil.getModuleConfig().CriteriaMapping["existence"];
+        var fmConfig = ConfigUtil.getModuleConfig().CriteriaMapping["fm"];
+        
+        Criteria existanceCriteria = new Criteria(existanceConfig.Key, existanceConfig.Key, existanceConfig.Index,
+            0, 3, new float[]{0.5f,1.5f}, true);
+        Criteria fmCriteria = new Criteria(fmConfig.Key, fmConfig.Key, fmConfig.Index, 
+            0, 2, new float[] {0.5f}, true);
+
+        
+        //默认自由下落是经典模式，默认通道只选择双枣
+        var doubleExistanceBoundrryIndeces = new int[] {2};// 1.5-3 {2} 
+        var doubleExistanceFilter = new Filter(doubleExistanceBoundrryIndeces,existanceCriteria,Filter.fillBoundries(existanceCriteria,doubleExistanceBoundrryIndeces).ToArray());
+
+        //吹出默认模式下，是分选FM的模式，，默认通道选取 吹出任何单枣和双枣。
+        var doubleSingleExistanceBoundrryIndeces = new int[] {1,2};//[0-0.5|0.5-1.5|1.5-3] 1,2 are 0.5-1.5 {1}  and 1.5-3 {2} 
+        var doubleSingleExistanceFilter = new Filter(doubleSingleExistanceBoundrryIndeces,existanceCriteria,Filter.fillBoundries(existanceCriteria,doubleSingleExistanceBoundrryIndeces).ToArray());
+
+        //FM选择的filter
+        var fmBoundryIndeces = new int[] {1 }; // 0.5-2 {1} 选择FM
+        var fmFilter = new Filter(fmBoundryIndeces, fmCriteria,
+            Filter.fillBoundries(existanceCriteria, doubleSingleExistanceBoundrryIndeces).ToArray());
+        
+        EnabledCriteria.Add(fmCriteria);
+        EnabledCriteria.Add(existanceCriteria);
+        
+        FullCriteria.Add(fmCriteria);
+        FullCriteria.Add(existanceCriteria);
+        
+        //如果自由下落的经典模式下，我们只需要确保双枣和FM都被自由下落通道（0）号选中。并且设置0号通道为默认default
+        if(ConfigUtil.getModuleConfig().WorkingMode==WorkingMode.FreefallDefault)
         {
-           // enabledCriterion.Code == "existance";
+            //使用Or 关系让双枣或者FM都进入自由下落通道
+            Filter[][] freefallDefaultFilter = new Filter[][]{new Filter[]{doubleExistanceFilter},new Filter[]{fmFilter}};
+
+            Outlet zeroChannelOutlet = new Outlet("0","default",freefallDefaultFilter);
+            Outlets.Add(zeroChannelOutlet);
         }
+        else//如果是主动吹出模式下，我们需要让0号自由下落通道选中FM，8号通道选中单/双枣。并且设置8号通道为默认default
+        {   
+            
+            //让FM被选中
+            Filter[][] fmFreefallWhenEjectdefaultFilter = new Filter[][] {new Filter[] {fmFilter}};
+            Outlet zeroChannelOutlet = new Outlet("0","auto",fmFreefallWhenEjectdefaultFilter);
+            Outlets.Add(zeroChannelOutlet);
+            
+            //让单，双枣都进入吹出通道
+            Filter[][] ejectDefaultFilter = new Filter[][]{new Filter[]{doubleSingleExistanceFilter}};
+            Outlet eightChannelOutlet = Outlets.Where(value => value.ChannelNo == "8").SingleOrDefault();
+            eightChannelOutlet.Type = "default";
+            
+            eightChannelOutlet.Filters = ejectDefaultFilter;
+           
+        }
+        
+        
     }
 }
 

@@ -2,41 +2,11 @@
   "name": "RecognizeRunner",
   "module": "Recognizer",
   "genre": "palmDate",
+  "standalone": false,
   "cameraSimulationMode": true,
   "recognizerSimulationMode": true,
-  "standalone": false,
-  "recognizerConfig": {
-    "dllPaht": "./recognizer.dll",
-    "initializationImagePath": "./assets/1.bmp",
-    "initCols": 6,
-    "initRows": 4
-  },
-  "cameraConfigs":[
-    {
-      "classDriver": "BaslerIPCamDriver",
-      "brand":"basler",
-		"model":"1920",
-      "address": "192.168.16.100",
-      "_comment_columns": "相机覆盖的列范围，数组只能有2个元素，起和截止，注意，范围包含起也包含止的值，所以，【0，5】的意思是0，1，2，3，4，5 一共六列",
-      "columns": [6,11] ,
-	  "offsets":[0,3],
-      "_comment_cameraPosition": "可以使用的值: left,middle,right",
-      "cameraPosition": "middle",
-      "saveRawImage": false,
-      "savePath": "../cam1",
-	  "width":1696,
-	  "height":920,
-	  "gid":0
-    }
-  ],
-  "networkConfig": {
-    "rpcPort": 5114,
-    "_comment_rpcProxyProt": "如果和rpcPort相同，则发现服务 如果希望使用 mitmweb --mode upstream:http://localhost:5185 --listen-port 8082 --web-port 8083 其中，5185是rpcPort, 8082是rpcProxyPort , 8083是WEBUI浏览器查看debug信息的端口。 工具来进行http的debug,则可以设置这个参数 rpcProxyport ，让mitmweb 可以监听这个rpcProxyPort,并且转给upstream的rpcPort {port value} . 这里的设置，是让自动发现服务给对端广播这个代理端口，以让我们可以进行调试。. ",
-    "rpcProxyPort": 5114,
-    "discoveryPorts": [13567],
-    "rpcBindIP": "*",
-    "udpBindIP": "*"
-  },
+  "recognizerConfig":{"import": "sub_config/recognizer_config.json"},
+  "networkConfig": { "import": "sub_config/network_config.json"},
   "description": "模块配置：相机模块配置",
   "minimumCoreVersion": "1.1",
   "title": "相机模块配置",

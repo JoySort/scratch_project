@@ -1,0 +1,8 @@
+{
+  "dllPaht": "./recognizer.dll",
+  "initializationImagePath": "./assets/1.bmp",
+  "initCols": 6,
+  "initRows": 4,
+  "Columns": [0,23],
+  "_column_comment": "if Columns not set, default to cover 0-9999"
+}

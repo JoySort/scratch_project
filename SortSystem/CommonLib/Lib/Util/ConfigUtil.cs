@@ -47,18 +47,112 @@ public class ConfigUtil
     public static ModuleConfig? getModuleConfig()
     {
         if (_moduleConfig == null) {
-        string filePath = configFile;
-        _moduleConfig =   JsonConvert.DeserializeObject<ModuleConfig>(loadSubConfig(filePath).ToString());
+            string filePath = configFile;
+            _moduleConfig =   JsonConvert.DeserializeObject<ModuleConfig>(loadSubConfig(filePath).ToString());
             if (CMDArgumentUtil.standalone != -1 && (CMDArgumentUtil.standalone==1 != _moduleConfig.Standalone))
             {
                 logger.Warn($"Configuration file standalone:{_moduleConfig.Standalone} has a different value than CMD parameter {CMDArgumentUtil.standalone == 1}, Using CMD Parameter");
                 _moduleConfig.Standalone = CMDArgumentUtil.standalone == 1 ? true : false;
             }
+            
+            validateConfig(_moduleConfig);
+
         }
         return _moduleConfig;
 
     }
-    
+
+    private static void validateConfig(ModuleConfig moduleConfigs)
+    {
+        var commonExpectedKeys = new string[]{
+            "NetworkConfig",
+            "Name",
+            "Genre",    
+            "Description",
+            "Title",
+            "MinimumCoreVersion",
+            "Version",
+            "Author"
+        }
+        ;
+        var upperExpectedKeys = new string[]
+        {
+            "ElasticSearchConfig",
+            "MachineState",
+            "Emiiters",
+            "LowerConfig",
+            "SortConfig",
+            "ConsolidatePolicy",
+            "CriteriaMapping",
+            "WorkingMode",
+            "LowerMachineSimulationMode"
+        };
+
+        var recognizerWithCameraExpectedKeys = new string[]
+        {
+            "RecognizerSimulationMode",
+            "RecognizerConfig",
+            "CameraSimulationMode",
+            "CameraConfigs"
+        };
+        var recognizerStandaloneExpectedKeys = new string[]
+        {
+            "RecognizerSimulationMode",
+            "RecognizerConfig"
+        };
+        var cameraExpectedKeys = new string[]
+        {
+            "CameraSimulationMode",
+            "CameraConfigs"
+        };
+
+       
+        
+        switch (moduleConfigs.Module)
+        {
+            case JoyModule.Upper:
+                checkProperties(moduleConfigs, commonExpectedKeys);
+                checkProperties(moduleConfigs, upperExpectedKeys);
+                break;
+            case JoyModule.Recognizer:
+                checkProperties(moduleConfigs, commonExpectedKeys);
+
+                if (!moduleConfigs.Standalone)
+                {
+                    checkProperties(moduleConfigs, recognizerWithCameraExpectedKeys);
+                }
+                else
+                {
+                    checkProperties(moduleConfigs, recognizerStandaloneExpectedKeys);
+                }
+                break;
+            case JoyModule.Camera:
+                checkProperties(moduleConfigs, commonExpectedKeys);
+                checkProperties(moduleConfigs, cameraExpectedKeys);
+                break;
+            default:
+                throw new ConfigNotCompleteException($"Module is not configured correctly {moduleConfigs.Module}");
+                break;
+        }
+    }
+
+    private static void checkProperties(ModuleConfig moduleConfigs, string [] expectedKeys)
+    {
+        foreach (var expectedKey in expectedKeys)
+        {
+            if (moduleConfigs
+                    .GetType()
+                    .GetProperty(expectedKey)
+                    .GetValue(moduleConfigs, null) 
+                == null)
+            {
+                throw new ConfigNotCompleteException($"{expectedKey} is required in {Enum.GetName(moduleConfigs.Module)} module configuration" +
+                                                     $"Checking against {string.Join(",",expectedKeys)}");
+            }
+
+        }
+    }
+
     public static MachineState[] getMachineState()
     {
         if(_machineStates == null){
@@ -71,7 +165,7 @@ public class ConfigUtil
     {
         if (_emitters == null)
         {
-            _emitters = getModuleConfig().emiiters;
+            _emitters = getModuleConfig().Emiiters;
         }
 
         return _emitters;
@@ -156,6 +250,13 @@ public class ConfigUtil
         return jresult;
     }
 }
+
+public class ConfigNotCompleteException : Exception
+{
+    public ConfigNotCompleteException(string message): base(message) {
+    }
+}
+
 
 public enum ConfigFile
 {

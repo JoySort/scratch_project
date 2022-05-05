@@ -27,6 +27,13 @@ public class ModuleConfig
     private RecognizerConfig recognizerConfig;
     private ElasticSearchConfig elasticSearchConfig;
     private bool standalone = true;
+    private WorkingMode workingMode = WorkingMode.FreefallDefault;
+
+    public WorkingMode WorkingMode
+    {
+        get => workingMode;
+        set => workingMode = value;
+    }
 
     public bool Standalone
     {
@@ -58,14 +65,14 @@ public class ModuleConfig
         set;
     }
 
-    public Emitter[] emiiters
+    public Emitter[] Emiiters
     {
         get;
         set;
     }
 
 
-    public ModuleConfig(string author,bool standalone, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, bool cameraSimulationMode, bool recognizerSimulationMode, RecognizerConfig recognizerConfig, ElasticSearchConfig elasticSearchConfig, string machineId, string title, int version, MachineState[] machineState, Emitter[] emiiters,string uuid)
+    public ModuleConfig(string author,WorkingMode WorkingMode,bool standalone, ConsolidatePolicy consolidatePolicy, Dictionary<string, CriteriaMapping> criteriaMapping, string description, GenreName genre, LowerConfig[] lowerConfig, CameraConfig[] cameraConfigs, string minimumCoreVersion, JoyModule module, string name, NetworkConfig networkConfig, SortConfig sortConfig, bool lowerMachineSimulationMode, bool cameraSimulationMode, bool recognizerSimulationMode, RecognizerConfig recognizerConfig, ElasticSearchConfig elasticSearchConfig, string machineId, string title, int version, MachineState[] machineState, Emitter[] emiiters,string uuid)
     {
         this.author = author;
         this.consolidatePolicy = consolidatePolicy;
@@ -88,8 +95,9 @@ public class ModuleConfig
         this.title = title;
         this.version = version;
         MachineState = machineState;
-        this.emiiters = emiiters;
+        this.Emiiters = emiiters;
         this.standalone = standalone;
+        this.workingMode = WorkingMode;
         if(uuid != null)
             if(uuid.Length > 0)
                 this.uuid = uuid;
@@ -224,4 +232,10 @@ public class ElasticSearchConfig
     public string url;
     public bool enabled;
  
+}
+
+public enum WorkingMode
+{
+    EjectDefault,
+    FreefallDefault,
 }

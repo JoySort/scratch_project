@@ -2,6 +2,7 @@
   "name": "RecognizeRunner",
   "module": "Recognizer",
   "genre": "palmDate",
+  "standalone": true,
   "cameraSimulationMode": true,
   "recognizerSimulationMode": true,
   "recognizerConfig":{"import": "sub_config/recognizer_config.json"},
