@@ -42,8 +42,8 @@ public class JsonParserTestV1 {
         
          var fullCriteria = jparser?.FullCriteria;
          var enabledCriteria = jparser?.EnabledCriteria;
-         var fullCriteriaLength = 4;
-         var enabledCriteriaLength = 4;
+         var fullCriteriaLength = 4+2; // existance and fm are by default added
+         var enabledCriteriaLength = 4+2;// existance and fm are by default added
          Assert.AreEqual(fullCriteriaLength,fullCriteria?.Count);
          Assert.AreEqual(enabledCriteriaLength,enabledCriteria?.Count);
         //
@@ -54,7 +54,7 @@ public class JsonParserTestV1 {
     public void CheckOutlet()
     {
          var outlets = jparser?.Outlets;
-         var outletNO = 8;
+         var outletNO = 8+1; //channel 0 is by default added
          Assert.AreEqual(outlets?.Count,outletNO);
 
          var expectedFilters = new string[][] {new string[]{"dd","wt"},
@@ -69,6 +69,7 @@ public class JsonParserTestV1 {
 
          foreach (var outlet in outlets)
          {
+             if (outlet.ChannelNo == "0" || outlet.ChannelNo == "8") continue;
            Assert.True(outlet.Filters.First().Select((filter=>filter.Criteria.Code)).ToArray().OrderBy(value=>value).SequenceEqual(expectedFilters[int.Parse(outlet.ChannelNo)-1].OrderBy(value=>value)));  
          }
     }

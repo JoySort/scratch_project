@@ -49,8 +49,8 @@ public class JsonParserTestV2 {
         
         var fullCriteria = jparser?.FullCriteria;
         var enabledCriteria = jparser?.EnabledCriteria;
-        var fullCriteriaLength = 11;
-        var enabledCriteriaLength = 4;
+        var fullCriteriaLength = 11+2;
+        var enabledCriteriaLength = 4 +2;
         Assert.AreEqual(fullCriteriaLength,fullCriteria?.Count);
         Assert.AreEqual(enabledCriteriaLength,enabledCriteria?.Count);
         
@@ -61,7 +61,7 @@ public class JsonParserTestV2 {
     public void CheckOutlet()
     {
         var outlets = jparser?.Outlets;
-        var outletNO = 8;
+        var outletNO = 8+1;
         Assert.AreEqual(outlets?.Count,outletNO);
         var expectedFilters = new string[][] {
             new string[]{"height","zl"},
@@ -76,6 +76,7 @@ public class JsonParserTestV2 {
         foreach (var outlet in outlets)
         {
             if (outlet.Filters.Length == 0) continue;
+            if (outlet.ChannelNo == "0" || outlet.ChannelNo == "8") continue;
             Assert.True(outlet.Filters.First().Select((filter=>filter.Criteria.Code)).ToArray().OrderBy(value=>value).SequenceEqual(expectedFilters[int.Parse(outlet.ChannelNo)-1].OrderBy(value=>value)));  
         }
         
