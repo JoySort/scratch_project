@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="MagicOnion.Server" Version="4.4.1" />
+        <PackageReference Include="MagicOnion.Server.HttpGateway" Version="4.4.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 

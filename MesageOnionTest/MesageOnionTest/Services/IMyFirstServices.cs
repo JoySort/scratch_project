@@ -49,6 +49,9 @@ public class MyPictureService :ServiceBase<IPictureService>,IPictureService
    // public static 
     public async UnaryResult<int> sendPicture(List<CameraPayLoad> list)
     {
+       
+        Console.WriteLine($"batch {string.Join(",",list.Select(value=>value.triggerId))}");
+
         // var path = Path.Combine(
         //     Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
         //     cameraPayLoad.CamConfig.SavePath)+"/"+timestamp;

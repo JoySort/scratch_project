@@ -1,3 +1,5 @@
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,7 +15,9 @@ builder.Services.AddGrpc(options =>
     options.EnableDetailedErrors = true;
     options.MaxReceiveMessageSize = 200 * 1024 * 1024; // 2 MB
     options.MaxSendMessageSize = 5 * 1024 * 1024; // 5 MB
+    
 });
+//SocketsHttpHandler.EnableMultipleHttp2Connections
 builder.Services.AddMagicOnion();
 
 var app = builder.Build();
