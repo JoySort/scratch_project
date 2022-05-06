@@ -10,7 +10,9 @@ using MessagePack.Resolvers;
 Console.WriteLine(string.Join(",",args));
 // Connect to the server using gRPC channel.
 //var channel = GrpcChannel.ForAddress("http://localhost:5002");
-var channel = GrpcChannel.ForAddress("http://localhost:5002", new GrpcChannelOptions
+var host = (args.Length > 1) ? args[1] : "localhost";
+
+var channel = GrpcChannel.ForAddress($"http://{host}:5002", new GrpcChannelOptions
 {
     HttpHandler = new SocketsHttpHandler
     {
