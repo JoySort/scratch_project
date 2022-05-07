@@ -146,7 +146,7 @@ public class SortingWorker
 
         if (selectedOutlets.Count > 0)
         {
-            sortResults.Add(new SortResult(consolidatedResult.Coordinate, consolidatedResult.ExpectedFeatureCount,consolidatedResult.CreatedTimestamp ,consolidatedResult.Features,
+            sortResults.Add(new SortResult(consolidatedResult.Coordinate, consolidatedResult.ExpectedFeatureCount,consolidatedResult.RecTimestamp ,consolidatedResult.Features,
                 selectedOutlets.ToArray()));
         }
         else

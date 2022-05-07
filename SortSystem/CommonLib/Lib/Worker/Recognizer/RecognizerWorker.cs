@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using CommonLib.Lib.ConfigVO;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
@@ -169,7 +170,8 @@ public class RecognizerWorker
         if (ConfigUtil.getModuleConfig().RecognizerSimulationMode)
         {
             //这个模拟器并不生成这一张照片的一个识别结果，而是生成4张照片的结果一次性。因此不是一个严格的模拟器。
-            results =  RecResultGenerator.prepareData(currentProject, payload.TriggerId, 1, payload.CamConfig.Columns, payload.CamConfig.CameraPosition,4);
+            
+            results =  RecResultGenerator.prepareData(currentProject, OutletPriority.ASC, payload.TriggerId, 1, payload.CamConfig.Columns, payload.CamConfig.CameraPosition,4,payload.startTime);
             if (results.Last().Coordinate.TriggerId == 0)
             {
                 logger.Debug($"TriggerID 0 triggerred");

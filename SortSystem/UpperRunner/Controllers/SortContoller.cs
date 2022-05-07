@@ -33,7 +33,7 @@ public class SortController: ControllerBase
     [HttpPost]
     public WebControllerResult consolidate(List<RecResult> recResults)
     {
-       
+
        
         consolidateWorker.processBulk(recResults);
         return new WebControllerResult("OK");//如果有异常，则会抛出，因此运行到这里就意味着没问题。

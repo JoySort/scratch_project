@@ -9,7 +9,7 @@ public class LBResult:SortResult
 
     public Outlet[] LoadBalancedOutlet => loadBalancedOutlet;
 
-    public LBResult(Coordinate coordinate, int expectedFeatureCount, long createdTimestamp, List<Feature> features, Outlet[] outlets, Outlet[] loadBalancedOutlet) : base(coordinate, expectedFeatureCount, createdTimestamp, features, outlets)
+    public LBResult(Coordinate coordinate, int expectedFeatureCount, long recTimestamp, List<Feature> features, Outlet[] outlets, Outlet[] loadBalancedOutlet) : base(coordinate, expectedFeatureCount, recTimestamp, features, outlets)
     {
         this.loadBalancedOutlet = loadBalancedOutlet;
     }

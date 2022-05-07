@@ -21,7 +21,7 @@ public class JoyHTTPClient
     private readonly HttpClient httpClient = new HttpClient();
     public  async Task<T?> GetFromRemote<T>(string uri)
     {
-        logger.Debug("getFromRemoteAssync {}",uri );
+        //logger.Debug("getFromRemoteAssync {}",uri );
         T? result = default;
         try
         {

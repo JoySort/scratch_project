@@ -177,7 +177,7 @@ public class LBWorker
                           //outletNO = lbChannelNO;
                       }
 
-                      var lbResult = new LBResult(sortResult.Coordinate, sortResult.ExpectedFeatureCount,sortResult.CreatedTimestamp, sortResult.Features,
+                      var lbResult = new LBResult(sortResult.Coordinate, sortResult.ExpectedFeatureCount,sortResult.RecTimestamp, sortResult.Features,
                           sortResult.Outlets,
                           new Outlet[] { new Outlet(lbChannelNO, sortResult.Outlets.First().Type, sortResult.Outlets.First().Filters) });
                       lbResults.Add(lbResult);

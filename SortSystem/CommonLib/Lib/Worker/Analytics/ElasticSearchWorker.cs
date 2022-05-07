@@ -143,7 +143,7 @@ public class ElasticSearchWorker
                             {
                                 foreach(var feature in item.Features)
                                 {
-                                    ESFeature esFeature = new ESFeature(feature,"N/A",null,null,criteriaMappingByIndex[feature.CriteriaIndex].Key,machineID,currentProject.Id,currentProject.TimeStamp,item.Coordinate,false,item.CreatedTimestamp);
+                                    ESFeature esFeature = new ESFeature(feature,"N/A",null,null,criteriaMappingByIndex[feature.CriteriaIndex].Key,machineID,currentProject.Id,currentProject.TimeStamp,item.Coordinate,false,item.RecTimestamp);
                                     toBeSent.Add(esFeature);
                                 }
                             }
@@ -203,7 +203,7 @@ public class ElasticSearchWorker
                             {
                                 foreach(var feature in item.Features)
                                 {
-                                    ESFeature esFeature = new ESFeature(feature,getFilterString(item.LoadBalancedOutlet.First().Filters),item.Outlets,item.LoadBalancedOutlet ,criteriaMappingByIndex[feature.CriteriaIndex].Key,machineID,currentProject.Id,currentProject.TimeStamp,item.Coordinate,true,item.CreatedTimestamp);
+                                    ESFeature esFeature = new ESFeature(feature,getFilterString(item.LoadBalancedOutlet.First().Filters),item.Outlets,item.LoadBalancedOutlet ,criteriaMappingByIndex[feature.CriteriaIndex].Key,machineID,currentProject.Id,currentProject.TimeStamp,item.Coordinate,true,item.RecTimestamp);
                                     eslbResults.Add(esFeature);
                                 }
                             }

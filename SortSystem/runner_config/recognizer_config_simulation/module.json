@@ -4,6 +4,7 @@
   "genre": "palmDate",
   "standalone": false,
   "cameraSimulationMode": true,
+  "cameraConfigs":{"import": "sub_config/camera_config.json"},
   "recognizerSimulationMode": true,
   "recognizerConfig":{"import": "sub_config/recognizer_config.json"},
   "networkConfig": { "import": "sub_config/network_config.json"},

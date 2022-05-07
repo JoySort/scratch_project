@@ -1,22 +1,24 @@
 using System.Collections.Concurrent;
 using CommonLib.Lib.ConfigVO;
+using CommonLib.Lib.GrpcServiceInterface;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Sort.ResultVO;
 using CommonLib.Lib.Util;
 using CommonLib.Lib.vo;
+using Grpc.Core;
 using Newtonsoft.Json;
 using NLog;
 
 namespace CommonLib.Lib.Worker.Camera;
 
-public class CameraHttpClientWorker
+public class CameraTransmissionWorker
 {
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private bool isProjectRunning = false;
     private Project currentProject;
   
-    private static CameraHttpClientWorker me = new CameraHttpClientWorker();
-    public static CameraHttpClientWorker getInstance()
+    private static CameraTransmissionWorker me = new CameraTransmissionWorker();
+    public static CameraTransmissionWorker getInstance()
     {
         return me;
     }
@@ -28,34 +30,40 @@ public class CameraHttpClientWorker
 
     public void onCameraPayLoad(object? sender, CameraPayLoad cameraPayLoad)
     {
-        cameraPayLoads.Enqueue(cameraPayLoad);
-        if (cameraPayLoads.Count > 1)
-        {
-            Task.Run(() =>
-            {
-                List<CameraPayLoad> tmpResult = new List<CameraPayLoad>();
-                while (cameraPayLoads.Count > 0)
-                {
-                    CameraPayLoad tmpCameraPayload = null;
-                    if(cameraPayLoads.TryDequeue(out tmpCameraPayload))
-                    tmpResult.Add(tmpCameraPayload);
-                }
-
-                processCameraData(tmpResult);
-            });
-        }
+        var tmpResult = new List<CameraPayLoad>();
+        tmpResult.Add(cameraPayLoad);
+        processCameraData(tmpResult);
     }
 
-    private ConcurrentQueue<CameraPayLoad> cameraPayLoads;
     public void processCameraData(List<CameraPayLoad> results)
     {
         var joyHttpClient = new JoyHTTPClient.JoyHTTPClient();
         var toBeSent = filterCameraPayloadAgainstRecognizerCoverage(results);
         
         foreach((var key,var value) in toBeSent){
-            var remoteURI = remoteCallProtocal + key.Address + ":" + key.WebPort + recognizerProcessCameraPayloadURL;
-            joyHttpClient.Upload(remoteURI,value);
-            logger.Debug($"Sending CameraPayLoad count {results.Count} of lastTriggerID {results.Last().TriggerId} with Column coverage {string.Join(",",results.Last().CamConfig.Columns)} to {remoteURI}");
+            //var remoteURI = remoteCallProtocal + key.Address + ":" + key.WebPort + recognizerProcessCameraPayloadURL;
+            //joyHttpClient.Upload(remoteURI,value);
+            var client = new GrpcTransmissionClient(key.Address, key.TcpPort);
+            foreach (var cameraPayLoad in value)
+            {
+                Task.Run(() =>
+                {
+                    var stats = new StatsHolder();
+                    stats.StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    stats.TriggerId = cameraPayLoad.TriggerId;
+                    var triggerId = cameraPayLoad.TriggerId;
+                    var result =  client.sendCameraData(cameraPayLoad);
+                    stats.FinishTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                    onCameraDataSent?.Invoke(this,stats);
+                    if (triggerId != result.Result)
+                    {
+                        throw new Exception($"GRPC service Sent triggerID {triggerId} does not match returned triggerid {result.Result}");
+                    }
+                });
+                
+            }
+            
+            if(logger.IsDebugEnabled)logger.Debug($"Sending CameraPayLoad count {results.Count} of lastTriggerID {results.Last().TriggerId} with Column coverage {string.Join(",",results.Last().CamConfig.Columns)} ");
         }
     }
 
@@ -111,7 +119,7 @@ public class CameraHttpClientWorker
 
     }
 
-    private CameraHttpClientWorker()
+    private CameraTransmissionWorker()
     {
         init();
 
@@ -122,7 +130,6 @@ public class CameraHttpClientWorker
     {
         if (e.State == ProjectState.start)
         {
-            cameraPayLoads = new ConcurrentQueue<CameraPayLoad>();
             recognizerRpcEndPoints = new List<RpcEndPoint>();
             var remoteEndPoints = ModuleCommunicationWorker.getInstance().RpcEndPoints;
             foreach ((var module, var rdps) in remoteEndPoints)
@@ -160,7 +167,9 @@ public class CameraHttpClientWorker
         }
     }
 
+    public  event EventHandler<StatsHolder>? onCameraDataSent;
     private string remoteCallProtocal = "http://";
     private string recognizerProcessCameraPayloadURL = "/recognize/process_camera_data";
 
 }
+

@@ -201,7 +201,7 @@ public class ConsolidateWorker
                 foreach( (var key, var features) in incompleteFeatureList){
                     if (features.Count == expectedFeatureCount)
                     {
-                        completeResult.Add(new ConsolidatedResult(incompleteCoordinate[key],expectedFeatureCount,cacheRecResultDictionary[key].First().CreatedTimestamp,features));
+                        completeResult.Add(new ConsolidatedResult(incompleteCoordinate[key],expectedFeatureCount,cacheRecResultDictionary[key].First().RecTimestamp,features));
                        //logger.Debug("consolidated results{}",JsonConvert.SerializeObject(completeResult.Last()));
                     }
                 }

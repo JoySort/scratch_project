@@ -1,7 +1,8 @@
-using ZeroFormatter;
+
+using MessagePack;
 
 namespace CommonLib.Lib.ConfigVO;
-[ZeroFormattable]
+[MessagePackObject(keyAsPropertyName: true)]
 public class CameraConfig
 {
     private string classDriver;
@@ -40,79 +41,79 @@ public class CameraConfig
     public CameraConfig()
     {
     }
-    [Index(0)]
+  
     public virtual string Brand
     {
         get => brand;
         set => brand = value ;
     }
-    [Index(1)]
+
     public virtual string Model
     {
         get => model;
         set => model = value ;
     }
-    [Index(2)]
+ 
     public virtual string Address
     {
         get => address;
         set => address = value ;
     }
-    [Index(3)]
+  
     public virtual int[] Columns
     {
         get => columns;
         set => columns = value;
     }
-    [Index(4)]
+  
     public virtual int[] Offsets
     {
         get => offsets;
         set => offsets = value ;
     }
-    [Index(5)]
+   
     public virtual CameraPosition CameraPosition
     {
         get => cameraPosition;
         set => cameraPosition = value;
     }
-    [Index(6)]
+
     public virtual bool SaveRawImage
     {
         get => saveRawImage;
         set => saveRawImage = value;
     }
-    [Index(7)]
+  
     public virtual string SavePath
     {
         get => savePath;
         set => savePath = value ;
     }
-    [Index(8)]
+  
     public virtual int Gid
     {
         get => gid;
         set => gid = value;
     }
-    [Index(9)]
+
     public virtual int Width
     {
         get => width;
         set => width = value;
     }
-    [Index(10)]
+
     public virtual int Height
     {
         get => height;
         set => height = value;
     }
-    [Index(11)]
+
     public virtual CameraType CameraType
     {
         get => cameraType;
         set => cameraType = value;
     }
-    [Index(12)]
+ 
     public virtual string ClassDriver { get => classDriver; set => classDriver = value; }
 }
 

@@ -14,14 +14,17 @@ public class RecResultGenerator
     /**
      * <summary>Return list first element is Dictionary<long, long> triggerid->selectedOutletIndex, second element is the List<RecResult> object list</summary>
      */
-    public static List<RecResult> prepareData(Project project,long startTriggerID, long count,int[] columnRange,CameraPosition cameraPosition,int perTargetPictureCount )
+    public static List<RecResult> prepareData(Project project,OutletPriority priority,long startTriggerID, long count,int[] columnRange,CameraPosition cameraPosition,int perTargetPictureCount,long imageTime )
     {
 
 
         var moduleConfig = ModuleCommunicationWorker.getInstance().RpcEndPoints[JoyModule.Upper].First().Value.ModuleConfig;
         var result = new List<RecResult>();
         var critieraList = project.Criterias;
-        var outlets = project.Outlets;
+        var outlets = priority ==OutletPriority.DESC
+            ?project.Outlets.OrderByDescending(outlet => outlet.ChannelNo).ToArray()
+            :project.Outlets.OrderBy(outlet => outlet.ChannelNo).ToArray();
+        //var outlets = project.Outlets;
         var consolidatePolicy = moduleConfig.ConsolidatePolicy;
         Random rdn = new Random();
 
@@ -148,6 +151,7 @@ public class RecResultGenerator
                     }
                     
                     var recResult = new RecResult(coordinate, expectedFeatureCount, DateTimeOffset.Now.ToUnixTimeMilliseconds(),featureList);
+                    //recResult.imageTime = imageTime;
                     result.Add(recResult);
                 }
                 
@@ -163,12 +167,14 @@ public class RecResultGenerator
                     var featureValue = offsetRowNotNormalFeature.FilterBoundaries.First().First() + ((float)rdn.Next((int)diff*100))/100;
                     featureList1.Add(new Feature(offsetRowNotNormalFeature.Criteria.Index,featureValue));
                     var recResult1 = new RecResult(coordinate, expectedFeatureCount,DateTimeOffset.Now.ToUnixTimeMilliseconds(), featureList1);
+                    //recResult1.imageTime = imageTime;
                     result.Add(recResult1);
                 }
                 else if(NotNormalOffsetRowCountIndex!=-1)
                 {
                     featureList1.Add(new Feature(NotNormalOffsetRowCountIndex,0));
                     var recResult1 = new RecResult(coordinate, expectedFeatureCount,DateTimeOffset.Now.ToUnixTimeMilliseconds(), featureList1);
+                    //recResult1.imageTime = imageTime;
                     result.Add(recResult1);
                 }
                 

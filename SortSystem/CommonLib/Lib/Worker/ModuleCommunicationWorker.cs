@@ -8,6 +8,7 @@ using CommonLib.Lib.JoyHTTPClient;
 using CommonLib.Lib.LowerMachine;
 using CommonLib.Lib.Network;
 using CommonLib.Lib.Util;
+using Newtonsoft.Json;
 using NLog;
 
 namespace CommonLib.Lib.Worker;
@@ -106,19 +107,27 @@ public class ModuleCommunicationWorker
         
         var rpcEndpoint = new RpcEndPoint(webPort, tcpPort,ipAddr, uuid);
         rpcEndpoint.ModuleConfig = result;
-        if(!rpcEndPoints.ContainsKey(result.Module))rpcEndPoints.TryAdd(result.Module,new ConcurrentDictionary<string,RpcEndPoint>());
+        if (!rpcEndPoints.ContainsKey(result.Module))
+        {
+            rpcEndPoints.TryAdd(result.Module,new ConcurrentDictionary<string,RpcEndPoint>());
+        }
 
         if (rpcEndPoints[result.Module].ContainsKey(rpcEndpoint.Key()))
         {
-            rpcEndPoints[result.Module][rpcEndpoint.Key()] = rpcEndpoint;
+            if (JsonConvert.SerializeObject(rpcEndPoints[result.Module][rpcEndpoint.Key()]) !=
+                JsonConvert.SerializeObject(rpcEndpoint))
+            {
+                rpcEndPoints[result.Module][rpcEndpoint.Key()] = rpcEndpoint;
+                logger.Info($"Updating remote endpoint {rpcEndpoint.ModuleConfig.Name} with address info {rpcEndpoint.Address}:{rpcEndpoint.WebPort} tcp port {rpcEndpoint.TcpPort} on Module {Enum.GetName(rpcEndpoint.ModuleConfig.Module)}");
+            }
         }
         else
         {
             rpcEndPoints[result.Module].TryAdd(rpcEndpoint.Key(),rpcEndpoint);
+            logger.Info($"Registering remote endpoint {rpcEndpoint.ModuleConfig.Name} with address info {rpcEndpoint.Address}:{rpcEndpoint.WebPort} tcp port {rpcEndpoint.TcpPort} on Module {Enum.GetName(rpcEndpoint.ModuleConfig.Module)}");
         }
 
-        logger.Info($"Registering remote endpoint {rpcEndpoint.ModuleConfig.Name} with address info {rpcEndpoint.Address}:{rpcEndpoint.WebPort} tcp port {rpcEndpoint.TcpPort} on Module {Enum.GetName(rpcEndpoint.ModuleConfig.Module)}");
-
+        
 
 
         OnDiscovery?.Invoke(this,rpcEndpoint);

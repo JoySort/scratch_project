@@ -13,7 +13,7 @@ public class RecResult:RawResult
         set => features = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public RecResult(Coordinate coordinate, int expectedFeatureCount, long createdTimestamp, List<Feature> features) : base(coordinate, expectedFeatureCount, createdTimestamp)
+    public RecResult(Coordinate coordinate, int expectedFeatureCount, long recTimestamp, List<Feature> features) : base(coordinate, expectedFeatureCount, recTimestamp)
     {
         this.features = features;
     }

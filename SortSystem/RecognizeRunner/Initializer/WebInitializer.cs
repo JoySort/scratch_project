@@ -1,5 +1,7 @@
 using System.Net;
 using CommonLib.Lib.Util;
+using Grpc.Net.Client;
+using Newtonsoft.Json;
 using NLog;
 using NLog.Web;
 
@@ -29,32 +31,110 @@ public class WebInitializer
         //logger.Info("Listening on {}",rpcUrl);
         return joyArgs;
     }
+
+    private static (int webapiPort,int tcpPort,IPAddress webAPIAddress, IPAddress tcpIpAddress ) getWebConfig()
+    {
+        var webAPIPort = ConfigUtil.getModuleConfig().NetworkConfig.RpcPort;
+        var webAPIBindAddressString = ConfigUtil.getModuleConfig().NetworkConfig.RpcBindIp;
+
+        var tcpPort = ConfigUtil.getModuleConfig().NetworkConfig.TcpPort;
+        var tcpBindAddressString = ConfigUtil.getModuleConfig().NetworkConfig.TcpBindIp;
+        
+        logger.Info($"Using Networking Configuration {JsonConvert.SerializeObject(ConfigUtil.getModuleConfig().NetworkConfig)}");
+        
+        IPAddress webAPIIPaddress = null;
+        if (!(IPAddress.TryParse(webAPIBindAddressString, out webAPIIPaddress)))
+        {
+            if (webAPIBindAddressString == null || webAPIBindAddressString == "*")
+            {
+                webAPIIPaddress=IPAddress.Any;
+            }
+        }
+        
+        IPAddress tcpIPaddress = null;
+        if (!(IPAddress.TryParse(tcpBindAddressString, out tcpIPaddress)))
+        {
+            if (tcpBindAddressString == null || tcpBindAddressString == "*")
+            {
+                tcpIPaddress=IPAddress.Any;
+            }
+        }
+
+        return (webAPIPort, tcpPort, webAPIIPaddress, tcpIPaddress);
+
+    }
+
     public static void init()
     {
         var rpcPort = rpcSetup();
-     
-        var builder = WebApplication.CreateBuilder(rpcPort);
+        var configInfo = getWebConfig();
+       
+        var builder = WebApplication.CreateBuilder();
+        builder.WebHost.ConfigureKestrel(serverOptions =>
+        {
+            if (ConfigUtil.getModuleConfig().Standalone)
+            {
+                serverOptions.Listen(configInfo.tcpIpAddress, configInfo.tcpPort,
+                    cfg => { cfg.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2; });
+            }
 
-// Add services to the container.
+            serverOptions.Listen(configInfo.webAPIAddress, configInfo.webapiPort, cfg =>
+            {
+                cfg.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1;
+            }); 
+        });
 
         builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-
+        
         builder.Logging.ClearProviders();
         builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
         builder.Host.UseNLog();
-        //builder.("http://*:"+ConfigUtil.getModuleConfig().Network.RpcPort);
         
+        if(ConfigUtil.getModuleConfig().Standalone){
+            builder.Services.AddGrpc(options =>
+            {
+                options.EnableDetailedErrors = true;
+                options.MaxReceiveMessageSize = 200 * 1024 * 1024; // 200 MB
+                options.MaxSendMessageSize = 5 * 1024 * 1024; // 5 MB
+        
+            });
+            builder.Services.AddMagicOnion();
+        }
         var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
+   
+        app.UseRouter(builder =>
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            builder.MapGet("/", context =>
+            {
+                context.Response.Redirect("./swagger/index.html", permanent: false);
+                return Task.FromResult(0);
+            });
+        });
+        if (ConfigUtil.getModuleConfig().Standalone)
+        {
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapMagicOnionHttpGateway("_",
+                    ((IApplicationBuilder) app).ApplicationServices
+                    .GetService<MagicOnion.Server.MagicOnionServiceDefinition>().MethodHandlers,
+                    GrpcChannel.ForAddress($"http://{configInfo.tcpIpAddress.ToString()}:{configInfo.tcpPort}"));
+                endpoints.MapMagicOnionSwagger("swagger",
+                    ((IApplicationBuilder) app).ApplicationServices
+                    .GetService<MagicOnion.Server.MagicOnionServiceDefinition>().MethodHandlers, "/_/");
+
+                endpoints.MapMagicOnionService();
+
+
+            });
         }
+
+        app.UseSwagger();
+        app.UseSwaggerUI();
+        
 
         //app.UseHttpsRedirection();
 

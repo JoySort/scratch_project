@@ -63,7 +63,7 @@ public abstract class CameraDriverBase:ICameraDriver
 
     public void onRecivingPicture(byte[] picture)
     {
-        OnPictureArrive?.Invoke(this,new CameraPayLoad(counter++,camConfig,picture));
+        OnPictureArrive?.Invoke(this,new CameraPayLoad(counter++,DateTimeOffset.Now.ToUnixTimeMilliseconds(),camConfig,picture));
     }
 
 

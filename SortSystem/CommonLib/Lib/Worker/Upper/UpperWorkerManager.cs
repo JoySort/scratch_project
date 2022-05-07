@@ -66,10 +66,12 @@ public class UpperWorkerManager
             var min = tempValue.First();
             var max = tempValue.Last();
             var avg = tempValue.Average(value=>value.timeTook);
-            
-            logger.Info($"stats of {key}, max timeTook {max.timeTook} with batch count {max.resultCount} lastTriggerId {max.triggerID}");
-            logger.Info($"stats of {key}, min timeTook {min.timeTook} with batch count {min.resultCount} lastTriggerId {min.triggerID}");
-            logger.Info($"stats of {key}, avg timeTook {avg}");
+
+            var callsites = key.ToString().Split(",");
+            var className = callsites[callsites.Length - 1];
+            logger.Info($"stats of {className}, max timeTook {max.timeTook} with batch count {max.resultCount} lastTriggerId {max.triggerID}");
+            logger.Info($"stats of {className}, min timeTook {min.timeTook} with batch count {min.resultCount} lastTriggerId {min.triggerID}");
+            logger.Info($"stats of {className}, avg timeTook {avg}");
             
             value.Clear();
             
@@ -131,6 +133,9 @@ public class UpperWorkerManager
         
         var startTime1 = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         EmitWorker.getInstance().processBulk(args.Results);
+
+        //args.Results.Select(value => value.imageTime);
+        
         var timeTook1 = DateTimeOffset.Now.ToUnixTimeMilliseconds() - startTime1;
         var count1 = args.Results.Count;
         var triggerID1 = count1 > 0 ? args.Results.Last().Coordinate.TriggerId:-1;
@@ -140,7 +145,9 @@ public class UpperWorkerManager
     private  void EmitResultEventHandler(object sender, EmitResultEventArg args)
     {
         var startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        
         LowerMachineWorker.getInstance().processBulk(args.Results);
+        
         var timeTook = DateTimeOffset.Now.ToUnixTimeMilliseconds() - startTime;
         var count = args.Results.Count;
         var triggerID = count > 0 ? args.Results.Last().TriggerId:-1;
